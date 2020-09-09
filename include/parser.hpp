@@ -12,9 +12,9 @@ class Parser
 {
 
 private:
-    ParamSet<std::string, std::string> *cameraParams;
-    ParamSet<std::string, std::string> *filmParams;
-    ParamSet<std::string, std::string> *backgroundParams;
+    ParamSet<std::string, std::string> cameraParams;
+    ParamSet<std::string, std::string> filmParams;
+    ParamSet<std::string, std::string> backgroundParams;
 
     void addItemToParamSet(pugi::xml_node *node, ParamSet<std::string, std::string> *ps)
     {
@@ -49,17 +49,18 @@ public:
         for (pugi::xml_node n : nodes)
         {
             std::string aux = n.name();
+
             if (!aux.compare("camera"))
             {
-                this->addItemToParamSet(&n, cameraParams);
+                this->addItemToParamSet(&n, &cameraParams);
             }
             else if (!aux.compare("film"))
             {
-                this->addItemToParamSet(&n, filmParams);
+                this->addItemToParamSet(&n, &filmParams);
             }
             else if (!aux.compare("background"))
             {
-                this->addItemToParamSet(&n, backgroundParams);
+                this->addItemToParamSet(&n, &backgroundParams);
             }
         }
 

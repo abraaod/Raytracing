@@ -9,9 +9,10 @@
 template<typename Key, typename Data>
 class ParamSet{
     public:
-        ParamSet();
+        ParamSet(){
+        }
         
-        void add(const Key _key, const Data _data){
+        void add(const Key &_key, const Data &_data){
             params[_key] = _data;
         }
         
