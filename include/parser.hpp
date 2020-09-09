@@ -67,11 +67,16 @@ public:
         return 0;
     }
 
-    // void print(){
-    //     for(auto const& pair : *filmParams){
-    //         std::cout << pair.first << " " << pair.second << std::endl;
-    //     }
-    // }
+    void printLoadedScene(){
+        std::cout << "Camera params\n" << std::endl;
+        cameraParams.print();
+        std::cout << std::endl;
+        std::cout << "Film params\n" << std::endl;
+        filmParams.print();
+        std::cout << std::endl;
+        std::cout << "Background params\n" << std::endl;
+        backgroundParams.print();
+    }
 };
 
 #endif
