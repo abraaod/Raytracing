@@ -9,10 +9,10 @@ add_executable(
     main
     ./src/main.cpp
 
-    ./include/parser.cpp
-    ./include/background.cpp
-    ./include/film.cpp
-    ./include/paramset.cpp
+    ./include/parser.hpp
+    ./include/background.hpp
+    ./include/film.hpp
+    ./include/paramset.hpp
 
     ./lib/pugixml-1.10/src/pugixml.cpp
 )
