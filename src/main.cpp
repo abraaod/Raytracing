@@ -8,6 +8,7 @@ int main(int argc, char const *argv[])
 
     Parser parser(path);
     parser.loadScene();
+    parser.printLoadedScene();
     
     //parser.print();
     return 0;
