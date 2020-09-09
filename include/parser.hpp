@@ -64,6 +64,8 @@ public:
             }
         }
 
+        filmParams.print();
+        
         return 0;
     }
 

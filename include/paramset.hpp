@@ -15,6 +15,12 @@ class ParamSet{
         void add(const Key &_key, const Data &_data){
             params[_key] = _data;
         }
+
+        void print(){
+            for (const auto &pair : params) {
+                std::cout << pair.first << ": " << pair.second << '\n';
+            }
+        }
         
         void print(){
             for(auto it = params.begin(); it != params.end(); it++){
