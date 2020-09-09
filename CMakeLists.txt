@@ -14,5 +14,6 @@ add_executable(
     ./include/film.hpp
     ./include/paramset.hpp
 
-    ./lib/pugixml-1.10/src/pugixml.cpp
+    ./lib/pugixml.cpp
+    ./lib/lodepng.cpp
 )

@@ -1,6 +1,6 @@
 #ifndef _PARSER_
 #define _PARSER_
-#include "../lib/pugixml-1.10/src/pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include <string>
 #include <map>
 #include <iostream>
