@@ -12,7 +12,9 @@ add_executable(
     ./include/parser.hpp
     ./include/background.hpp
     ./include/film.hpp
+    ./include/camera.hpp
     ./include/paramset.hpp
+    ./include/api.hpp
 
     ./lib/pugixml.cpp
     ./lib/lodepng.cpp
