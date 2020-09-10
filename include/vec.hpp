@@ -138,7 +138,10 @@ class Vec{
             float r_v3 = v3/root;
 
             return Vec(r_v1, r_v2, r_v3);
+        }
 
+        std::string toRGB(){
+            return to_string(v1*255.0) + " " + to_string(v2*255.0) + " " + to_string(v3*255.0);
         }
 };
 
