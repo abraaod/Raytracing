@@ -22,7 +22,7 @@ public:
 
     void print();
 
-    std::string find(std::string search) const;
+    Data find(const Key _key) const;
 };
 
 template <typename Key, typename Data>
@@ -49,8 +49,13 @@ void Paramset<Key, Data>::print()
 }
 
 template<typename Key, typename Data>
-std::string Paramset<Key, Data>::find(std::string search) const{
-    return params[search];
+Data Paramset<Key, Data>::find(const Key _key) const{
+    auto result = params.find(_key);
+    if(result == params.end()){
+        return "";
+    }
+    std::cout << result->second << std::endl;
+    return result->second;
 }
 
 #endif

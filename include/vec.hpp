@@ -1,11 +1,12 @@
-#ifndef _Vec_
-#define _Vec_
+#ifndef _VEC_
+#define _VEC_
 
 #include <iostream>
 #include <string>
 #include <cmath>
 #include <sstream>
 #include <vector>
+#include <iterator>
 
 class Vec{
     private:
@@ -54,13 +55,13 @@ class Vec{
             std::istringstream(splited[1]) >> v2_;
             int v3_;
             std::istringstream(splited[2]) >> v3_;
-            int v4_;
-            std::istringstream(splited[3]) >> v4_;
+            // int v4_;
+            // std::istringstream(splited[3]) >> v4_;
 
             this->v1 = v1_/255.0;
             this->v2 = v2_/255.0;
             this->v3 = v3_/255.0;
-            this->v4 = v4_/255.0;
+            // this->v4 = v4_/255.0;
         }
 
         Vec(std::vector<float> vetor){
@@ -126,7 +127,7 @@ class Vec{
         }
 
         // Normalização do vetor
-        Vec normalizar(){
+        Vec normalize(){
             float sq_v1 = v1 * v1;
             float sq_v2 = v2 * v2;
             float sq_v3 = v3 * v3;
@@ -141,7 +142,7 @@ class Vec{
         }
 
         std::string toRGB(){
-            return to_string(v1*255.0) + " " + to_string(v2*255.0) + " " + to_string(v3*255.0);
+            return std::to_string(v1*255.0) + " " + std::to_string(v2*255.0) + " " + std::to_string(v3*255.0);
         }
 };
 

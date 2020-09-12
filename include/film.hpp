@@ -12,9 +12,14 @@ private:
     int y_res;
 
 public:
+    Film();
     Film(std::string filename, std::string img_type, std::string type, int x_res, int y_res);
     ~Film();
 };
+
+Film::Film(){
+
+}
 
 Film::Film(std::string filename, std::string img_type, std::string type, int x_res, int y_res)
 {

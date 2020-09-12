@@ -6,7 +6,7 @@
 #include <iostream>
 #include <variant>
 #include "paramset.hpp"
-
+#include "api.hpp"
 
 class Parser
 {
@@ -25,11 +25,13 @@ private:
     }
 
     std::string path;
+    Api api;
 
 public:
-    Parser(std::string path)
+    Parser(std::string path, const Api &api)
     {
         this->path = path;
+        this->api = api;
     }
 
     ~Parser() = default;
@@ -64,8 +66,11 @@ public:
             }
         }
 
-        filmParams.print();
-        
+        api.CAMERA(cameraParams);
+        api.FILM(filmParams);
+        api.BACKGROUND(backgroundParams);
+        std::cout << "rodou aqui" << std::endl;
+
         return 0;
     }
 
