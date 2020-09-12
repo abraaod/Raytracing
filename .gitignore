@@ -35,7 +35,7 @@
 *.exe
 *.out
 *.app
-
+main
 ### CMake ###
 CMakeLists.txt.user
 CMakeCache.txt
