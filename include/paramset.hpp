@@ -54,7 +54,7 @@ Data Paramset<Key, Data>::find(const Key _key) const{
     if(result == params.end()){
         return "";
     }
-    std::cout << result->second << std::endl;
+    //std::cout << result->second << std::endl;
     return result->second;
 }
 
