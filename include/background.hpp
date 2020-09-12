@@ -18,17 +18,12 @@ private:
     std::string mapping;
 
 public:
-    Background();
     Background(std::string type, Vec color);
     Background(std::string type, Vec bl, Vec br, Vec tl, Vec tr, std::string mapping);
     ~Background();
     Vec sample(float v1, float v2);
     Vec interpolate(float x, float y);
 };
-
-Background::Background(){
-
-}
 
 Background::Background(std::string type, Vec color)
 {

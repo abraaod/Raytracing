@@ -25,13 +25,13 @@ private:
     }
 
     std::string path;
-    Api api;
+    Api* api;
 
 public:
-    Parser(std::string path, const Api &api)
+    Parser(std::string path, Api &api)
     {
         this->path = path;
-        this->api = api;
+        this->api = &api;
     }
 
     ~Parser() = default;
@@ -66,17 +66,17 @@ public:
             }
         }
 
-        api.CAMERA(cameraParams);
-        api.FILM(filmParams);
-        api.BACKGROUND(backgroundParams);
-        std::cout << "rodou aqui" << std::endl;
+        api->CAMERA(cameraParams);
+        api->FILM(filmParams);
+        api->BACKGROUND(backgroundParams);
+        //std::cout << "rodou aqui" << std::endl;
 
         return 0;
     }
 
-    Api getApi(){
-        return api;
-    }
+    // Api getApi(){
+    //     return api;
+    // }
 
     void printLoadedScene(){
         std::cout << "Camera params\n" << std::endl;

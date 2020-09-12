@@ -13,11 +13,11 @@ class Api
 {
 private:
     /* data */
-    Camera camera;
+    Camera* camera;
 
-    Film film;
+    Film* film;
 
-    Background background;
+    Background* background;
 
 public:
     Api(/* args */);
@@ -39,16 +39,22 @@ public:
 
 };
 
-Api::Api(/* args */)
+Api::Api(/* args */) : camera{nullptr}, film{nullptr}, background{nullptr}
 {
 }
 
-Api::~Api() = default;
+Api::~Api(){
+    if(camera)
+        delete camera;
+    if(film)
+        delete film;
+    if(background)
+        delete background;
+}
 
 void Api::CAMERA(Paramset<std::string, std::string> ps){
     std::string type = ps.find("type");
-    Camera c(type);
-    camera = c;
+    camera = new Camera(type);
 }
 
 void Api::FILM(Paramset<std::string, std::string> ps){
@@ -57,8 +63,7 @@ void Api::FILM(Paramset<std::string, std::string> ps){
         std::string type = ps.find("type");
         int x_res = std::stoi(ps.find("x_res"));
         int y_res = std::stoi(ps.find("y_res"));
-        Film f(filename, img_type, type, x_res, y_res);
-        film = f;
+        film = new Film(filename, img_type, type, x_res, y_res);
 }
 
 void Api::BACKGROUND(Paramset<std::string, std::string> ps){
@@ -66,43 +71,43 @@ void Api::BACKGROUND(Paramset<std::string, std::string> ps){
     std::string color(ps.find("color"));
     if(color != ""){
         Vec c(color);
-        Background b(type, c);
-        background = b;
+        background = new Background(type, c);
     } else {
         Vec bl(ps.find("bl"));
         Vec br(ps.find("br"));
         Vec tl(ps.find("tl"));
         Vec tr(ps.find("tr"));
         std::string mapping = ps.find("mapping");
-        Background b(type, bl, br, tl, tr, mapping);
-        background = b;
+        background = new Background(type, bl, br, tl, tr, mapping);
     }
 }
 
 Camera Api::getCamera(){
-    return this->camera;
+    return *camera;
 }
 
 Film Api::getFilm(){
-    return this->film;
+    return *film;
 }
 
 Background Api::getBackground(){
-    return this->background;
+    return *background;
 }
 
 void Api::render(){
-    auto w = film.width();
-    auto h = film.height();
+    auto w = film->width();
+    auto h = film->height();
 
     std::cout << "Tamanhos: " << w << "-" << h << "\n";
 
     for(int j = h-1; j >= 0 ; j--){
         for(int i = 0; i < w; i++){
-            auto color = background.sample(float(i)/float(w), float(j)/float(h));
-            film.add(i, j, color);
+            auto color = background->sample(float(i)/float(w), float(j)/float(h));
+            film->add(i, j, color);
         }
     }
+
+    film->write_image();
 }
 
 #endif

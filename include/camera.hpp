@@ -10,14 +10,9 @@ private:
     std::string type;
 
 public:
-    Camera();
     Camera(std::string type);
     ~Camera();
 };
-
-Camera::Camera(){
-
-}
 
 Camera::Camera(std::string type)
 {
