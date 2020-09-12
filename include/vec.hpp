@@ -16,10 +16,10 @@ class Vec{
         float v4;   // a
 
         Vec(){
-            v1 = 0;
-            v2 = 0;
-            v3 = 0;
-            v4 = 0;
+            v1 = 0.0;
+            v2 = 0.0;
+            v3 = 0.0;
+            v4 = 0.0;
         }
 
         Vec(float v1, float v2, float v3){
@@ -140,7 +140,10 @@ class Vec{
         }
 
         std::string toRGB(){
-            return std::to_string(v1*255.0) + " " + std::to_string(v2*255.0) + " " + std::to_string(v3*255.0);
+            int v1_ = static_cast<int>(v1*255);
+            int v2_ = static_cast<int>(v2*255);
+            int v3_ = static_cast<int>(v3*255);
+            return std::to_string(v1_) + " " + std::to_string(v2_) + " " + std::to_string(v3_);
         }
 };
 
