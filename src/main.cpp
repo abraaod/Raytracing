@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include "../include/vec.hpp"
+#include "../include/api.hpp"
 
 
 int main(int argc, char const *argv[])
@@ -16,7 +17,9 @@ int main(int argc, char const *argv[])
 
     std::string path = "./scene/scene.xml";
 
-    Parser parser(path);
+    Api api;
+    
+    Parser parser(path, api);
     parser.loadScene();
     parser.printLoadedScene();
     
