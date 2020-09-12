@@ -22,6 +22,8 @@ public:
     Background(std::string type, Vec color);
     Background(std::string type, Vec bl, Vec br, Vec tl, Vec tr, std::string mapping);
     ~Background();
+    Vec sample(float v1, float v2);
+    Vec interpolate(float x, float y);
 };
 
 Background::Background(){
@@ -44,5 +46,24 @@ Background::Background(std::string type, Vec bl, Vec br, Vec tl, Vec tr, std::st
 }
 
 Background::~Background() = default;
+
+Vec Background::sample(float v1, float v2){
+    if(!color.isBlack()){
+        return color;
+    } else{
+        Vec interpolated = interpolate(v1, v2);
+        return interpolated;
+    }
+}
+
+Vec Background::interpolate(float x, float y){
+    float v1_ = bl.v1*(1-x)*(1-y) + br.v1*x*(1-y) + tl.v1*(1-x)*y + tr.v1*x*y;
+    float v2_ = bl.v2*(1-x)*(1-y) + br.v2*x*(1-y) + tl.v2*(1-x)*y + tr.v2*x*y;
+    float v3_ = bl.v3*(1-x)*(1-y) + br.v3*x*(1-y) + tl.v3*(1-x)*y + tr.v3*x*y;
+
+    return Vec(v1_, v2_, v3_);
+}
+
+
 
 #endif

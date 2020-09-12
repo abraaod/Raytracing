@@ -22,6 +22,8 @@ int main(int argc, char const *argv[])
     Parser parser(path, api);
     parser.loadScene();
     parser.printLoadedScene();
+    api = parser.getApi();
+    api.render();
     
     //parser.print();
     return 0;

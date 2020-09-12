@@ -9,13 +9,11 @@
 #include <iterator>
 
 class Vec{
-    private:
+    public:
         float v1;   // x
         float v2;   // y 
         float v3;   // z
         float v4;   // a
-
-    public:
 
         Vec(){
             v1 = 0;

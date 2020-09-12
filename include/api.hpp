@@ -35,6 +35,8 @@ public:
 
     Background getBackground();
 
+    void render();
+
 };
 
 Api::Api(/* args */)
@@ -87,6 +89,20 @@ Film Api::getFilm(){
 
 Background Api::getBackground(){
     return this->background;
+}
+
+void Api::render(){
+    auto w = film.width();
+    auto h = film.height();
+
+    std::cout << "Tamanhos: " << w << "-" << h << "\n";
+
+    for(int j = h-1; j >= 0 ; j--){
+        for(int i = 0; i < w; i++){
+            auto color = background.sample(float(i)/float(w), float(j)/float(h));
+            film.add(i, j, color);
+        }
+    }
 }
 
 #endif

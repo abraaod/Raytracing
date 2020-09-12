@@ -74,6 +74,10 @@ public:
         return 0;
     }
 
+    Api getApi(){
+        return api;
+    }
+
     void printLoadedScene(){
         std::cout << "Camera params\n" << std::endl;
         cameraParams.print();
