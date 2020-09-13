@@ -34,7 +34,7 @@ The image with just a single color can be found in `simple_bkg.ppm`; and the ima
 
 
 ## Author
-Abraão Vitor Lopes Dantas
+Abraão Vitor Lopes Dantas  
 IT and Computer Science Student. IT Technician(since 2016)
 Email: _abraaovld@gmail.com_
 
