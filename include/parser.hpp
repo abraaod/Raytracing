@@ -6,17 +6,17 @@
 #include <iostream>
 #include <variant>
 #include "paramset.hpp"
-
+#include "api.hpp"
 
 class Parser
 {
 
 private:
-    ParamSet<std::string, std::string> cameraParams;
-    ParamSet<std::string, std::string> filmParams;
-    ParamSet<std::string, std::string> backgroundParams;
+    Paramset<std::string, std::string> cameraParams;
+    Paramset<std::string, std::string> filmParams;
+    Paramset<std::string, std::string> backgroundParams;
 
-    void addItemToParamSet(pugi::xml_node *node, ParamSet<std::string, std::string> *ps)
+    void addItemToParamSet(pugi::xml_node *node, Paramset<std::string, std::string> *ps)
     {
         for (pugi::xml_attribute attr : (*node).attributes())
         {
@@ -25,11 +25,13 @@ private:
     }
 
     std::string path;
+    Api* api;
 
 public:
-    Parser(std::string path)
+    Parser(std::string path, Api &api)
     {
         this->path = path;
+        this->api = &api;
     }
 
     ~Parser() = default;
@@ -64,8 +66,10 @@ public:
             }
         }
 
-        filmParams.print();
-        
+        api->CAMERA(cameraParams);
+        api->FILM(filmParams);
+        api->BACKGROUND(backgroundParams);
+
         return 0;
     }
 
