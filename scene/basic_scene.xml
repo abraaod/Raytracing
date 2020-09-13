@@ -1,0 +1,7 @@
+<RT3>
+    <camera type="orthographic" />
+    <film type="image" x_res="200" y_res="100" filename="simple_bkg.ppm" img_type="ppm" />
+    <world_begin/>
+        <background type="colors" color="153 204 255"/>
+    <world_end/>
+</RT3>

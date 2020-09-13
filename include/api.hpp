@@ -23,7 +23,7 @@ public:
     Api(/* args */);
     ~Api();
 
-    void CAMERA (Paramset<std::string, std::string> ps);
+    void CAMERA(Paramset<std::string, std::string> ps);
 
     void FILM(Paramset<std::string, std::string> ps);
 
@@ -97,9 +97,7 @@ Background Api::getBackground(){
 void Api::render(){
     auto w = film->width();
     auto h = film->height();
-
-    std::cout << "Tamanhos: " << w << "-" << h << "\n";
-
+    
     for(int j = h-1; j >= 0 ; j--){
         for(int i = 0; i < w; i++){
             auto color = background->sample(float(i)/float(w), float(j)/float(h));
