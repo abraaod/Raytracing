@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
     // std::cout << "Input file: " << argv[1] << std::endl;
     std::string path = argv[1];
 
-    std::cout << "Loading..."
+    std::cout << "Loading...\n";
 
     Api api;
     
