@@ -19,6 +19,7 @@ All images generated has type ppm, for more performance.
 ## Compile
 
 `cmake CMakeLists.txt`
+
 `make`
 
 ## Execute
