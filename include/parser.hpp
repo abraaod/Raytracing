@@ -69,14 +69,9 @@ public:
         api->CAMERA(cameraParams);
         api->FILM(filmParams);
         api->BACKGROUND(backgroundParams);
-        //std::cout << "rodou aqui" << std::endl;
 
         return 0;
     }
-
-    // Api getApi(){
-    //     return api;
-    // }
 
     void printLoadedScene(){
         std::cout << "Camera params\n" << std::endl;

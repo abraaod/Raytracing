@@ -12,17 +12,17 @@ int main(int argc, char const *argv[])
         return 0;
     }
 
-    std::cout << "Input file: " << argv[1] << std::endl;
+    // std::cout << "Input file: " << argv[1] << std::endl;
     std::string path = argv[1];
 
     Api api;
     
     Parser parser(path, api);
     parser.loadScene();
-    parser.printLoadedScene();
-    //api = parser.getApi();
+    // parser.printLoadedScene();
     api.render();
     
-    //parser.print();
+    std::cout << "Image generated with success.\n";
+
     return 0;
 }
