@@ -145,6 +145,44 @@ class Vec{
             int v3_ = static_cast<int>(v3*255);
             return std::to_string(v1_) + " " + std::to_string(v2_) + " " + std::to_string(v3_);
         }
+
+        float length() const{
+            return sqrt(v1 * v1 + v2 * v2 + v3 * v3);
+        }
+
+        Vec& operator/=(const Vec &v){
+            v1  /= v.v1;
+            v2  /= v.v2;
+            v3  /= v.v3;
+            return *this;   
+        }
+
+        Vec& operator/=(const float t) {
+            float k = 1.0/t;
+            v1  *= k;
+            v2  *= k;
+            v3  *= k;
+            return *this;
+        }
+
+
 };
+
+inline float dot(const Vec &v1, const Vec &v2){
+    return v1.v1 * v2.v1 + v1.v2 * v2.v2 + v1.v3 * v2.v3;
+}
+
+inline Vec operator/(const Vec &v1, const Vec &v2) {
+    return Vec(v1.v1 / v2.v1, v1.v2 / v2.v2, v1.v3 / v2.v3);
+}
+
+inline Vec operator/(Vec v, float t) {
+    return Vec(v.v1/t, v.v2/t, v.v3/t);
+}
+
+
+inline Vec unique_vector(Vec v){
+    return v / v.length();
+}
 
 #endif

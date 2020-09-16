@@ -13,6 +13,7 @@ add_executable(
     ./include/background.hpp
     ./include/film.hpp
     ./include/camera.hpp
+    ./include/ray.hpp
     ./include/paramset.hpp
     ./include/api.hpp
 

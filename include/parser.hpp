@@ -56,6 +56,10 @@ public:
             {
                 this->addItemToParamSet(&n, &cameraParams);
             }
+            if(!aux.compare("lookat"))
+            {
+                this->addItemToParamSet(&n, &cameraParams);
+            }
             else if (!aux.compare("film"))
             {
                 this->addItemToParamSet(&n, &filmParams);
