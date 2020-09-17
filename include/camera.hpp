@@ -10,8 +10,10 @@ class Camera
 private:
     /* data */
     std::string type;
+
     Ray generate_ray(int x, int y);
     Ray generate_ray(float x, float y);
+    
     Vec gaze;
     Vec vup;
     Vec fovy;

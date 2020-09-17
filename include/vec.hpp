@@ -98,6 +98,10 @@ class Vec{
             return Vec(v_v1, v_v2, v_v3, v_v4);
         }
 
+        Vec operator-(){ 
+            return Vec(-v1, -v2, -v3);
+        }
+
         Vec operator-(const Vec &v_){
             float v_v1 = v1 - v_.v1;
             float v_v2 = v2 - v_.v2;

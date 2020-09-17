@@ -44,6 +44,7 @@ Film::Film(std::string filename, std::string img_type, std::string type, int x_r
     this->type = type;
     this->x_res = x_res;
     this->y_res = y_res;
+    
     fillEmpty();
 }
 
