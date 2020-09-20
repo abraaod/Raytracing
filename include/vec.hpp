@@ -50,6 +50,7 @@ public:
 
     Vec(std::string vetor)
     {
+        if(vetor != ""){
         std::istringstream iss(vetor);
         std::vector<std::string> splited((std::istream_iterator<std::string>(iss)),
                                          std::istream_iterator<std::string>());
@@ -66,6 +67,12 @@ public:
         this->v2 = v2_ / 255.0;
         this->v3 = v3_ / 255.0;
         // this->v4 = v4_/255.0;
+        } else{
+            v1 = 0.0;
+        v2 = 0.0;
+        v3 = 0.0;
+        v4 = 0.0;
+        }
     }
 
     Vec(std::vector<float> vetor)
@@ -151,6 +158,14 @@ public:
         int v2_ = static_cast<int>(v2 * 255);
         int v3_ = static_cast<int>(v3 * 255);
         return std::to_string(v1_) + " " + std::to_string(v2_) + " " + std::to_string(v3_);
+    }
+
+    std::string toRGBA()
+    {
+        int v1_ = static_cast<int>(v1 * 255);
+        int v2_ = static_cast<int>(v2 * 255);
+        int v3_ = static_cast<int>(v3 * 255);
+        return std::to_string(v1_) + " " + std::to_string(v2_) + " " + std::to_string(v3_) + " 255";
     }
 
     float length() const
