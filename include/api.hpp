@@ -13,7 +13,7 @@ class Api
 {
 private:
     /* data */
-    Camera* camera;
+    OrthograficCamera* camera;
 
     Film* film;
 
@@ -54,7 +54,16 @@ Api::~Api(){
 
 void Api::CAMERA(Paramset<std::string, std::string> ps){
     std::string type = ps.find("type");
-    camera = new Camera(type);
+    Vec lookat(ps.find("look_at"));
+    Vec lookfrom(ps.find("look_from"));
+    Vec vup(ps.find("up"));
+    std::string screen = ps.find("screen_window");
+
+    if(type.compare("orthographic") == 0){
+        camera = new OrthograficCamera(type, screen, lookat, lookfrom, vup);
+    } else if (type.compare("perspective")){
+
+    }
 }
 
 void Api::FILM(Paramset<std::string, std::string> ps){
@@ -98,8 +107,16 @@ void Api::render(){
     auto w = film->width();
     auto h = film->height();
     
+    camera->setHeightWidth(h, w);
     for(int j = h-1; j >= 0 ; j--){
         for(int i = 0; i < w; i++){
+            
+            Ray r1 = camera->generate_ray( float(i)/float(w), float(j)/float(h) );
+            // Generate ray with the Shirley method.
+            Ray r2 = camera->generate_ray( i, j );
+            // Print out the two rays, that must be the same (regardless of the method).
+            std::cout << "Ray1: " << r1 << ", Ray2: " << r2 << std::endl;
+
             auto color = background->sample(float(i)/float(w), float(j)/float(h));
             film->add(i, j, color);
         }
