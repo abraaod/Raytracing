@@ -57,7 +57,8 @@ Camera::Camera(std::string type, float fovy, Vec lookat, Vec lookfrom, Vec vup)
 }
 
 void Camera::initializeScreen(std::string screen){
-    std::istringstream iss(screen);
+    if(screen != ""){
+        std::istringstream iss(screen);
             std::vector<std::string> splited((std::istream_iterator<std::string>(iss)),
                                      std::istream_iterator<std::string>());
 
@@ -65,6 +66,7 @@ void Camera::initializeScreen(std::string screen){
             std::istringstream(splited[1]) >> r;
             std::istringstream(splited[2]) >> b;
             std::istringstream(splited[3]) >> t;
+    }
 }
 
 void Camera::initializeFrame(Vec lookat, Vec lookfrom, Vec vup){
