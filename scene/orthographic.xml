@@ -2,7 +2,7 @@
     <lookat look_from="0 7 0" look_at="0 0 0" up="0 0 1" />
     <camera type="orthographic" screen_window="-5.3 5.3 -4 4"/>
     <film type="image" x_res="2800" y_res="1800" crop_window="0 1 0 1"
-        filename="../images/gcodex_matte_ortho.png"
+        filename="gcodex_matte_ortho.png"
         img_type="png"  gamma_corrected="yes" />
 
     <world_begin/>
