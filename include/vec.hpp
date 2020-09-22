@@ -62,10 +62,13 @@ public:
         std::istringstream(splited[2]) >> v3_;
         // int v4_;
         // std::istringstream(splited[3]) >> v4_;
-
-        this->v1 = v1_ / 255.0;
-        this->v2 = v2_ / 255.0;
-        this->v3 = v3_ / 255.0;
+        
+        this->v1 = v1_;
+        this->v2 = v2_;
+        this->v3 = v3_;
+        // this->v1 = v1_ / 255.0;
+        // this->v2 = v2_ / 255.0;
+        // this->v3 = v3_ / 255.0;
         // this->v4 = v4_/255.0;
         } else{
             v1 = 0.0;
@@ -209,7 +212,7 @@ inline Vec normalize(const Vec &v)
 
 inline Vec cross(const Vec &v1, const Vec &v2){
     return Vec((v1.v2 * v2.v3 - v1.v3 * v2.v2), 
-    (-(v1.v1 * v2.v3 - v1.v3 * v2.v1)),
+    ((v1.v1 * v2.v3 - v1.v3 * v2.v1)),
     (v1.v1 * v2.v2 - v1.v2 * v2.v1));
 }
 

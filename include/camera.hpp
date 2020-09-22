@@ -66,6 +66,8 @@ void Camera::initializeScreen(std::string screen){
             std::istringstream(splited[1]) >> r;
             std::istringstream(splited[2]) >> b;
             std::istringstream(splited[3]) >> t;
+
+            std::cout << l << " " << r << " " << b << " "  << t << std::endl;
     }
 }
 
@@ -75,6 +77,9 @@ void Camera::initializeFrame(Vec lookat, Vec lookfrom, Vec vup){
     this->u = normalize(cross(vup, w));
     this->v = normalize(cross(w, u));
     this->e = lookfrom;
+
+    u.print();
+    v.print();
 }
 
 void Camera::setHeightWidth(int height, int width){
