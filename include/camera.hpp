@@ -11,8 +11,8 @@ private:
 
 public:
 
-    Ray generate_ray(int x, int y);
-    Ray generate_ray(float x, float y);
+    virtual Ray generate_ray(int x, int y) {}
+    virtual Ray generate_ray(float x, float y) {}
 
     std::string type;
 
@@ -21,7 +21,7 @@ public:
     float b;
     float t;
 
-    float fovy;
+    float fovy = 0;
 
     Vec gaze;
     Vec w;
@@ -35,26 +35,13 @@ public:
     int height;
     int width;
 
-    explicit Camera(std::string type, std::string screen, Vec lookat, Vec lookfrom, Vec vup);
-    explicit Camera(std::string type, float fovy, Vec lookat, Vec lookfrom, Vec vup);
+    Camera(std::string type, std::string screen, Vec lookat, Vec lookfrom, Vec vup) {}
+    Camera(std::string type, float fovy, Vec lookat, Vec lookfrom, Vec vup) {}
     void initializeScreen(std::string screen);
     void initializeFrame(Vec lookat, Vec lookfrom, Vec vup);
     void setHeightWidth(int height, int width);
-    ~Camera();
+    virtual ~Camera() = default;
 };
-
-Camera::Camera(std::string type, std::string screen, Vec lookat, Vec lookfrom, Vec vup)
-{
-    this->type = type;
-    initializeScreen(screen);
-    initializeFrame(lookat, lookfrom, vup);
-}
-
-Camera::Camera(std::string type, float fovy, Vec lookat, Vec lookfrom, Vec vup)
-{
-    this->type = type;
-    initializeFrame(lookat, lookfrom, vup);
-}
 
 void Camera::initializeScreen(std::string screen){
     if(screen != ""){
@@ -78,36 +65,66 @@ void Camera::initializeFrame(Vec lookat, Vec lookfrom, Vec vup){
     this->v = normalize(cross(w, u));
     this->e = lookfrom;
 
-    u.print();
-    v.print();
+    // u.print();
+    // v.print();
 }
 
 void Camera::setHeightWidth(int height, int width){
+    
     this->height = height;
     this->width = width;
+
+    if(fovy > 0){
+        
+        float ratio = width/height;
+        
+        l = -ratio;
+        r = ratio;
+        t = 1;
+        b = -1;
+    }
 }
 
-Camera::~Camera() = default;
-
-// class PerspectiveCamera : public Camera{
+class PerspectiveCamera : public Camera{
     
-//     public:
-//         Ray generate_ray(int x, int y){
-
-//         }
-
-//         Ray generate_ray(float x, float y){
-
-//         }
-// };
-
-class OrthograficCamera : public Camera{
     public:
-        using Camera::Camera;
+
+        PerspectiveCamera(std::string type, float fovy, Vec lookat, Vec lookfrom, Vec vup) : Camera(type, fovy, lookat, lookfrom, vup){
+            this->type = type;
+            this->fovy = fovy;
+            initializeFrame(lookat, lookfrom, vup);
+        }
+
         Ray generate_ray(int x, int y){
             u_ = l + (r - l) * ((x+0.5)/width);
             v_ = b + (t - b) * ((y+0.5)/height);
-            std::cout  << u_ << " " << v_ << std::endl;
+            Ray r(w + u*u_ + v*v_, e);
+            return r;
+        }
+
+        Ray generate_ray(float x, float y){
+            u_ = l + (r - l) * ((x+0.5)/width);
+            v_ = b + (t - b) * ((y+0.5)/height);
+            Ray r(w + u*u_ + v*v_, e);
+            return r;
+        }
+
+        virtual ~PerspectiveCamera() = default;
+};
+
+class OrthograficCamera : public Camera{
+    public:
+        
+        OrthograficCamera(std::string type, std::string screen, Vec lookat, Vec lookfrom, Vec vup) : Camera(type, screen, lookat, lookfrom, vup){
+            this->type = type;
+            initializeScreen(screen);
+            initializeFrame(lookat, lookfrom, vup);
+        }
+
+        Ray generate_ray(int x, int y){
+            u_ = l + (r - l) * ((x+0.5)/width);
+            v_ = b + (t - b) * ((y+0.5)/height);
+            //std::cout  << u_ << " " << v_ << std::endl;
             Ray r(e + u*u_ + v*v_, w);
             return r;
 
@@ -119,6 +136,8 @@ class OrthograficCamera : public Camera{
             Ray r(e + u*u_ + v*v_, w);
             return r;
         }
+
+        virtual ~OrthograficCamera() = default;
 };
 
 #endif

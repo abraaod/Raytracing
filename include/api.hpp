@@ -14,7 +14,7 @@ class Api
 {
 private:
     /* data */
-    OrthograficCamera* camera;
+    Camera* camera;
 
     Film* film;
 
@@ -62,9 +62,10 @@ void Api::CAMERA(Paramset<std::string, std::string> ps){
     std::string screen = ps.find("screen_window");
 
     if(type.compare("orthographic") == 0){
-        camera = new OrthograficCamera(type, screen, lookat, lookfrom, vup);
+        camera =  new OrthograficCamera(type, screen, lookat, lookfrom, vup);
     } else if (type.compare("perspective")){
-
+        float fovy = std::stof(ps.find("fovy"));
+        camera = new PerspectiveCamera(type, fovy, lookat, lookfrom, vup);
     }
 }
 
