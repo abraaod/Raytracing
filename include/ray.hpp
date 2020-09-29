@@ -16,12 +16,23 @@ class Ray{
         Ray(const Point3& o, const Vec& d) : o{o}, d{d} {/*empty*/}
         ~Ray();
         friend std::ostream& operator<<(std::ostream& os, const Ray& r);
+
+        Vec getOrigin();
+        Vec getDirection();
 };
 
 std::ostream& operator<<(std::ostream& os, const Ray& r)
 {
     os <<  "Origin: " << r.o.v1 << " " << r.o.v2 << " " << r.o.v3 << "\nDirection: " << r.d.v1 << " " << r.d.v2 << " " << r.d.v3 << "\n"; 
     return os;
+}
+
+Vec Ray::getOrigin(){
+    return o;
+}
+
+Vec Ray::getDirection(){
+    return d;
 }
 
 Ray::~Ray() = default;
