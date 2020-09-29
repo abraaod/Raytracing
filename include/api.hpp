@@ -63,7 +63,7 @@ void Api::CAMERA(Paramset<std::string, std::string> ps){
 
     if(type.compare("orthographic") == 0){
         camera =  new OrthograficCamera(type, screen, lookat, lookfrom, vup);
-    } else if (type.compare("perspective")){
+    } else if (type.compare("perspective") == 0){
         float fovy = std::stof(ps.find("fovy"));
         camera = new PerspectiveCamera(type, fovy, lookat, lookfrom, vup);
     }
