@@ -1,9 +1,10 @@
 #ifndef _SURFEL_
 #define _SURFEL_
 
-#include "vec.hpp"
 #include "primitive.hpp"
+#include "vec.hpp"
 #include "point2.hpp"
+class Primitive;
 
 class Surfel{
 	public:

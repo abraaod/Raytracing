@@ -5,6 +5,7 @@
 #include <map>
 #include <iostream>
 #include <variant>
+#include <vector>
 #include "paramset.hpp"
 #include "api.hpp"
 
@@ -15,6 +16,8 @@ private:
     Paramset<std::string, std::string> cameraParams;
     Paramset<std::string, std::string> filmParams;
     Paramset<std::string, std::string> backgroundParams;
+    Paramset<std::string, std::string> materialParams;
+    std::vector<Paramset<std::string, std::string>> objectParams;
 
     void addItemToParamSet(pugi::xml_node *node, Paramset<std::string, std::string> *ps)
     {
@@ -68,11 +71,21 @@ public:
             {
                 this->addItemToParamSet(&n, &backgroundParams);
             }
+            else if(!aux.compare("material")){
+                this->addItemToParamSet(&n, &materialParams);
+            }
+            else if(!aux.compare("object")){
+                Paramset<std::string, std::string> object_;
+                this->addItemToParamSet(&n, &object_);
+                objectParams.push_back(object_);
+            }
         }
 
         api->CAMERA(cameraParams);
         api->FILM(filmParams);
         api->BACKGROUND(backgroundParams);
+        api->MATERIAL(materialParams);
+        api->OBJECTS(objectParams);
 
         return 0;
     }
