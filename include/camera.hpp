@@ -2,6 +2,7 @@
 #define _CAMERA_
 
 #include <string>
+#include <math.h>
 #include "./vec.hpp"
 #include "./ray.hpp"
 
@@ -75,13 +76,13 @@ void Camera::setHeightWidth(int height, int width){
     this->width = width;
 
     if(fovy > 0){
-        
-        float ratio = width/height;
-        
-        l = -ratio;
-        r = ratio;
-        t = 1;
-        b = -1;
+        float ratio = (float) width/ (float) height;
+        float h = tan((float) fovy/2.0);
+
+        this->l = -ratio * h;
+        this->r = ratio * h;
+        this->t = h;
+        this->b = -h;
     }
 }
 
@@ -96,8 +97,8 @@ class PerspectiveCamera : public Camera{
         }
 
         Ray generate_ray(int x, int y){
-            u_ = l + (r - l) * ((x+0.5)/width);
-            v_ = b + (t - b) * ((y+0.5)/height);
+            u_ = l + (r - l) * ((float(x)+0.5)/(float)width);
+            v_ = b + (t - b) * ((float(y)+0.5)/(float)height);
             Ray r(w + u*u_ + v*v_, e);
             return r;
         }
