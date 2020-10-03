@@ -74,9 +74,9 @@ void Camera::setHeightWidth(int height, int width){
 
     if(fovy > 0){
         float ratio = (float) width/ (float) height;
-        float h = tan((fovy*M_PI)/180.0);
+        float h = tan(((fovy*M_PI)/180.0)/2.0);
         
-        h /= 2;
+        // h /= 2;
         this->l = -ratio * h;
         this->r = ratio * h;
         this->t = h;
