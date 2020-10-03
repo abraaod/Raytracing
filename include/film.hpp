@@ -4,6 +4,7 @@
 #include <vector>
 #include "./vec.hpp"
 #include "../lib/lodepng.h"
+#include <iostream>
 #include <fstream>
 
 class Film
@@ -44,6 +45,7 @@ Film::Film(std::string filename, std::string img_type, std::string type, int x_r
     this->type = type;
     this->x_res = x_res;
     this->y_res = y_res;
+    
     fillEmpty();
 }
 
@@ -74,6 +76,23 @@ void Film::write_image(){
             }
         }
         outfile.close();
+    } else if(img_type == "png"){
+        std::vector<unsigned char> image;
+        image.resize(width() * height() * 4);
+        int o = 0;
+        for(int i = height() - 1; i >= 0; i--){
+            for(int j = 0; j < width(); j++){
+                image[o] = (int) (output[j][i].v1 * 255);
+                image[o+1] = (int) (output[j][i].v2 * 255);
+                image[o+2] = (int) (output[j][i].v3 * 255);
+                image[o+3] = 255;
+                o+=4;
+            }
+        }
+
+        unsigned error = lodepng::encode(filename, image, width(), height());
+
+        if(error) std::cout << "encoder error " << error << ":" << lodepng_error_text(error) << std::endl; 
     }
 }
 #endif

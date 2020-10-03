@@ -4,11 +4,11 @@
 #include "../include/vec.hpp"
 #include "../include/api.hpp"
 
-
 int main(int argc, char const *argv[])
 {
+
     if(argc != 2){
-        std::cout << "Error: Insert input file.\nEX: ./main <inputfile>.xml\n(You can find some example sin scene path)\n";
+        std::cout << "Error: Insert input file.\nEX: ./main <inputfile>.xml\n(You can find some examples in scene path)\n";
         return 0;
     }
 
@@ -21,8 +21,9 @@ int main(int argc, char const *argv[])
     
     Parser parser(path, api);
     parser.loadScene();
-    // parser.printLoadedScene();
+    parser.printLoadedScene();
     api.render();
+
     
     std::cout << "Image generated with success.\n";
 
