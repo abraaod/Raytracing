@@ -176,25 +176,18 @@ void Api::render(){
             Ray ray = camera->generate_ray( i, j );
             Vec color_(0,0,0);
 
+            // std::cout << i << " " << j << std::endl;
+            // std::cout << ray << std::endl;
+
             if(background->getMapping() == "screen"){
                 color_ = background->sample(float(i)/float(w), float(j)/float(h));
             }
             
-            if(obj_list_[0]->intersect_p(ray)){
-                color_ = Vec(1,0,0);
+            for(int k = 0; k < obj_list_.size(); k++){
+                if(obj_list_[k]->intersect_p(ray)){
+                    color_ = Vec(1,0,0);
+                }
             }
-
-            if(obj_list_[1]->intersect_p(ray)){
-                color_ = Vec(1,0,0);
-            }
-
-            if(obj_list_[2]->intersect_p(ray))
-                color_ = Vec(1,0,0);
-
-            // for(auto obj : obj_list_){
-            //     if(obj->intersect_p(ray))
-            //         color_ = Vec(255,0,0);
-            // }
 
             film->add(i, j, color_);
         }

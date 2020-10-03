@@ -212,7 +212,7 @@ inline Vec normalize(const Vec &v)
 
 inline Vec cross(const Vec &v1, const Vec &v2){
     return Vec((v1.v2 * v2.v3 - v1.v3 * v2.v2), 
-    ((v1.v1 * v2.v3 - v1.v3 * v2.v1)),
+    ((v1.v3 * v2.v1 - v1.v1 * v2.v3)),
     (v1.v1 * v2.v2 - v1.v2 * v2.v1));
 }
 

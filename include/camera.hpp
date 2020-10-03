@@ -65,9 +65,6 @@ void Camera::initializeFrame(Vec lookat, Vec lookfrom, Vec vup){
     this->u = normalize(cross(vup, w));
     this->v = normalize(cross(w, u));
     this->e = lookfrom;
-
-    // u.print();
-    // v.print();
 }
 
 void Camera::setHeightWidth(int height, int width){
@@ -77,12 +74,15 @@ void Camera::setHeightWidth(int height, int width){
 
     if(fovy > 0){
         float ratio = (float) width/ (float) height;
-        float h = tan((float) fovy/2.0);
-
+        float h = tan((fovy*M_PI)/180.0);
+        
+        h /= 2;
         this->l = -ratio * h;
         this->r = ratio * h;
         this->t = h;
         this->b = -h;
+
+        //std::cout << l << " " << r << " " << t << " " << b << " " << ratio << " " << h << std::endl;
     }
 }
 
@@ -97,16 +97,19 @@ class PerspectiveCamera : public Camera{
         }
 
         Ray generate_ray(int x, int y){
-            u_ = l + (r - l) * ((float(x)+0.5)/(float)width);
-            v_ = b + (t - b) * ((float(y)+0.5)/(float)height);
-            Ray r(w + u*u_ + v*v_, e);
+            u_ = l + (r - l) * ((x+0.5)/ (float) width);
+            v_ = b + (t - b) * ((y+0.5)/ (float) height);
+            //std::cout << u_ << " " << v_ << std::endl;
+            Ray r(e, w + u*u_ + v*v_);
             return r;
         }
 
         Ray generate_ray(float x, float y){
-            u_ = l + (r - l) * ((x+0.5)/width);
-            v_ = b + (t - b) * ((y+0.5)/height);
-            Ray r(w + u*u_ + v*v_, e);
+            u_ = l + (r - l) * ((y+0.5)/ (float) width);
+            v_ = b + (t - b) * ((x+0.5)/ (float) height);
+
+            //std::cout << u_ << " " << v_ << std::endl;
+            Ray r(e, w + u* (float) u_ + v* (float) v_);
             return r;
         }
 
@@ -123,18 +126,18 @@ class OrthograficCamera : public Camera{
         }
 
         Ray generate_ray(int x, int y){
-            u_ = l + (r - l) * ((x+0.5)/width);
-            v_ = b + (t - b) * ((y+0.5)/height);
+            u_ = l + (r - l) * ((x+0.5)/ (float) width);
+            v_ = b + (t - b) * ((y+0.5)/ (float) height);
             //std::cout  << u_ << " " << v_ << std::endl;
-            Ray r(e + u*u_ + v*v_, w);
+            Ray r(e + u* (float) u_ + v* (float) v_, w);
             return r;
 
         }
 
         Ray generate_ray(float x, float y){
-            u_ = l + (r - l) * ((x+0.5)/width);
-            v_ = b + (t - b) * ((y+0.5)/height);
-            Ray r(e + u*u_ + v*v_, w);
+            u_ = l + (r - l) * ((x+0.5)/ (float) width);
+            v_ = b + (t - b) * ((y+0.5)/ (float) height);
+            Ray r(e + u* (float) u_ + v* (float) v_, w);
             return r;
         }
 
