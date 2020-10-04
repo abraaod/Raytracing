@@ -26,9 +26,6 @@ Enter the folder of the projec and type:
 
 `./main <input_file_name>.xml`
 
-## Results
-
-The image with just a single color can be found in `simple_bkg.ppm`; and the image with the four colors gradient in `interpolated_bkg.ppm`.
 
 
 ## Author
