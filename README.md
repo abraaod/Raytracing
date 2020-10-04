@@ -2,19 +2,17 @@
 
 ##### [Abraão Vitor Lopes Dantas and Henrique David de Medeiros](#author)
 
-# Project 1 - Basic Infrastructure
+# Project 3 - Ray-Sphere Intersection
 
 This is a project to Computer Graphics I class (DIM0451-UFRN).
 
-In this project, it was necessary to create the basic infrastructure to make the ray tracing. The first project was divided in three subprojects: create a Paramset class, that is responsible to take info from XML file to the project; add a structure to Camera, Film and Background; and generate two image outputs from two inputs (single color background and a gradient from 4 colors background).
+In this project, it was necessary to make the rays generated in project 02 hit the spheres that was defined in project's scene in xml.
 
-The ParamSet is a class that it's gonna help us to take the inputs of an external file, responsible to create our configuration and our world, that is pass in XML format. The class saves in a dictionary the attributes (keys and values) and then we begin to configure everything that we need.  (Abraão and Henrique)
+Implementation of the infrastructure of Primitive and Surfel classes.  (Abraão and Henrique)
 
-After creating the ParamSet class, we focus on develop the world configurations, in the case: Camera, Film and Background's classes. They are responsible to manager the world that is gonna be created. We developed an Api class to handle those classes. (Abraão)
+Implementation of the intersection equation, between rays and sphere, from the values in the camera's rays object. (Abraão)
 
-The next step of the project, we had to generate an image with just a single background color (light blue sky, in ./scene/basic_scene.xml). And in the last step, we had to generate another image with 4 input colors, then we make an interpolation and we generate a beautiful gradient of those input colors, being each color in each corner of the rectangle. (Henrique)
-
-All generated images has type ppm, for more performance.
+Insertion of the equation in the generation of rays along the spheres, as well as the printing on the output file. (Henrique)
 
 ## Compile
 
