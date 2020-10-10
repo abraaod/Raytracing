@@ -18,6 +18,7 @@
 #include "primitive.hpp"
 #include "material.hpp"
 #include "flatmaterial.hpp"
+#include "aggregateprimitive.hpp"
 
 class Api
 {
@@ -29,7 +30,6 @@ private:
 
     Background* background;
     Material* mat;
-    // Primitive obj_list;
     std::vector<GeometricPrimitive *> obj_list_;
     Scene* scene;
 
@@ -45,7 +45,6 @@ public:
 
     void MATERIAL(Paramset<std::string, std::string> ps);
 
-    // void OBJECTS(std::vector<Paramset<std::string, std::string>> ps);
     void OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Paramset<std::string, std::string>>> ps);
     
     Camera getCamera();
@@ -167,24 +166,6 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
 
         obj_list_.push_back(geo_pri);
     }
-    
-    // for(Paramset<std::string, std::string> p : ps){
-    //     std::string type = p.find("type");
-    //     if(type == "sphere"){
-    //         float radius_ = std::stof(p.find("radius"));
-    //         std::string center = p.find("center");
-    //         // Quebrar os espaços do centro e gerar o vetor centro
-    //         std::vector<std::string> result; 
-    //         std::istringstream iss(center); 
-    //         for(std::string s; iss >> s; ) 
-    //             result.push_back(s);
-    //         Vec center_(std::stof(result[0]), std::stof(result[1]), std::stof(result[2]));
-    //         center_.print();
-    //         center_.v4 = 0;
-    //         Primitive * obj_list = new Sphere(center_, radius_);
-    //         obj_list_.push_back(obj_list);
-    //     }
-    // }
 }
 
 Camera Api::getCamera(){
