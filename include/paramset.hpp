@@ -23,6 +23,8 @@ public:
     void print();
 
     Data find(const Key _key) const;
+
+    void clear();
 };
 
 template <typename Key, typename Data>
@@ -56,6 +58,11 @@ Data Paramset<Key, Data>::find(const Key _key) const{
     }
     //std::cout << result->second << std::endl;
     return result->second;
+}
+
+template<typename Key, typename Data>
+void Paramset<Key, Data>::clear(){
+    params.clear();
 }
 
 #endif
