@@ -2,36 +2,36 @@
 #define _SPHERE_
 
 #include <cmath>
-#include "primitive.hpp"
+#include "shape.hpp"
 
-class Sphere : public Primitive {
+class Sphere : public Shape {
 
     public:
+        Sphere(bool flip_n, Vec center, float radius);
+        
 
         Vec center;
         float radius;
-
-        bool intersect( const Ray& r, Surfel *sf );
         
-        bool intersect_p( const Ray& r );
+
+        bool intersect( const Ray& r,float * t_hit, Surfel *sf );
+        bool intersect_p( const Ray & r );
 
         void printCenter(){
             center.print();
         }
 
-        Sphere(Vec center, float radius);
         // Sphere(Vec * center = nullptr, float radius = 0.0) : center{center}, radius{radius} {};
         virtual ~Sphere() = default;
 
 };
 
-Sphere::Sphere(Vec center, float radius){
+Sphere::Sphere(bool flip_n, Vec center, float radius){
     this->center= center;
     this->radius = radius;
 }
 
-bool Sphere::intersect(const Ray& r, Surfel *sf){
-
+bool Sphere::intersect( const Ray& r,float * t_hit, Surfel *sf ){
     Ray ray = r;
     Vec oc = ray.getOrigin() - (center);
     float a = (dot(ray.getDirection(), ray.getDirection()));
@@ -48,9 +48,7 @@ bool Sphere::intersect(const Ray& r, Surfel *sf){
 }
 
 bool Sphere::intersect_p(const Ray& r){
-    // center.print();
-    // std::cout << "R = " << r << "| Radius = " << radius << std::endl;
-
+    
     Ray ray = r;
     Vec oc = ray.getOrigin() - (center);
     float a = (dot(ray.getDirection(), ray.getDirection()));

@@ -93,7 +93,7 @@ public:
         api->FILM(filmParams);
         api->BACKGROUND(backgroundParams);
         // api->MATERIAL(materialParams);
-        // api->OBJECTS(objectParams);
+        api->OBJECTS(materialObject);
 
         return 0;
     }
