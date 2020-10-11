@@ -19,6 +19,7 @@
 #include "material.hpp"
 #include "flatmaterial.hpp"
 #include "aggregateprimitive.hpp"
+#include "integrator.hpp"
 
 class Api
 {
@@ -29,9 +30,11 @@ private:
     Film* film;
 
     Background* background;
-    Material* mat;
+    //Material* mat;
     std::vector<std::shared_ptr<GeometricPrimitive>> obj_list_;
     Scene* scene;
+
+    Integrator * integrator;
 
 public:
     Api(/* args */);
@@ -46,6 +49,8 @@ public:
     void MATERIAL(Paramset<std::string, std::string> ps);
 
     void OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Paramset<std::string, std::string>>> ps);
+
+    void INTEGRATOR(Paramset<std::string, std::string> ps);
     
     Camera getCamera();
 
@@ -57,17 +62,22 @@ public:
 
 };
 
-Api::Api(/* args */) : camera{nullptr}, film{nullptr}, background{nullptr}
+Api::Api(/* args */) : camera{nullptr}, film{nullptr}, background{nullptr}, integrator{nullptr}
 {
+    scene = new Scene();
 }
 
 Api::~Api(){
+    if(scene)
+        delete scene;
     if(camera)
         delete camera;
     if(film)
         delete film;
     if(background)
         delete background;
+    if(integrator)
+        delete integrator;
 }
 
 void Api::CAMERA(Paramset<std::string, std::string> ps){
@@ -84,6 +94,8 @@ void Api::CAMERA(Paramset<std::string, std::string> ps){
         float fovy = std::stof(ps.find("fovy"));
         camera = new PerspectiveCamera(type, fovy, lookat, lookfrom, vup);
     }
+
+    scene->setCamera(camera);
 }
 
 void Api::FILM(Paramset<std::string, std::string> ps){
@@ -93,6 +105,8 @@ void Api::FILM(Paramset<std::string, std::string> ps){
         int x_res = std::stoi(ps.find("x_res"));
         int y_res = std::stoi(ps.find("y_res"));
         film = new Film(filename, img_type, type, x_res, y_res);
+
+        scene->setFilm(film);
 }
 
 void Api::BACKGROUND(Paramset<std::string, std::string> ps){
@@ -109,19 +123,21 @@ void Api::BACKGROUND(Paramset<std::string, std::string> ps){
         std::string mapping = ps.find("mapping");
         background = new Background(type, bl, br, tl, tr, mapping);
     }
+
+    scene->setBackground(background);
 }
 
-void Api::MATERIAL(Paramset<std::string, std::string> ps){
-    std::string type = ps.find("type");
-    if(type == "flat"){
-        std::string color = ps.find("color");
-        Vec c(color);
-        mat = new FlatMaterial(c);
+// void Api::MATERIAL(Paramset<std::string, std::string> ps){
+//     std::string type = ps.find("type");
+//     if(type == "flat"){
+//         std::string color = ps.find("color");
+//         Vec c(color);
+//         mat = new FlatMaterial(c);
 
-    } else{
-        std::cout << "TIPO DO MATERIAL NÃO COMPATIVEL\n";
-    }
-}
+//     } else{
+//         std::cout << "TIPO DO MATERIAL NÃO COMPATIVEL\n";
+//     }
+// }
 
 void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Paramset<std::string, std::string>>> ps){
     for(std::pair<Paramset<std::string, std::string>, Paramset<std::string, std::string>> p : ps){
@@ -130,10 +146,10 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
 
         std::shared_ptr<GeometricPrimitive> geo_pri =  std::make_shared<GeometricPrimitive>();
 
-        std::cout << type_integrator <<  "\n\n\n";
+        //std::cout << type_integrator <<  "\n\n\n";
 
         if(type_object == "sphere"){
-        std::cout << "ENTROU\n\n\n";
+        //std::cout << "ENTROU\n\n\n";
 
             float radius_ = std::stof(std::get<1>(p).find("radius"));
             std::string center = std::get<1>(p).find("center");
@@ -143,7 +159,7 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             for(std::string s; iss >> s; ) 
                 result.push_back(s);
             Vec center_(std::stof(result[0]), std::stof(result[1]), std::stof(result[2]));
-            center_.print();
+            //center_.print();
             center_.v4 = 0;
             Shape * obj_ = new Sphere(false, center_, radius_);
             geo_pri->set_shape(obj_);
@@ -157,7 +173,7 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             for(std::string s; iss >> s; ) 
                 result.push_back(s);
             Vec center_(std::stof(result[0])/255.0, std::stof(result[1])/255.0, std::stof(result[2])/255.0);
-            center_.print();
+            //center_.print();
             center_.v4 = 0;
             Material * fl_ma = new FlatMaterial(center_); 
             geo_pri->set_material(fl_ma);
@@ -165,6 +181,15 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
 
 
         obj_list_.push_back(geo_pri);
+    }
+
+    scene->setObjList(obj_list_);
+}
+
+void Api::INTEGRATOR(Paramset<std::string, std::string> ps){
+    std::string type =  ps.find("type");
+    if(type == "flat"){
+        integrator = new FlatIntegrator(type);
     }
 }
 
@@ -187,6 +212,7 @@ void Api::render(){
     auto h = film->height();
     
     camera->setHeightWidth(h, w);
+
     for(int j = h-1; j >= 0 ; j--){
         for(int i = 0; i < w; i++){
             
@@ -200,13 +226,8 @@ void Api::render(){
                 color_ = background->sample(float(i)/float(w), float(j)/float(h));
             }
             
-            for(int k = 0; k < obj_list_.size(); k++){
-                if(obj_list_[k]->get_Shape()->intersect_p(ray)){
-                    color_ = obj_list_[k]->get_material()->kd();
-                }
-            }
-
-            film->add(i, j, color_);
+            Color24 c = integrator->Li(ray, scene, color_);
+            film->add(i, j, c);
         }
     }
 
