@@ -22,7 +22,9 @@ add_executable(
     ./include/primitive.hpp
     ./include/scene.hpp
     ./include/sphere.hpp
+    ./include/shape.hpp
     ./include/surfel.hpp
+    ./include/geometricprimitive.hpp
     ./include/vec.hpp
 
     ./lib/pugixml.cpp

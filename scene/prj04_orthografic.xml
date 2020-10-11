@@ -1,0 +1,25 @@
+<RT3>
+    <lookat look_from="0 0 -2" look_at="0 0 10" up="0 1 0" />
+    <camera type="perspective" fovy="65" />
+    <integrator type="flat"/>
+    <film type="image" x_res="800" y_res="600" filename="flat_spheres.png" img_type="png" />
+
+    <world_begin/>
+        <!-- The Background -->
+        <background type="colors" mapping="screen" bl="153 204 255" tl="18 10 143" tr="18 10 143" br="153 204 255" />
+
+        <material type="flat" color="42 201 51" /> <!-- Green -->
+        <object type="sphere" radius="0.4" center="-1 3.5 5"/>
+        <object type="sphere" radius="0.4" center="1 -0.5 5" />
+
+        <material type="flat" color="236 124 17" /> <!-- Gold -->
+        <object type="sphere" radius="0.4" center="-1 -1.5 1.5"/>
+
+        <material type="flat" color="253 153 253" /> <!-- Pink -->
+        <object type="sphere" radius="1" center="7 1.5 10" />
+
+        <material type="flat" color="253 3 3" /> <!-- Red -->
+        <object type="sphere" radius="0.8" center="1 -2.5 5" />
+    <world_end/>
+
+</RT3>
