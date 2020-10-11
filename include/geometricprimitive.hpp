@@ -8,13 +8,13 @@
 
 // using Bounds3f = Vec;
 
-class GeometricPrimitive{
+class GeometricPrimitive : public Primitive{
     private:
     Shape * shape;
     Material * material;
 
     public:
-    GeometricPrimitive();
+    GeometricPrimitive() : Primitive() {};
     GeometricPrimitive(Shape * s, Material * m);
     // Bounds3f world_bounds();
     bool intersect(Ray r, Surfel s);
@@ -23,9 +23,13 @@ class GeometricPrimitive{
     void set_material(Material * m);
     Shape * get_Shape();
     void set_shape(Shape * s);
+    ~GeometricPrimitive(){
+        if(shape)
+            delete shape;
+        if(material)
+            delete material;
+    }
 };
-
-GeometricPrimitive::GeometricPrimitive(){}
 
 GeometricPrimitive::GeometricPrimitive(Shape * s, Material * m){
     this->shape = s;
