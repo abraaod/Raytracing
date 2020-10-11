@@ -15,8 +15,8 @@ class Shape  {
 
     // Shape(bool flip_n);
     // Bounds3f world_bounds();
-    virtual bool intersect(const Ray& r, float * t_hit, Surfel * s) = 0;
-    virtual bool intersect_p(const Ray & r) = 0;
+    virtual bool intersect(Ray& r, float * t_hit, Surfel * s) = 0;
+    virtual bool intersect_p(Ray & r) = 0;
     virtual void printCenter() = 0;
 };
 
