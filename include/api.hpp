@@ -30,7 +30,7 @@ private:
 
     Background* background;
     Material* mat;
-    std::vector<GeometricPrimitive *> obj_list_;
+    std::vector<std::shared_ptr<GeometricPrimitive>> obj_list_;
     Scene* scene;
 
 public:
@@ -128,7 +128,7 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
         std::string type_object = std::get<1>(p).find("type");
         std::string type_integrator = std::get<0>(p).find("type");
 
-        GeometricPrimitive * geo_pri =  new GeometricPrimitive();
+        std::shared_ptr<GeometricPrimitive> geo_pri =  std::make_shared<GeometricPrimitive>();
 
         std::cout << type_integrator <<  "\n\n\n";
 
