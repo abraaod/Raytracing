@@ -2,17 +2,15 @@
 
 ##### [Abraão Vitor Lopes Dantas and Henrique David de Medeiros](#author)
 
-# Project 3 - Ray-Sphere Intersection
+# Project 4 - Integrators and Materials
 
 This is a project to Computer Graphics I class (DIM0451-UFRN).
 
-In this project, it was necessary to make the rays generated in project 02 hit the spheres that was defined in project's scene in xml.
+In this project, it was necessary to:
 
-Implementation of the infrastructure of Primitive and Surfel classes.  (Abraão and Henrique)
-
-Implementation of the intersection equation, between rays and sphere, from the values in the camera's rays object. (Abraão)
-
-Insertion of the equation in the generation of rays along the spheres, as well as the printing on the output file. (Henrique)
+1. Rearrange the project structure and implement classes and methods suggested by the professor; (Abraão and Henrique)
+2. Implement a `Material` class and and a derived `FlatMaterial` class that allows to specify a RGB color that will affect any object that comes afterwards the material tag; (Henrique)
+3. Implement a `Integrator` class and the derived `FlatIntegrator` class, which implements the color assignment algorithm. (Abraão)
 
 ## Compile
 
@@ -26,8 +24,23 @@ Enter the folder of the projec and type:
 
 `./main <input_file_name>.xml`
 
+## Results
 
+### Flat Integrator
+  #### Perspective
+  <img src="./flat_spheres.png">
+  #### Orthografic
+  <img src="./flat_spheres_ortho.png">
+  
+The normal integrator was implemented for extra credit
 
+### Normal Integrator
+  #### Perspective 
+  <img src="./flat_spheres_normal.png">
+  #### Orthografic
+  <img src="./flat_spheres_ortho_normal.png">
+  
+  
 ## Author
 Abraão Vitor Lopes Dantas  
 IT and Computer Science Student. IT Technician(since 2016)  
