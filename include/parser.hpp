@@ -94,6 +94,7 @@ public:
         api->BACKGROUND(backgroundParams);
         // api->MATERIAL(materialParams);
         api->OBJECTS(materialObject);
+        api->INTEGRATOR(integratorParams);
 
         return 0;
     }

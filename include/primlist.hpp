@@ -31,4 +31,4 @@ bool PrimList::intersect_p( const Ray & r ){
     return false;
 }
 
-#ifndef
+#endif

@@ -6,34 +6,32 @@
 #include "camera.hpp"
 #include "film.hpp"
 #include "background.hpp"
+#include "geometricprimitive.hpp"
 
 class Scene{
     public:
         Camera * camera;
         Background * background;
-        std::vector<Primitive> * obj_list;
-
-    private:
-        Scene(){}
-        Scene(Camera * cam, Background * bg, std::vector<Primitive> * obj_list);
-        ~Scene();
+        Film * film;
+        std::vector<std::shared_ptr<GeometricPrimitive>> obj_list;
+        //std::vector<GeometricPrimitive> * obj_list;
+        Scene() {}
+        Scene(Camera * cam, Background * bg, Film * film, std::vector<std::shared_ptr<GeometricPrimitive>> obj_list);
+        ~Scene() = default; 
         void setCamera(Camera * camera);
         void setBackground(Background * bg);
-        void setObjList(std::vector<Primitive> * obj_list);
+        void setFilm(Film * film);
+        void setObjList(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list);
+    private:
+        
 
 };
 
-Scene::Scene(Camera * cam, Background * bg, std::vector<Primitive> * obj_list){
+Scene::Scene(Camera * cam, Background * bg, Film * film, std::vector<std::shared_ptr<GeometricPrimitive>> obj_list){
     this->camera = cam;
     this->background = bg;
+    this->film = film;
     this->obj_list = obj_list;
-}
-
-Scene::~Scene(){
-    if(camera)
-        delete camera;
-    if(background)
-        delete background;
 }
 
 void Scene::setCamera(Camera * camera){
@@ -44,7 +42,11 @@ void Scene::setBackground(Background * bg){
     this->background = bg;
 }
 
-void Scene::setObjList(std::vector<Primitive> * obj_list){
+void Scene::setFilm(Film * film){
+    this->film = film;
+}
+
+void Scene::setObjList(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list){
     this->obj_list = obj_list;
 }
 
