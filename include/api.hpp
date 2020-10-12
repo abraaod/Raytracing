@@ -190,6 +190,8 @@ void Api::INTEGRATOR(Paramset<std::string, std::string> ps){
     std::string type =  ps.find("type");
     if(type == "flat"){
         integrator = new FlatIntegrator(type);
+    } else if (type == "normal_flat") {
+        integrator = new NormalIntegrator(type);
     }
 }
 
