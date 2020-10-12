@@ -27,17 +27,19 @@ Enter the folder of the projec and type:
 ## Results
 
 ### Flat Integrator
-  #### Perspective
+#### Perspective
   <img src="./flat_spheres.png">
-  #### Orthografic
+  
+#### Orthografic
   <img src="./flat_spheres_ortho.png">
   
 The normal integrator was implemented for extra credit
 
 ### Normal Integrator
-  #### Perspective 
+#### Perspective 
   <img src="./flat_spheres_normal.png">
-  #### Orthografic
+  
+#### Orthografic
   <img src="./flat_spheres_ortho_normal.png">
   
   
