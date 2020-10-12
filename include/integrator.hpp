@@ -29,7 +29,7 @@ class FlatIntegrator : public Integrator{
             for(int k = 0; k < obj_list_.size(); k++){
                 if(obj_list_[k]->intersect(ray, &sf)){
                     //sf.primitive->get_material()->kd();
-                    color_ = sf.primitive->get_material()->kd();;
+                    color_ = sf.primitive->get_material()->kd();
                 }
             }
 
