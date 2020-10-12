@@ -3,7 +3,7 @@
     <camera type="orthographic" screen_window="-8 8 -6 6" />
     <film type="image" x_res="800" y_res="600" filename="flat_spheres_ortho_normal.png" img_type="png" />
 
-    <integrator type="normal_flat"/>
+    <integrator type="depth_map" zmin="0.1" zmax="0.8" near_color="0 50 0" far_color="0 220 0"/>
 
     <world_begin/>
         <!-- The Background -->

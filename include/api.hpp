@@ -192,6 +192,24 @@ void Api::INTEGRATOR(Paramset<std::string, std::string> ps){
         integrator = new FlatIntegrator(type);
     } else if (type == "normal_flat") {
         integrator = new NormalIntegrator(type);
+    } else if (type == "depth_map"){
+        float zmin = std::stof(ps.find("zmin"));
+        float zmax = std::stof(ps.find("zmax"));
+        std::string nearColor_ = ps.find("near_color");
+        std::vector<std::string> result1; 
+        std::istringstream iss(nearColor_); 
+        for(std::string s; iss >> s; ) 
+            result1.push_back(s);
+        Vec nearColor(std::stof(result1[0])/255.0, std::stof(result1[1])/255.0, std::stof(result1[2])/255.0);
+        
+        std::string farColor_ = ps.find("far_color");
+        std::vector<std::string> result2; 
+        std::istringstream iss1(farColor_); 
+        for(std::string s; iss1 >> s; ) 
+            result2.push_back(s);
+        Vec farColor(std::stof(result2[0])/255.0, std::stof(result2[1])/255.0, std::stof(result2[2])/255.0);
+
+        integrator = new DepthIntegrator(type, zmin, zmax, nearColor, farColor);
     }
 }
 
@@ -210,10 +228,13 @@ Background Api::getBackground(){
 
 void Api::render(){
     
-    auto w = film->width();
-    auto h = film->height();
+    auto w = scene->film->width();
+    auto h = scene->film->height();
     
     camera->setHeightWidth(h, w);
+
+    integrator->preprocess(this->scene, this->camera);
+
 
     for(int j = h-1; j >= 0 ; j--){
         for(int i = 0; i < w; i++){
@@ -229,11 +250,11 @@ void Api::render(){
             }
             
             Color24 c = integrator->Li(ray, scene, color_);
-            film->add(i, j, c);
+            scene->film->add(i, j, c);
         }
     }
 
-    film->write_image();
+    scene->film->write_image();
 }
 
 #endif
