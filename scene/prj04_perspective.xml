@@ -1,8 +1,8 @@
 <RT3>
     <lookat look_from="0 0 -2" look_at="0 0 10" up="0 1 0" />
     <camera type="perspective" fovy="65" />
-    <integrator type="flat"/>
-    <film type="image" x_res="800" y_res="600" filename="flat_spheres.png" img_type="png" />
+    <integrator type="normal_flat"/>
+    <film type="image" x_res="800" y_res="600" filename="flat_spheres_normal.png" img_type="png" />
 
     
    <world_begin/>
