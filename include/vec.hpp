@@ -148,9 +148,9 @@ public:
 
     Vec operator*(const Vec &v_) const
     {
-        float v_v1 = v2 * (v_.v3 - v3) * v_.v2;
-        float v_v2 = (-1) * (v1 * v_.v3 - v3 * v_.v1);
-        float v_v3 = v1 * v_.v2 - v2 * v_.v1;
+        float v_v1 = v1 * v_.v1;
+        float v_v2 = v2 * v_.v2;
+        float v_v3 = v3 * v_.v3;
 
         return Vec(v_v1, v_v2, v_v3);
     }
