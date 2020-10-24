@@ -20,6 +20,8 @@ private:
     Paramset<std::string, std::string> materialParams;
     Paramset<std::string, std::string> objectParams;
     Paramset<std::string, std::string> integratorParams;
+    Paramset<std::string, std::string> lightsourceParams;
+    std::vector<Paramset<std::string, std::string>> lightsourcesParams;
     std::vector<std::pair<Paramset<std::string, std::string>, Paramset<std::string, std::string>>> materialObject;
 
     void addItemToParamSet(pugi::xml_node *node, Paramset<std::string, std::string> *ps)
@@ -87,6 +89,11 @@ public:
                 materialObject.push_back(materialObject_);
                 objectParams.clear();
             }
+            else if(!aux.compare("light_source")){
+                this->addItemToParamSet(&n, &lightsourceParams);
+                lightsourcesParams.push_back(lightsourceParams);
+                lightsourceParams.clear();
+            }
         }
 
         api->CAMERA(cameraParams);
@@ -95,6 +102,7 @@ public:
         // api->MATERIAL(materialParams);
         api->OBJECTS(materialObject);
         api->INTEGRATOR(integratorParams);
+        api->LIGHTS(lightsourcesParams);
 
         return 0;
     }

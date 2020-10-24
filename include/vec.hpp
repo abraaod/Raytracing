@@ -54,11 +54,11 @@ public:
         std::istringstream iss(vetor);
         std::vector<std::string> splited((std::istream_iterator<std::string>(iss)),
                                          std::istream_iterator<std::string>());
-        int v1_;
+        float v1_;
         std::istringstream(splited[0]) >> v1_;
-        int v2_;
+        float v2_;
         std::istringstream(splited[1]) >> v2_;
-        int v3_;
+        float v3_;
         std::istringstream(splited[2]) >> v3_;
         // int v4_;
         // std::istringstream(splited[3]) >> v4_;
@@ -66,10 +66,6 @@ public:
         this->v1 = v1_;
         this->v2 = v2_;
         this->v3 = v3_;
-        // this->v1 = v1_ / 255.0;
-        // this->v2 = v2_ / 255.0;
-        // this->v3 = v3_ / 255.0;
-        // this->v4 = v4_/255.0;
         } else{
             v1 = 0.0;
         v2 = 0.0;
