@@ -20,6 +20,11 @@
 #include "flatmaterial.hpp"
 #include "aggregateprimitive.hpp"
 #include "integrator.hpp"
+#include "light/light.hpp"
+#include "light/ambient.hpp"
+#include "light/directional.hpp"
+#include "light/point.hpp"
+#include "light/spot.hpp"
 
 class Api
 {
@@ -32,6 +37,7 @@ private:
     Background* background;
     //Material* mat;
     std::vector<std::shared_ptr<GeometricPrimitive>> obj_list_;
+    std::vector<std::shared_ptr<Light>> light_list;
     Scene* scene;
 
     Integrator * integrator;
@@ -51,6 +57,8 @@ public:
     void OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Paramset<std::string, std::string>>> ps);
 
     void INTEGRATOR(Paramset<std::string, std::string> ps);
+
+    void LIGHTS(std::vector<Paramset<std::string, std::string>> ps);
     
     Camera getCamera();
 
@@ -120,6 +128,8 @@ void Api::BACKGROUND(Paramset<std::string, std::string> ps){
         Vec br(ps.find("br"));
         Vec tl(ps.find("tl"));
         Vec tr(ps.find("tr"));
+        std::cout << std::endl;
+
         std::string mapping = ps.find("mapping");
         background = new Background(type, bl, br, tl, tr, mapping);
     }
@@ -172,7 +182,7 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             std::istringstream iss(color); 
             for(std::string s; iss >> s; ) 
                 result.push_back(s);
-            Vec center_(std::stof(result[0])/255.0, std::stof(result[1])/255.0, std::stof(result[2])/255.0);
+            Vec center_(std::stof(result[0]), std::stof(result[1]), std::stof(result[2]));
             //center_.print();
             center_.v4 = 0;
             Material * fl_ma = new FlatMaterial(center_); 
@@ -193,6 +203,49 @@ void Api::INTEGRATOR(Paramset<std::string, std::string> ps){
     } else if (type == "normal_flat") {
         integrator = new NormalIntegrator(type);
     }
+}
+
+void Api::LIGHTS(std::vector<Paramset<std::string, std::string>> ps){
+    for(auto lig : ps){
+       std::string type = lig.find("type");
+       if(type == "ambient" || type == "directional"){
+           Vec l(lig.find("L"));
+           if(type == "ambient"){
+            std::shared_ptr<Light> al = std::make_shared<AmbientLight>(type, l);
+            light_list.push_back(al);
+           }
+
+
+           if(type == "directional"){
+               Vec scale(lig.find("scale"));
+               Vec from(lig.find("from"));
+               Vec to(lig.find("to"));
+               // CREATE DIRECTIONAL LIGHT
+            //    std::shared_ptr<Light> dl = std::make_shared<DirectionalLight>(type, l, scale, from, to);
+            //    light_list.push_back(dl);
+           }
+       }
+
+       if(type == "point" || type == "spot"){
+           Vec i(lig.find("I"));
+           Vec from(lig.find("from"));
+           Vec scale(lig.find("scale"));
+
+           if(type == "point"){
+               std::shared_ptr<Light> pl = std::make_shared<PointLight>(type, i, scale, from);
+               light_list.push_back(pl);
+           }
+
+           if(type == "spot"){
+               Vec to(lig.find("to"));
+               Vec cutoff(lig.find("cutoff"));
+               Vec falloff(lig.find("falloff"));
+               std::shared_ptr<Light> sl = std::make_shared<SpotLight>(type, i, scale, from , to, cutoff, falloff);
+               light_list.push_back(sl);
+           }
+       }
+    }
+    
 }
 
 Camera Api::getCamera(){
