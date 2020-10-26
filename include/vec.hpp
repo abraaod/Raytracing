@@ -137,7 +137,7 @@ public:
         float v_v1 = v1 * v_;
         float v_v2 = v2 * v_;
         float v_v3 = v3 * v_;
-        float v_v4 = v4 * v_;
+        float v_v4 = 0.0;
 
         return Vec(v_v1, v_v2, v_v3, v_v4);
     }
@@ -148,7 +148,7 @@ public:
         float v_v2 = v2 * v_.v2;
         float v_v3 = v3 * v_.v3;
 
-        return Vec(v_v1, v_v2, v_v3);
+        return Vec(v_v1, v_v2, v_v3, 0.0);
     }
 
     std::string toRGB()
@@ -204,6 +204,15 @@ inline Vec normalize(const Vec &v)
     float r_v3 = v.v3 / root;
 
     return Vec(r_v1, r_v2, r_v3);
+}
+
+inline float magnitude(const Vec &v){
+    float sq_v1 = v.v1 * v.v1;
+    float sq_v2 = v.v2 * v.v2;
+    float sq_v3 = v.v3 * v.v3;
+
+    float root = sqrt(sq_v1 + sq_v2 + sq_v3);
+    return root;
 }
 
 inline Vec cross(const Vec &v1, const Vec &v2){

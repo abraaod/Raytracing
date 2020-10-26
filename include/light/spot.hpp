@@ -23,6 +23,8 @@ class SpotLight : public Light{
         this->cutoff = cutoff;
         this->falloff = falloff;
     }
+
+    Vec sample_Li(const Surfel& hit /*in*/, Vec v) {}
 };
 
 #endif

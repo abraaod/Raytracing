@@ -42,7 +42,7 @@ GeometricPrimitive::GeometricPrimitive(Shape * s, Material * m){
 bool GeometricPrimitive::intersect(Ray& r, Surfel * s){
     float thit;
     if(shape->intersect(r, &thit, s)){
-        if(thit < r.tmax){
+        if(thit < r.tmax and thit > 0.0){
             r.tmax = thit;
             s->primitive = this;
             return true;

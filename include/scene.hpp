@@ -7,6 +7,8 @@
 #include "film.hpp"
 #include "background.hpp"
 #include "geometricprimitive.hpp"
+#include "light/light.hpp"
+#include "light/ambient.hpp"
 
 class Scene{
     public:
@@ -14,6 +16,8 @@ class Scene{
         Background * background;
         Film * film;
         std::vector<std::shared_ptr<GeometricPrimitive>> obj_list;
+        std::vector<std::shared_ptr<Light>> lights;
+        AmbientLight * ambient;
         //std::vector<GeometricPrimitive> * obj_list;
         Scene() {}
         Scene(Camera * cam, Background * bg, Film * film, std::vector<std::shared_ptr<GeometricPrimitive>> obj_list);
@@ -22,6 +26,7 @@ class Scene{
         void setBackground(Background * bg);
         void setFilm(Film * film);
         void setObjList(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list);
+        void setLight(std::vector<std::shared_ptr<Light>> lights);
     private:
         
 
@@ -48,6 +53,10 @@ void Scene::setFilm(Film * film){
 
 void Scene::setObjList(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list){
     this->obj_list = obj_list;
+}
+
+void Scene::setLight(std::vector<std::shared_ptr<Light>> lights){
+    this->lights = lights;
 }
 
 #endif

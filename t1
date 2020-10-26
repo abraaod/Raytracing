@@ -1,0 +1,32 @@
+Loading...
+vup: 0 1 0
+
+Camera params
+
+fovy 45
+look_at 0 2 1
+look_from -3 5.5 -10
+type perspective
+up 0 1 0
+
+Film params
+
+filename flat_spheres.png
+img_type png
+type image
+x_res 800
+y_res 600
+
+Integrator params
+
+type blinn_phong
+
+Background params
+
+bl 153 204 255
+br 153 204 255
+mapping screen
+tl 18 10 143
+tr 18 10 143
+type colors
+Image generated with success.

@@ -14,6 +14,12 @@ class AmbientLight : public Light{
         this->type = type;
         this->l = l;
     }
+
+    Vec sample_Li(const Surfel& hit /*in*/, Vec v);
 };
+
+Vec AmbientLight::sample_Li(const Surfel& hit, Vec v){
+    return l;
+}
 
 #endif
