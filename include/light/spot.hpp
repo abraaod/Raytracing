@@ -24,7 +24,7 @@ class SpotLight : public Light{
         this->falloff = falloff;
     }
 
-    Vec sample_Li(const Surfel& hit /*in*/, Vec v) {}
+    Vec sample_Li(const Surfel& hit /*in*/, Vec v, Vec *wi) {}
 };
 
 #endif

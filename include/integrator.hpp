@@ -111,16 +111,27 @@ public:
                 // BlinnMaterial *fm = dynamic_cast< BlinnMaterial *>( sf.primitive->get_material() );
                 // color_ = fm->kd() * light_I * std::max(0.f, dot(c, l));
                 Vec c;
-                for(int l = 0;  l < lights.size(); l++){
-                    c = c + lights[l]->sample_Li(sf, ray.getOrigin());
-                    //color_.print();
-                }
+                Vec wi;
+                BlinnMaterial *bm = dynamic_cast< BlinnMaterial *>( sf.primitive->get_material() );
+                for(int i = 0;  i < lights.size(); i++){
+                    Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
+                    Vec v = ray.getOrigin() - sf.p;
+                    v = normalize(v);
+                    //v = normalize(v);
+                    Vec n =  normalize(sf.n);
+                    Vec h =  (v + l)/(magnitude(v+l));// * magnitude(dir_))); 
 
-                //color_ = c;
-                BlinnMaterial *fm = dynamic_cast< BlinnMaterial *>( sf.primitive->get_material() );
-                Vec la = scene->ambient->l;
-                color_ = c + (fm->ka() * la);
-                //color_.print();
+                    c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) +  (bm->ks() * wi *  std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
+                }
+                
+                if(scene->ambient != nullptr){
+                    Vec la = scene->ambient->l;
+                    color_ = c + (bm->ka() * la);
+                } else {
+                    color_ = c;
+                }
+                
+                
                 if(color_.v1 > 1.0){
                     color_.v1 = 1.0;
                 }

@@ -15,10 +15,10 @@ class AmbientLight : public Light{
         this->l = l;
     }
 
-    Vec sample_Li(const Surfel& hit /*in*/, Vec v);
+    Vec sample_Li(const Surfel& hit /*in*/, Vec v, Vec *wi);
 };
 
-Vec AmbientLight::sample_Li(const Surfel& hit, Vec v){
+Vec AmbientLight::sample_Li(const Surfel& hit, Vec v, Vec *wi){
     return l;
 }
 

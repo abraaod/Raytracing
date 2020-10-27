@@ -11,7 +11,7 @@ class Light{
 
     Light(std::string type){this->type = type;}
 
-    virtual Vec sample_Li(const Surfel& hit /*in*/, Vec v) = 0;
+    virtual Vec sample_Li(const Surfel& hit /*in*/, Vec v, Vec *wi) = 0;
 
 };
 

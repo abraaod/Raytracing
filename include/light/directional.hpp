@@ -23,26 +23,15 @@ class DirectionalLight : public Light{
         this->to = to;
     }
 
-    Vec sample_Li(const Surfel& hit /*in*/, Vec v);
+    Vec sample_Li(const Surfel& hit /*in*/, Vec v, Vec *wi);
 
 };
 
-Vec DirectionalLight::sample_Li(const Surfel& hit, Vec v){
-    Vec dir = from - to;
-    dir = normalize(dir);
-
-    Vec dir_ = v - normalize(hit.p);
-    dir_ = normalize(dir_);
-    //v = normalize(v);
-    Vec n =  normalize(hit.n);
-    Vec h =  (dir_ + dir)/(magnitude(dir_+dir));// * magnitude(dir_))); 
-
-    BlinnMaterial *bm = dynamic_cast< BlinnMaterial *>( hit.primitive->get_material());
-    Vec c = (bm->kd() * l * std::max(0.f, dot(n, dir))) +  (bm->ks() * l *  std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
-    
-   
-    
-    return c;
+Vec DirectionalLight::sample_Li(const Surfel& hit, Vec v, Vec *wi){
+    Vec l_ = from - to;
+    l_ = normalize(l_);
+    *wi = l;
+    return l_;
     //return l;
 
 }

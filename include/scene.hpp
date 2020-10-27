@@ -17,7 +17,7 @@ class Scene{
         Film * film;
         std::vector<std::shared_ptr<GeometricPrimitive>> obj_list;
         std::vector<std::shared_ptr<Light>> lights;
-        AmbientLight * ambient;
+        AmbientLight * ambient = nullptr;
         //std::vector<GeometricPrimitive> * obj_list;
         Scene() {}
         Scene(Camera * cam, Background * bg, Film * film, std::vector<std::shared_ptr<GeometricPrimitive>> obj_list);
