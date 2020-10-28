@@ -170,7 +170,7 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             for(std::string s; iss >> s; ) 
                 result.push_back(s);
             Vec center_(std::stof(result[0]), std::stof(result[1]), std::stof(result[2]));
-            //center_.print();
+            center_.print();
             center_.v4 = 0;
             Shape * obj_ = new Sphere(false, center_, radius_);
             geo_pri->set_shape(obj_);
@@ -261,8 +261,8 @@ void Api::LIGHTS(std::vector<Paramset<std::string, std::string>> ps){
 
            if(type == "spot"){
                Vec to(lig.find("to"));
-               Vec cutoff(lig.find("cutoff"));
-               Vec falloff(lig.find("falloff"));
+               float cutoff = std::stof(lig.find("cutoff"));
+               float falloff = std::stof(lig.find("falloff"));
                std::shared_ptr<Light> sl = std::make_shared<SpotLight>(type, i, scale, from , to, cutoff, falloff);
                light_list.push_back(sl);
            }
