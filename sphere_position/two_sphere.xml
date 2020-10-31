@@ -1,0 +1,15 @@
+<RT3>
+    <lookat look_from="0 3 -10" look_at="0 1 1" up="0 1 0" />
+    <camera type="perspective" fovy="45" />
+    <integrator type="blinn_phong" depth="2" />
+
+    <film type="image" x_res="800" y_res="600" filename="two_spheres.png" img_type="png" gamma_corrected="no" />
+    <include filename="../scenes/projects_references/proj_05_blinn_phong/sphere_position/geometry_directional.xml" />
+
+    <lookat look_from="0 1 -5" look_at="0 1 1" up="0 1 0" />
+    <camera type="orthographic" screen_window="-4 4 -3 3" />
+    <integrator type="blinn_phong" depth="2" />
+
+    <film type="image" x_res="800" y_res="600" filename="two_spheres_ortho.png" img_type="png" gamma_corrected="no" />
+    <include filename="../scenes/projects_references/proj_05_blinn_phong/sphere_position/geometry_directional.xml" />
+</RT3>

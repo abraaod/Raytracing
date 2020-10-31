@@ -1,0 +1,22 @@
+<RT3>
+    <lookat look_from="0 1 -5" look_at="0 1 1" up="0 1 0" />
+    <camera type="orthographic" screen_window="-4 4 -3 3" />
+    <integrator type="blinn_phong" depth="2" />
+    <film type="image" x_res="800" y_res="600" filename="two_spheres_ortho.png" img_type="png" gamma_corrected="no" />
+    <world_begin/>
+
+        <!-- The Background -->
+        <background type="colors" mapping="screen" bl="153 204 255" tl="18 10 143" tr="18 10 143" br="153 204 255" />
+
+        <!-- Lights -->
+        <light_source type="directional" L="0.9 0.9 0.9" scale="1 1 1" from="1 0.8 -1" to="0 0 1" />
+        <light_source type="directional" L="0.4 0.4 0.4" scale="1 1 1" from="-1 0.2 -1" to="0 0 1" />
+
+        <material type="blinn" name="redish" ambient="0.6 0.6 0.6" diffuse="0.9 0.2 0.1" specular="0.8 0.8 0.8" mirror="0.0 0.0 0.0" glossiness="64"/>
+        <object type="sphere" radius="1" center="0 1.0 0" />
+
+        <material type="blinn" name="grey" ambient="0.1 0.1 0.1" diffuse="0.7 0.7 0.7" specular="0 0 0" mirror="0.1 0.1 0.1" glossiness="0"/> <!-- Grey -->   
+        <object type="sphere" radius="5000" center="0 -5000.0 0"/>
+
+    <world_end/>
+</RT3>
