@@ -16,6 +16,8 @@ class DirectionalLight : public Light{
     Vec scale;
     Vec from;
     Vec to;
+    Vec world_center;
+    float world_radius;
 
     DirectionalLight(std::string type, Vec l, Vec scale, Vec from, Vec to) : Light(type, from){
         this->type = type;
@@ -39,9 +41,7 @@ Vec DirectionalLight::sample_Li(const Surfel& hit, Vec v, Vec *wi){
 }
 
 void DirectionalLight::preprocessLight(Scene & scene){
-    for(auto obj : scene.obj_list){
-        
-    }   
+    scene.getWorldBound().boundingSphere(&world_center, &world_radius);
 }
 
 
