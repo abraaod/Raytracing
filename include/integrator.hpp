@@ -4,6 +4,7 @@
 #include "ray.hpp"
 #include "scene.hpp"
 #include "surfel.hpp"
+#include "light/point.hpp"
 
 class Integrator
 {
@@ -97,6 +98,7 @@ public:
         {
             if (obj_list_[k]->intersect(ray, &sf))
             {
+                
                 // Vec light_pos{1, 3, 3};      // Point light location    (hardcoded here, for now)
                 // Vec light_I{0.9, 0.9, 0.9}; // Point light Intensity   (hardcoded here, for now)
                 // Vec l;                      // This is the light vector.
@@ -114,15 +116,36 @@ public:
                 Vec wi;
                 BlinnMaterial *bm = dynamic_cast< BlinnMaterial *>( sf.primitive->get_material() );
                 for(int i = 0;  i < lights.size(); i++){
+                    
                     Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
                     Vec v = ray.getOrigin() - sf.p;
                     v = normalize(v);
                     //v = normalize(v);
                     Vec n =  normalize(sf.n);
+
+                    
+                    
                     Vec h =  (v + l)/(magnitude(v+l));// * magnitude(dir_))); 
 
+                    
+                    
                     c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) +  (bm->ks() * wi *  std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
+                    
+
+                    Vec norma_p = normalize(sf.p);
+                    Surfel sp;
+                    
+                    for (int q = 0; q < obj_list_.size(); q++){
+                        for(int k = 0;  k < lights.size(); k++){
+                            Ray shadow_ray(sf.p, lights[k]->from);
+                            if (obj_list_[q]->intersect(shadow_ray, &sp)){
+                                
+                                return Vec(0,0,0);
+                            }
+                        }
+                    }
                 }
+
                 
                 if(scene->ambient != nullptr){
                     Vec la = scene->ambient->l;

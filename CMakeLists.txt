@@ -26,6 +26,12 @@ add_executable(
     ./include/surfel.hpp
     ./include/geometricprimitive.hpp
     ./include/vec.hpp
+    ./include/light/light.hpp
+    ./include/light/ambient.hpp
+    ./include/light/directional.hpp
+    ./include/light/point.hpp
+    ./include/light/spot.hpp
+    ./include/bounds3.hpp
 
     ./lib/pugixml.cpp
     ./lib/lodepng.cpp

@@ -4,6 +4,8 @@
 #include <string>
 #include "../vec.hpp"
 #include "./light.hpp"
+#include "../scene.hpp"
+
 
 class SpotLight : public Light{
     public:
@@ -25,6 +27,9 @@ class SpotLight : public Light{
     }
 
     Vec sample_Li(const Surfel& hit /*in*/, Vec v, Vec *wi) {}
+    void preprocessLight(Scene & scene){
+
+    }
 };
 
 #endif
