@@ -4,7 +4,10 @@
 #include <string>
 #include "../vec.hpp"
 #include "./light.hpp"
+<<<<<<< HEAD
 #include "../scene.hpp"
+=======
+>>>>>>> 50e8242ba12a1075d0ad38d7e1608f9afd2b3372
 #include "math.h"
 
 class SpotLight : public Light{
@@ -26,9 +29,12 @@ class SpotLight : public Light{
         this->falloff = cos(((falloff*M_PI)/180.0)/2.0);
     }
 
+<<<<<<< HEAD
     void preprocessLight(Scene & scene){
     }
 
+=======
+>>>>>>> 50e8242ba12a1075d0ad38d7e1608f9afd2b3372
     Vec sample_Li(const Surfel& hit /*in*/, Vec v, Vec *wi) {
 
         Vec lightDir = from - hit.p;
