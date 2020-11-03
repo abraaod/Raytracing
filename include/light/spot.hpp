@@ -21,8 +21,8 @@ class SpotLight : public Light{
         this->scale = scale;
         this->from = from;
         this->to = to;
-        this->cutoff = cos(((cutoff*M_PI)/180.0)/2.0);
-        this->falloff = cos(((falloff*M_PI)/180.0)/2.0);
+        this->cutoff = cos((cutoff*M_PI)/180.0);
+        this->falloff = cos((falloff*M_PI)/180.0);
     }
 
     Vec sample_Li(const Surfel& hit /*in*/, Vec v, Vec *wi) {
