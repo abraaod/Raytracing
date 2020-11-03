@@ -35,11 +35,30 @@ bool Sphere::intersect( Ray& r,float * t_hit, Surfel *sf ){
     Ray ray = r;
     Vec oc = ray.getOrigin() - (center);
     float a = (dot(ray.getDirection(), ray.getDirection()));
-    float b = 2.0 * (dot(oc, ray.getDirection()));
+    float b = 2 * (dot(oc, ray.getDirection()));
     float c = dot(oc, oc) - (radius*radius);
 
-    float discriminat = (b*b) -4 * a * c;
-    if(discriminat >= 0){
+    float discriminat = (b*b) - 4* a * c;
+    if((discriminat) >= 0){
+
+        // auto t = (-b - sqrt(discriminat)) / (a);
+
+        // if(t > r.tmin and t < r.tmax){
+        //     sf->p = r(t);
+        //     sf->n = sf->p - center;
+        //     *t_hit = t;
+        //     sf->primitive = dynamic_cast<Primitive *>(this);
+        // }
+
+        // t = (-b + sqrt(discriminat)) / (a);
+
+        // if(t > r.tmin and t < r.tmax){
+        //     sf->p = r(t);
+        //     sf->n = sf->p - center;
+        //     *t_hit = t;
+        //     sf->primitive = dynamic_cast<Primitive *>(this);
+        // }
+
         float tmin =  (-b -sqrt(discriminat))/ (2*a);
         float tmax =  (-b +sqrt(discriminat))/ (2*a);
         if(tmin < tmax){
@@ -59,16 +78,36 @@ bool Sphere::intersect( Ray& r,float * t_hit, Surfel *sf ){
 }
 
 bool Sphere::intersect_p(Ray& r){
-    
     Ray ray = r;
     Vec oc = ray.getOrigin() - (center);
     float a = (dot(ray.getDirection(), ray.getDirection()));
-    float b = 2.0 * (dot(oc, ray.getDirection()));
+    float b = 2.0*(dot(oc, ray.getDirection()));
     float c = dot(oc, oc) - (radius*radius);
 
-    float discriminat = (b*b) -4 * a * c;
-    if(discriminat >= 0){
-        return true;
+    float discriminat = ( b * b ) - 4.0 * a * c;
+    
+    if(discriminat > 0){
+        auto t  = (-b - sqrt(discriminat)) / (2.0*a);
+        // float tmin =  (-b -sqrt(discriminat))/ (2*a);
+        // float tmax =  (-b +sqrt(discriminat))/ (2*a);
+        
+        
+        if(t > r.tmin and t < r.tmax){
+            return true;
+        }
+
+        t = (-b + sqrt(discriminat)) / (2.0*a);
+
+        if(t > r.tmin and t < r.tmax){
+            return true;
+        }
+        
+        // if(tmin  < tmax){
+        //     *t_hit = tmin;
+        // } else {
+        //     *t_hit = tmax;
+        // }
+        // return true;
     }
 
     return false;

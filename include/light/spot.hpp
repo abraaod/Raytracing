@@ -4,6 +4,7 @@
 #include <string>
 #include "../vec.hpp"
 #include "./light.hpp"
+#include "../scene.hpp"
 #include "math.h"
 
 class SpotLight : public Light{
@@ -23,6 +24,9 @@ class SpotLight : public Light{
         this->to = to;
         this->cutoff = cos((cutoff*M_PI)/180.0);
         this->falloff = cos((falloff*M_PI)/180.0);
+    }
+
+    void preprocessLight(Scene & scene){
     }
 
     Vec sample_Li(const Surfel& hit /*in*/, Vec v, Vec *wi) {

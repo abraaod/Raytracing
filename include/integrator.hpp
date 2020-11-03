@@ -4,6 +4,7 @@
 #include "ray.hpp"
 #include "scene.hpp"
 #include "surfel.hpp"
+#include "light/point.hpp"
 
 class Integrator
 {
@@ -97,52 +98,63 @@ public:
         {
             if (obj_list_[k]->intersect(ray, &sf))
             {
-                // Vec light_pos{1, 3, 3};      // Point light location    (hardcoded here, for now)
-                // Vec light_I{0.9, 0.9, 0.9}; // Point light Intensity   (hardcoded here, for now)
-                // Vec l;                      // This is the light vector.
-                // l = light_pos - sf.p;         // Determine the vector from the light to the hit point `p`.
-                // l = normalize(l);
-                // //l.print();
 
-                // // Determining pixel color based on **Lambertian Shading** only.
-                // Vec c {sf.n};
-                // c = normalize(c);
-                // //std::cout << std::max(0.f, dot(c, l)) << std::endl;
-                // BlinnMaterial *fm = dynamic_cast< BlinnMaterial *>( sf.primitive->get_material() );
-                // color_ = fm->kd() * light_I * std::max(0.f, dot(c, l));
                 Vec c;
                 Vec wi;
-                BlinnMaterial *bm = dynamic_cast< BlinnMaterial *>( sf.primitive->get_material() );
-                for(int i = 0;  i < lights.size(); i++){
+                BlinnMaterial *bm = dynamic_cast<BlinnMaterial *>(sf.primitive->get_material());
+                for (int i = 0; i < lights.size(); i++)
+                {
+
                     Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
+                    float mag = distance(sf.p, lights[i]->from);
+                    Ray shadow_ray(sf.p, l, 0.0, mag);
+
+                    bool hittou = false;
+
+                    for (int z = 0; z < obj_list_.size(); z++)
+                    {
+                        if (z != k)
+                        {
+                            hittou = obj_list_[z]->intersect_p(shadow_ray);
+                        }
+                        if (hittou)
+                        {
+                            return Vec(0.0, 0.0, 0.0);
+                        }
+                    }
+
                     Vec v = ray.getOrigin() - sf.p;
                     v = normalize(v);
-                    //v = normalize(v);
-                    Vec n =  normalize(sf.n);
-                    Vec h =  (v + l)/(magnitude(v+l));// * magnitude(dir_))); 
+                    Vec n = normalize(sf.n);
 
-                    c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) +  (bm->ks() * wi *  std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
+                    Vec h = (v + l) / (magnitude(v + l)); // * magnitude(dir_)));
+
+                    c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) + (bm->ks() * wi * std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
+
                 }
-                
-                if(scene->ambient != nullptr){
+
+                if (scene->ambient != nullptr)
+                {
                     Vec la = scene->ambient->l;
                     color_ = c + (bm->ka() * la);
-                } else {
+                }
+                else
+                {
                     color_ = c;
                 }
-                
-                
-                if(color_.v1 > 1.0){
+
+                if (color_.v1 > 1.0)
+                {
                     color_.v1 = 1.0;
                 }
 
-
-                if(color_.v2 > 1.0){
+                if (color_.v2 > 1.0)
+                {
                     color_.v2 = 1.0;
                 }
 
-
-                if(color_.v3 > 1.0){
+                if (color_.v3 > 1.0)
+                {
                     color_.v3 = 1.0;
                 }
             }

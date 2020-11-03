@@ -29,7 +29,7 @@ public:
         this->v1 = v1;
         this->v2 = v2;
         this->v3 = v3;
-        this->v4 = 0;
+        this->v4 = 0.0;
     }
 
     Vec(float v1, float v2, float v3, float v4)
@@ -137,9 +137,9 @@ public:
         float v_v1 = v1 * v_;
         float v_v2 = v2 * v_;
         float v_v3 = v3 * v_;
-        float v_v4 = 0.0;
+        // float v_v4 = 0.0;
 
-        return Vec(v_v1, v_v2, v_v3, v_v4);
+        return Vec(v_v1, v_v2, v_v3);
     }
 
     Vec operator*(const Vec &v_) const
@@ -180,6 +180,14 @@ public:
         return *this;
     }
 
+    bool operator==(const Vec &b) const{
+        if(b.v1 == this->v1 && b.v2 == this->v2 && b.v3 == this->v3){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     Vec &operator/=(const float t)
     {
         float k = 1.0 / t;
@@ -188,6 +196,8 @@ public:
         v3 *= k;
         return *this;
     }
+
+    
 };
 
 // Normalização do vetor
@@ -213,6 +223,13 @@ inline float magnitude(const Vec &v){
 
     float root = sqrt(sq_v1 + sq_v2 + sq_v3);
     return root;
+}
+
+inline float distance(const Vec &v1, const Vec &v2){
+    float a = v2.v1 - v1.v1;
+    float b = v2.v2 - v1.v2;
+    float c = v2.v3 - v1.v3;
+    return  sqrt(a*a + b*b + c*c);
 }
 
 inline Vec cross(const Vec &v1, const Vec &v2){
