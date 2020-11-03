@@ -119,12 +119,12 @@ public:
                 {
 
                     Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
-                    
-                    Vec e(0.001f, 0.001f, 0.0001f);
-                    Ray shadow_ray(sf.p + e, l);
+
+                    Vec aux(0.01,0.01,0.01);
+
+                    Ray shadow_ray(sf.p, l+aux, 0.0, 1.0);
 
                     bool hittou = false;
-                    int cont = 0;
 
                     for (int z = 0; z < obj_list_.size(); z++)
                     {
@@ -158,7 +158,7 @@ public:
                     //     }
                     // }
                 
-                    // Ray reflected_ray(ray.getDirection() - 2*(dot(ray.getDirection(), sf.n)) * sf.n);
+                    // Ray reflected_ray(ray - 2(dot(ray, sf.n)) * sf.n);
 
                 }
 
