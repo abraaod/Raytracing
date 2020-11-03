@@ -57,8 +57,11 @@ bool GeometricPrimitive::intersect(Ray& r, Surfel * s){
 
 bool GeometricPrimitive::intersect_p(Ray& ray){
     float thit;
-    if(shape->intersect_p(ray)){
-        return true;
+    if(shape->intersect_p(ray, &thit)){
+        if(thit < ray.tmax and thit > 0.0){
+            ray.tmax = thit;
+            return true;
+        }
     }
     return false;
 }

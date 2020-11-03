@@ -15,7 +15,7 @@ class Sphere : public Shape {
         
 
         bool intersect( Ray& r,float * t_hit, Surfel *sf );
-        bool intersect_p( Ray & r );
+        bool intersect_p( Ray & r , float *thit );
 
         void printCenter(){
             center.print();
@@ -34,7 +34,7 @@ Sphere::Sphere(bool flip_n, Vec center, float radius){
 bool Sphere::intersect( Ray& r,float * t_hit, Surfel *sf ){
     Ray ray = r;
     Vec oc = ray.getOrigin() - (center);
-    float a = (dot(ray.getDirection(), ray.getDirection())) + 0.000001;
+    float a = (dot(ray.getDirection(), ray.getDirection()));
     float b = 2.0 * (dot(oc, ray.getDirection()));
     float c = dot(oc, oc) - (radius*radius);
 
@@ -58,7 +58,7 @@ bool Sphere::intersect( Ray& r,float * t_hit, Surfel *sf ){
     
 }
 
-bool Sphere::intersect_p(Ray& r){
+bool Sphere::intersect_p(Ray& r, float * t_hit){
     Ray ray = r;
     Vec oc = ray.getOrigin() - (center);
     float a = (dot(ray.getDirection(), ray.getDirection()));
@@ -68,6 +68,13 @@ bool Sphere::intersect_p(Ray& r){
     float discriminat = ( b * b ) - 4 * a * c;
 
     if(discriminat >= 0){
+        float tmin =  (-b -sqrt(discriminat))/ (2*a);
+        float tmax =  (-b +sqrt(discriminat))/ (2*a);
+        if(tmin < tmax){
+            *t_hit = tmin;
+        } else {
+            *t_hit = tmax;
+        }
         return true;
     }
 

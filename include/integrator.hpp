@@ -98,7 +98,7 @@ public:
         {
             if (obj_list_[k]->intersect(ray, &sf))
             {
-                
+
                 // Vec light_pos{1, 3, 3};      // Point light location    (hardcoded here, for now)
                 // Vec light_I{0.9, 0.9, 0.9}; // Point light Intensity   (hardcoded here, for now)
                 // Vec l;                      // This is the light vector.
@@ -114,58 +114,76 @@ public:
                 // color_ = fm->kd() * light_I * std::max(0.f, dot(c, l));
                 Vec c;
                 Vec wi;
-                BlinnMaterial *bm = dynamic_cast< BlinnMaterial *>( sf.primitive->get_material() );
-                for(int i = 0;  i < lights.size(); i++){
-                    
+                BlinnMaterial *bm = dynamic_cast<BlinnMaterial *>(sf.primitive->get_material());
+                for (int i = 0; i < lights.size(); i++)
+                {
+
                     Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
-                    Vec v = ray.getOrigin() - sf.p;
-                    v = normalize(v);
-                    //v = normalize(v);
-                    Vec n =  normalize(sf.n);
+                    
+                    Vec e(0.001f, 0.001f, 0.0001f);
+                    Ray shadow_ray(sf.p + e, l);
 
-                    
-                    
-                    Vec h =  (v + l)/(magnitude(v+l));// * magnitude(dir_))); 
+                    bool hittou = false;
+                    int cont = 0;
 
-                    
-                    
-                    c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) +  (bm->ks() * wi *  std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
-                    
-
-                    Vec norma_p = normalize(sf.p);
-                    Surfel sp;
-                    
-                    for (int q = 0; q < obj_list_.size(); q++){
-                        for(int k = 0;  k < lights.size(); k++){
-                            Ray shadow_ray(sf.p, lights[k]->from);
-                            if (obj_list_[q]->intersect(shadow_ray, &sp)){
-                                
-                                return Vec(0,0,0);
-                            }
+                    for (int z = 0; z < obj_list_.size(); z++)
+                    {
+                        if (z != k)
+                        {
+                            hittou = obj_list_[z]->intersect_p(shadow_ray);
+                        }
+                        if (hittou)
+                        {
+                            return Vec(0.0, 0.0, 0.0);
                         }
                     }
+
+                    // Vec r = d - 2 *dot(dot(d,n), n);
+
+                    Vec v = ray.getOrigin() - sf.p;
+                    v = normalize(v);
+                    Vec n = normalize(sf.n);
+
+                    Vec h = (v + l) / (magnitude(v + l)); // * magnitude(dir_)));
+
+                    c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) + (bm->ks() * wi * std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
+                    // for (int q = 0; q < obj_list_.size(); q++){
+                    //     for(int k = 0;  k < lights.size(); k++){
+                    //         Ray shadow_ray(sf.p, lights[k]->from);
+                    //         if (obj_list_[q]->intersect_p(shadow_ray)){
+                    //             Vec h_ = normalize((normalize(l) + normalize(-ray.getDirection())));
+                    //             c = (bm->kd() * wi * std::max(0.f, dot(n,l))) + (bm->ks() * wi * std::pow(dot(n,h_), bm->glossiness));
+                    //             // return Vec(0,0,0);
+                    //         }
+                    //     }
+                    // }
+                
+                    // Ray reflected_ray(ray.getDirection() - 2*(dot(ray.getDirection(), sf.n)) * sf.n);
+
                 }
 
-                
-                if(scene->ambient != nullptr){
+                if (scene->ambient != nullptr)
+                {
                     Vec la = scene->ambient->l;
                     color_ = c + (bm->ka() * la);
-                } else {
+                }
+                else
+                {
                     color_ = c;
                 }
-                
-                
-                if(color_.v1 > 1.0){
+
+                if (color_.v1 > 1.0)
+                {
                     color_.v1 = 1.0;
                 }
 
-
-                if(color_.v2 > 1.0){
+                if (color_.v2 > 1.0)
+                {
                     color_.v2 = 1.0;
                 }
 
-
-                if(color_.v3 > 1.0){
+                if (color_.v3 > 1.0)
+                {
                     color_.v3 = 1.0;
                 }
             }

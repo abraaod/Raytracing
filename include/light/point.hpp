@@ -12,7 +12,7 @@ class PointLight : public Light{
 
     Vec i;
     Vec scale;
-    // Vec from;
+    Vec from;
 
     PointLight(std::string type, Vec i, Vec scale, Vec from) : Light(type, from){
         this->type = type;
