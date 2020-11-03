@@ -225,6 +225,13 @@ inline float magnitude(const Vec &v){
     return root;
 }
 
+inline float distance(const Vec &v1, const Vec &v2){
+    float a = v2.v1 - v1.v1;
+    float b = v2.v2 - v1.v2;
+    float c = v2.v3 - v1.v3;
+    return  sqrt(a*a + b*b + c*c);
+}
+
 inline Vec cross(const Vec &v1, const Vec &v2){
     return Vec((v1.v2 * v2.v3 - v1.v3 * v2.v2), 
     ((v1.v3 * v2.v1 - v1.v1 * v2.v3)),

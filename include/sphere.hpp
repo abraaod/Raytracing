@@ -91,8 +91,6 @@ bool Sphere::intersect_p(Ray& r){
         // float tmin =  (-b -sqrt(discriminat))/ (2*a);
         // float tmax =  (-b +sqrt(discriminat))/ (2*a);
         
-    if(t >= 0)
-        return true;
         
         if(t > r.tmin and t < r.tmax){
             return true;

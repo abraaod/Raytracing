@@ -99,19 +99,6 @@ public:
             if (obj_list_[k]->intersect(ray, &sf))
             {
 
-                // Vec light_pos{1, 3, 3};      // Point light location    (hardcoded here, for now)
-                // Vec light_I{0.9, 0.9, 0.9}; // Point light Intensity   (hardcoded here, for now)
-                // Vec l;                      // This is the light vector.
-                // l = light_pos - sf.p;         // Determine the vector from the light to the hit point `p`.
-                // l = normalize(l);
-                // //l.print();
-
-                // // Determining pixel color based on **Lambertian Shading** only.
-                // Vec c {sf.n};
-                // c = normalize(c);
-                // //std::cout << std::max(0.f, dot(c, l)) << std::endl;
-                // BlinnMaterial *fm = dynamic_cast< BlinnMaterial *>( sf.primitive->get_material() );
-                // color_ = fm->kd() * light_I * std::max(0.f, dot(c, l));
                 Vec c;
                 Vec wi;
                 BlinnMaterial *bm = dynamic_cast<BlinnMaterial *>(sf.primitive->get_material());
@@ -119,10 +106,8 @@ public:
                 {
 
                     Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
-
-                    Vec aux(0.01,0.01,0.01);
-
-                    Ray shadow_ray(sf.p, l+aux, 0.0, 1.0);
+                    float mag = distance(sf.p, lights[i]->from);
+                    Ray shadow_ray(sf.p, l, 0.0, mag);
 
                     bool hittou = false;
 
@@ -138,8 +123,6 @@ public:
                         }
                     }
 
-                    // Vec r = d - 2 *dot(dot(d,n), n);
-
                     Vec v = ray.getOrigin() - sf.p;
                     v = normalize(v);
                     Vec n = normalize(sf.n);
@@ -147,18 +130,6 @@ public:
                     Vec h = (v + l) / (magnitude(v + l)); // * magnitude(dir_)));
 
                     c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) + (bm->ks() * wi * std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
-                    // for (int q = 0; q < obj_list_.size(); q++){
-                    //     for(int k = 0;  k < lights.size(); k++){
-                    //         Ray shadow_ray(sf.p, lights[k]->from);
-                    //         if (obj_list_[q]->intersect_p(shadow_ray)){
-                    //             Vec h_ = normalize((normalize(l) + normalize(-ray.getDirection())));
-                    //             c = (bm->kd() * wi * std::max(0.f, dot(n,l))) + (bm->ks() * wi * std::pow(dot(n,h_), bm->glossiness));
-                    //             // return Vec(0,0,0);
-                    //         }
-                    //     }
-                    // }
-                
-                    // Ray reflected_ray(ray - 2(dot(ray, sf.n)) * sf.n);
 
                 }
 
