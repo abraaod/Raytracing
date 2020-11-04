@@ -22,6 +22,7 @@ class BlinnMaterial : public Material{
     Color24 kd();
     Color24 ks();
     Color24 ka();
+    Color24 km();
 };
 
 BlinnMaterial::BlinnMaterial(Vec kd, Vec ks, Vec ka, std::string name, Vec mirror, float glossiness){
@@ -47,6 +48,10 @@ Color24 BlinnMaterial::ks(){
 
 Color24 BlinnMaterial::ka(){
     return color_ka;
+}
+
+Color24 BlinnMaterial::km(){
+    return mirror;
 }
 
 #endif

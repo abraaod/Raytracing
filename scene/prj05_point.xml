@@ -1,7 +1,7 @@
 <RT3>
     <lookat look_from="-3 5.5 -10" look_at="0 2 1" up="0 1 0" />
     <camera type="perspective" fovy="45" />
-    <integrator type="blinn_phong"/>
+    <integrator type="blinn_phong" depth="2"/>
     <film type="image" x_res="800" y_res="600" filename="point.png" img_type="png" />
 
     

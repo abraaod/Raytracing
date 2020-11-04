@@ -205,6 +205,8 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             Vec ka(ambient);
             Vec m(mirror);
 
+            //m.print();
+
             BlinnMaterial * fl_ma = new BlinnMaterial(kd, ks, ka, name, m, std::stof(glossiness)); 
             geo_pri->set_material(fl_ma);
         }
@@ -223,7 +225,8 @@ void Api::INTEGRATOR(Paramset<std::string, std::string> ps){
     } else if (type == "normal_flat") {
         integrator = new NormalIntegrator(type);
     } else if (type == "blinn_phong") {
-        integrator = new BlinnPhongIntegrator(type);
+        int depth =  std::stoi(ps.find("depth"));
+        integrator = new BlinnPhongIntegrator(type, depth);
     }
 }
 
@@ -306,7 +309,7 @@ void Api::render(){
                 color_ = background->sample(float(i)/float(w), float(j)/float(h));
             }
             
-            Color24 c = integrator->Li(ray, scene, color_);
+            Color24 c = integrator->Li(ray, scene, color_, 0);
             film->add(i, j, c);
         }
     }
