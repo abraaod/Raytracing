@@ -17,6 +17,7 @@ class Ray{
         float tmax = MAXFLOAT;
         Point3 operator()(float t){return o + d * t;}
         Vec point_at_parameter(float t){return o + d * t;}
+        Ray() {}
         Ray(const Point3& o, const Vec& d) : o{o}, d{d} {/*empty*/}
         Ray(const Point3& o, const Vec& d, float tmin, float tmax) : o{o}, d{d}, tmin{tmin}, tmax{tmax} {/*empty*/}
         ~Ray();

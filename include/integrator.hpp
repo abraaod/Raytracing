@@ -106,8 +106,13 @@ public:
                 {
 
                     Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
-                    float mag = distance(sf.p, lights[i]->from);
-                    Ray shadow_ray(sf.p, l, 0.0, mag);
+                    Ray shadow_ray;
+                    if(lights[i]->type == "point"){
+                        float dis = distance(sf.p, lights[i]->from);
+                        shadow_ray = Ray(sf.p, l, 0.0, dis);
+                    } else {
+                        shadow_ray = Ray(sf.p, l);
+                    }
 
                     bool hittou = false;
 
@@ -119,17 +124,20 @@ public:
                         }
                         if (hittou)
                         {
-                            return Vec(0.0, 0.0, 0.0);
+                            break;
                         }
                     }
 
-                    Vec v = ray.getOrigin() - sf.p;
-                    v = normalize(v);
-                    Vec n = normalize(sf.n);
+                    if(!hittou){
+                        Vec v = ray.getOrigin() - sf.p;
+                        v = normalize(v);
+                        Vec n = normalize(sf.n);
 
-                    Vec h = (v + l) / (magnitude(v + l)); // * magnitude(dir_)));
+                        Vec h = (v + l) / (magnitude(v + l)); // * magnitude(dir_)));
 
-                    c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) + (bm->ks() * wi * std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
+                        c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) + (bm->ks() * wi * std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
+                    }
+
 
                 }
 
@@ -159,7 +167,6 @@ public:
                 }
             }
         }
-
         return color_;
     }
     virtual ~BlinnPhongIntegrator() = default;
