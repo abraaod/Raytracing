@@ -243,6 +243,12 @@ inline float dot(const Vec &v1, const Vec &v2)
     return v1.v1 * v2.v1 + v1.v2 * v2.v2 + v1.v3 * v2.v3;
 }
 
+inline float cosAnguloVetores(const Vec &v1, const Vec &v2){
+    float cim = v1.v1 * v2.v1 + v1.v2 * v2.v2 + v1.v3 * v2.v3;
+    float bai = v1.length() * v2.length();
+    return cim/bai;
+}
+
 inline Vec operator/(const Vec &v1, const Vec &v2)
 {
     return Vec(v1.v1 / v2.v1, v1.v2 / v2.v2, v1.v3 / v2.v3);
