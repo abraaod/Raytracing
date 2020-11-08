@@ -176,8 +176,13 @@ public:
                 {
                     color_ = c;
                 }
+                                
+                if(depth < max_depth){
+                    Ray reflected_ray = Ray(sf.p, ray.getDirection() - n*(2*(dot(ray.getDirection(),n))));
+                    color_ = color_ + bm->km() * Li(reflected_ray, scene, bkg_color, depth+1);
+                }
 
-                if (color_.v1 > 1.0)
+                 if (color_.v1 > 1.0)
                 {
                     color_.v1 = 1.0;
                 }
@@ -191,12 +196,16 @@ public:
                 {
                     color_.v3 = 1.0;
                 }
+<<<<<<< HEAD
 
                 if (depth < max_depth)
                 {
                     Ray reflected_ray = Ray(sf.p, ray.getDirection() - n * (2 * (dot(ray.getDirection(), n))));
                     color_ = color_ + bm->km() * Li(reflected_ray, scene, color_, depth + 1);
                 }
+=======
+                
+>>>>>>> cc65879b4459af21805124e4ed1d646b9d399d39
             }
         }
         //color_.print();
