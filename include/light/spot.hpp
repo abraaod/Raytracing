@@ -46,12 +46,12 @@ class SpotLight : public Light{
     
         *wi = i * Falloff(theta);
         
-        return spotDir;
+        return lightDir;
     }
 
     float Falloff(float theta){
         float cosTheta = theta;
-        
+
         if(cosTheta < cutoff)
             return 0.0;
         if(cosTheta > falloff)
