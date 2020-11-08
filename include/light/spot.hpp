@@ -39,11 +39,27 @@ class SpotLight : public Light{
 
         float theta = dot(lightDir, spotDir);///(magnitude(lightDir)*magnitude(spotDir));
         
-        float epsilon   = falloff - cutoff;
-        float intensity = std::min(1.0f, std::max(0.f, (theta - cutoff) / epsilon));
+        // float epsilon   = falloff - cutoff;
+        // float intensity = std::min(1.0f, std::max(0.f, (theta - cutoff) / epsilon));
         
-        *wi = i * intensity;
-        return spotDir;
+        // *wi = i * intensity;
+    
+        *wi = i * Falloff(theta);
+        
+        return lightDir;
+    }
+
+    float Falloff(float theta){
+        float cosTheta = theta;
+
+        if(cosTheta < cutoff)
+            return 0.0;
+        if(cosTheta > falloff)
+            return 1.0;
+
+        float delta = (cosTheta - cutoff) /
+                     (falloff - cutoff);
+        return (delta * delta) * (delta * delta);
     }
 };
 
