@@ -10,71 +10,95 @@
 
 using Point = Vec;
 
-class GeometricPrimitive : public Primitive{
-    private:
-    Shape * shape;
+class GeometricPrimitive : public Primitive
+{
+private:
+    Shape *shape;
 
-    public:
-    GeometricPrimitive() : Primitive() {};
-    GeometricPrimitive(Shape * s, Material * m);
+public:
+    GeometricPrimitive() : Primitive(){};
+    GeometricPrimitive(Shape *s, Material *m);
     // Bounds3f world_bounds();
-    bool intersect(Ray& r, Surfel *s);
-    bool intersect_p(Ray& r);
-    Material * get_material() const;
-    void set_material(Material * m);
-    Shape * get_Shape();
-    
+    bool intersect(Ray &r, Surfel *s);
+    bool intersect_p(Ray &r);
+    Material *get_material() const;
+    void set_material(Material *m);
+    Shape *get_Shape();
+
     // Union(const Bounds3 )
-    void set_shape(Shape * s);
-    ~GeometricPrimitive(){
-        if(shape)
+    void set_shape(Shape *s);
+    ~GeometricPrimitive()
+    {
+        if (shape)
             delete shape;
-        if(material)
+        if (material)
             delete material;
     }
 };
 
-GeometricPrimitive::GeometricPrimitive(Shape * s, Material * m){
+GeometricPrimitive::GeometricPrimitive(Shape *s, Material *m)
+{
     this->shape = s;
     this->material = m;
 }
 
 // Bounds3f GeometricPrimitive::world_bounds(){
-    
+
 // }
 
-bool GeometricPrimitive::intersect(Ray& r, Surfel * s){
+bool GeometricPrimitive::intersect(Ray &r, Surfel *s)
+{
     float thit;
-    if(shape->intersect(r, &thit, s)){
-        if(thit < r.tmax and thit > 0.0){
+    if (shape->intersect(r, &thit, s))
+    {
+        // float cosTheta = dot(normalize(s->n), r.getDirection());
+        
+        // if (cosTheta > 0)
+        // {
+        //     std::cout << cosTheta << std::endl;
+        //     return true;
+        // }
+
+        if (thit < r.tmax)// and thit > 0.0)
+        {
             r.tmax = thit;
             s->primitive = this;
             return true;
+        } else if(thit < 0){
+            r.tmin = thit;
+            s->primitive = this;
+            return false;
         }
-    }
-    return false;   
-}
-
-bool GeometricPrimitive::intersect_p(Ray& ray){
-    if(shape->intersect_p(ray)){
-            return true;
     }
     return false;
 }
 
-Material * GeometricPrimitive::get_material() const{
+bool GeometricPrimitive::intersect_p(Ray &ray)
+{
+    if (shape->intersect_p(ray))
+    {
+        return true;
+    }
+    return false;
+}
+
+Material *GeometricPrimitive::get_material() const
+{
     return material;
 }
 
-void GeometricPrimitive::set_material(Material * m){
+void GeometricPrimitive::set_material(Material *m)
+{
     this->material = m;
 }
 
-Shape * GeometricPrimitive::get_Shape(){
+Shape *GeometricPrimitive::get_Shape()
+{
     return shape;
 }
 
-void GeometricPrimitive::set_shape(Shape * s){
+void GeometricPrimitive::set_shape(Shape *s)
+{
     this->shape = s;
 }
 #endif

@@ -107,6 +107,7 @@ public:
                 Vec wi;
                 BlinnMaterial *bm = dynamic_cast<BlinnMaterial *>(sf.primitive->get_material());
                 Vec n = normalize(sf.n);
+
                 for (int i = 0; i < lights.size(); i++)
                 {
 
@@ -141,12 +142,7 @@ public:
 
                     if (!hittou)
                     {
-                        float cosTheta = cosAnguloVetores(sf.n, l);
-                        // if (cosTheta < 0)
-                        // {
-                            // std::cout << cosTheta << std::endl;
-                            // return Vec(0,0,0);
-                        // }
+
                         Vec v = ray.getOrigin() - sf.p;
                         v = normalize(v);
 
@@ -164,7 +160,6 @@ public:
                     // std::cout << grau << std::endl;
                     // if (grau >= 90.0 || grau <= -90.0)
                     //     return Vec(0.0, 0.0, 0.0);
-
                 }
 
                 if (scene->ambient != nullptr)
@@ -196,6 +191,13 @@ public:
                 {
                     Ray reflected_ray = Ray(sf.p, ray.getDirection() - n * (2 * (dot(ray.getDirection(), n))));
                     color_ = color_ + bm->km() * Li(reflected_ray, scene, color_, depth + 1);
+                }
+            } else{
+                float cosTheta = dot(normalize(sf.n), -ray.getDirection());
+                // std::cout << cosTheta << std::endl;
+                if (cosTheta < 0.0 and ray.tmin < 0.0 and ray.tmax > 0.0)
+                {
+                    return Vec(0, 0, 0);
                 }
             }
         }
