@@ -196,19 +196,10 @@ public:
                 {
                     color_.v3 = 1.0;
                 }
-<<<<<<< HEAD
 
-                if (depth < max_depth)
-                {
-                    Ray reflected_ray = Ray(sf.p, ray.getDirection() - n * (2 * (dot(ray.getDirection(), n))));
-                    color_ = color_ + bm->km() * Li(reflected_ray, scene, color_, depth + 1);
-                }
-=======
-                
->>>>>>> cc65879b4459af21805124e4ed1d646b9d399d39
             }
         }
-        //color_.print();
+        
         return color_;
     }
     virtual ~BlinnPhongIntegrator() = default;
