@@ -81,7 +81,6 @@ public:
 class BlinnPhongIntegrator : public Integrator
 {
 public:
-
     int max_depth;
 
     BlinnPhongIntegrator(std::string type, int depth) : Integrator(type)
@@ -112,12 +111,18 @@ public:
                 {
 
                     Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
+
                     Ray shadow_ray;
-                    if(lights[i]->type == "directional"){
+                    if (lights[i]->type == "directional")
+                    {
                         shadow_ray = Ray(sf.p, l);
-                    } else {
+                    }
+                    else
+                    {
                         float dis = distance(sf.p, lights[i]->from);
                         shadow_ray = Ray(sf.p, l, 0.0, dis);
+
+                        Vec d_ = sf.p - lights[i]->from;
                     }
 
                     bool hittou = false;
@@ -134,7 +139,14 @@ public:
                         }
                     }
 
-                    if(!hittou){
+                    if (!hittou)
+                    {
+                        float cosTheta = cosAnguloVetores(sf.n, l);
+                        // if (cosTheta < 0)
+                        // {
+                            // std::cout << cosTheta << std::endl;
+                            // return Vec(0,0,0);
+                        // }
                         Vec v = ray.getOrigin() - sf.p;
                         v = normalize(v);
 
@@ -143,6 +155,15 @@ public:
                         c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) + (bm->ks() * wi * std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
                     }
 
+                    // if(cosTheta < 0){
+                    //     std::cout << cosTheta << std::endl;
+                    //     break;
+                    //     // return Vec(0.0, 0.0, 0.0);
+                    // }
+                    // float grau = cosTheta * (180 / M_PI);
+                    // std::cout << grau << std::endl;
+                    // if (grau >= 90.0 || grau <= -90.0)
+                    //     return Vec(0.0, 0.0, 0.0);
 
                 }
 
@@ -175,10 +196,10 @@ public:
                 {
                     color_.v3 = 1.0;
                 }
-                
+
             }
         }
-        //color_.print();
+        
         return color_;
     }
     virtual ~BlinnPhongIntegrator() = default;
