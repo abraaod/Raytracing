@@ -236,9 +236,9 @@ void Api::LIGHTS(std::vector<Paramset<std::string, std::string>> ps){
        if(type == "ambient" || type == "directional"){
            Vec l(lig.find("L"));
            if(type == "ambient"){
-            std::shared_ptr<Light> al = std::make_shared<AmbientLight>(type, l);
+            //std::shared_ptr<Light> al = std::make_shared<AmbientLight>(type, l);
             //light_list.push_back(al);
-            scene->ambient = dynamic_cast<AmbientLight *> (al.get());
+            scene->ambient = new AmbientLight(type, l);
            }
 
 
