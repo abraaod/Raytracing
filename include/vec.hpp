@@ -29,7 +29,7 @@ public:
         this->v1 = v1;
         this->v2 = v2;
         this->v3 = v3;
-        this->v4 = 0;
+        this->v4 = 0.0;
     }
 
     Vec(float v1, float v2, float v3, float v4)
@@ -137,9 +137,9 @@ public:
         float v_v1 = v1 * v_;
         float v_v2 = v2 * v_;
         float v_v3 = v3 * v_;
-        float v_v4 = v4 * v_;
+        // float v_v4 = 0.0;
 
-        return Vec(v_v1, v_v2, v_v3, v_v4);
+        return Vec(v_v1, v_v2, v_v3);
     }
 
     Vec operator*(const Vec &v_) const
@@ -148,7 +148,7 @@ public:
         float v_v2 = v2 * v_.v2;
         float v_v3 = v3 * v_.v3;
 
-        return Vec(v_v1, v_v2, v_v3);
+        return Vec(v_v1, v_v2, v_v3, 0.0);
     }
 
     std::string toRGB()
@@ -180,6 +180,14 @@ public:
         return *this;
     }
 
+    bool operator==(const Vec &b) const{
+        if(b.v1 == this->v1 && b.v2 == this->v2 && b.v3 == this->v3){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     Vec &operator/=(const float t)
     {
         float k = 1.0 / t;
@@ -188,6 +196,8 @@ public:
         v3 *= k;
         return *this;
     }
+
+    
 };
 
 // Normalização do vetor
@@ -206,6 +216,22 @@ inline Vec normalize(const Vec &v)
     return Vec(r_v1, r_v2, r_v3);
 }
 
+inline float magnitude(const Vec &v){
+    float sq_v1 = v.v1 * v.v1;
+    float sq_v2 = v.v2 * v.v2;
+    float sq_v3 = v.v3 * v.v3;
+
+    float root = sqrt(sq_v1 + sq_v2 + sq_v3);
+    return root;
+}
+
+inline float distance(const Vec &v1, const Vec &v2){
+    float a = v2.v1 - v1.v1;
+    float b = v2.v2 - v1.v2;
+    float c = v2.v3 - v1.v3;
+    return  sqrt(a*a + b*b + c*c);
+}
+
 inline Vec cross(const Vec &v1, const Vec &v2){
     return Vec((v1.v2 * v2.v3 - v1.v3 * v2.v2), 
     ((v1.v3 * v2.v1 - v1.v1 * v2.v3)),
@@ -215,6 +241,12 @@ inline Vec cross(const Vec &v1, const Vec &v2){
 inline float dot(const Vec &v1, const Vec &v2)
 {
     return v1.v1 * v2.v1 + v1.v2 * v2.v2 + v1.v3 * v2.v3;
+}
+
+inline float cosAnguloVetores(const Vec &v1, const Vec &v2){
+    float cim = v1.v1 * v2.v1 + v1.v2 * v2.v2 + v1.v3 * v2.v3;
+    float bai = v1.length() * v2.length();
+    return cim/bai;
 }
 
 inline Vec operator/(const Vec &v1, const Vec &v2)

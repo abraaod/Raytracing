@@ -4,13 +4,14 @@
 #include "ray.hpp"
 #include "scene.hpp"
 #include "surfel.hpp"
+#include "light/point.hpp"
 
 class Integrator
 {
 public:
     std::string type;
     Integrator(std::string type) {}
-    virtual Color24 Li(Ray &ray, const Scene *scene, Color24 bkg_color) const = 0;
+    virtual Color24 Li(Ray &ray, const Scene *scene, Color24 bkg_color, int depth) const = 0;
     virtual ~Integrator() = default;
 
 private:
@@ -24,7 +25,7 @@ public:
         this->type = type;
     }
 
-    Color24 Li(Ray &ray, const Scene *scene, Color24 bkg_color) const
+    Color24 Li(Ray &ray, const Scene *scene, Color24 bkg_color, int depth) const
     {
 
         Color24 color_ = bkg_color;
@@ -35,23 +36,7 @@ public:
         {
             if (obj_list_[k]->intersect(ray, &sf))
             {
-                Vec light_pos{1, 3, 3};      // Point light location    (hardcoded here, for now)
-                Vec light_I{0.9, 0.9, 0.9}; // Point light Intensity   (hardcoded here, for now)
-                Vec kd{0.9, 0.1, 0.1};      // Redish diffuse material (hardcoded here, for now)
-                Vec l;                      // This is the light vector.
-                l = light_pos - sf.p;         // Determine the vector from the light to the hit point `p`.
-                l = normalize(l);
-                //l.print();
-
-                // Determining pixel color based on **Lambertian Shading** only.
-                Vec c {sf.n};
-                c = normalize(c);
-                //std::cout << std::max(0.f, dot(c, l)) << std::endl;
-                color_ = kd * light_I * std::max(0.f, dot(c, l));
-                
-                //color_.print();
-                //sf.primitive->get_material()->kd();
-                //color_ = sf.primitive->get_material()->kd();
+                color_ = sf.primitive->get_material()->kd();
             }
         }
 
@@ -68,7 +53,7 @@ public:
         this->type = type;
     }
 
-    Color24 Li(Ray &ray, const Scene *scene, Color24 bkg_color) const
+    Color24 Li(Ray &ray, const Scene *scene, Color24 bkg_color, int depth) const
     {
 
         Color24 color_ = bkg_color;
@@ -91,6 +76,133 @@ public:
         return color_;
     }
     virtual ~NormalIntegrator() = default;
+};
+
+class BlinnPhongIntegrator : public Integrator
+{
+public:
+    int max_depth;
+
+    BlinnPhongIntegrator(std::string type, int depth) : Integrator(type)
+    {
+        this->type = type;
+        this->max_depth = depth;
+    }
+
+    Color24 Li(Ray &ray, const Scene *scene, Color24 bkg_color, int depth) const
+    {
+        //std::cout << depth << std::endl;
+
+        Color24 color_ = bkg_color;
+        auto obj_list_ = scene->obj_list;
+        auto lights = scene->lights;
+
+        Surfel sf;
+        for (int k = 0; k < obj_list_.size(); k++)
+        {
+            if (obj_list_[k]->intersect(ray, &sf))
+            {
+
+                Vec c;
+                Vec wi;
+                BlinnMaterial *bm = dynamic_cast<BlinnMaterial *>(sf.primitive->get_material());
+                Vec n = normalize(sf.n);
+                for (int i = 0; i < lights.size(); i++)
+                {
+
+                    Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
+
+                    Ray shadow_ray;
+                    if (lights[i]->type == "directional")
+                    {
+                        shadow_ray = Ray(sf.p, l);
+                    }
+                    else
+                    {
+                        float dis = distance(sf.p, lights[i]->from);
+                        shadow_ray = Ray(sf.p, l, 0.0, dis);
+
+                        Vec d_ = sf.p - lights[i]->from;
+                    }
+
+                    bool hittou = false;
+
+                    for (int z = 0; z < obj_list_.size(); z++)
+                    {
+                        if (z != k)
+                        {
+                            hittou = obj_list_[z]->intersect_p(shadow_ray);
+                        }
+                        if (hittou)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (!hittou)
+                    {
+                        float cosTheta = cosAnguloVetores(sf.n, l);
+                        // if (cosTheta < 0)
+                        // {
+                            // std::cout << cosTheta << std::endl;
+                            // return Vec(0,0,0);
+                        // }
+                        Vec v = ray.getOrigin() - sf.p;
+                        v = normalize(v);
+
+                        Vec h = (v + l) / (magnitude(v + l)); // * magnitude(dir_)));
+
+                        c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) + (bm->ks() * wi * std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
+                    }
+
+                    // if(cosTheta < 0){
+                    //     std::cout << cosTheta << std::endl;
+                    //     break;
+                    //     // return Vec(0.0, 0.0, 0.0);
+                    // }
+                    // float grau = cosTheta * (180 / M_PI);
+                    // std::cout << grau << std::endl;
+                    // if (grau >= 90.0 || grau <= -90.0)
+                    //     return Vec(0.0, 0.0, 0.0);
+
+                }
+
+                if (scene->ambient != nullptr)
+                {
+                    Vec la = scene->ambient->l;
+                    color_ = c + (bm->ka() * la);
+                }
+                else
+                {
+                    color_ = c;
+                }
+                                
+                if(depth < max_depth){
+                    Ray reflected_ray = Ray(sf.p, ray.getDirection() - n*(2*(dot(ray.getDirection(),n))));
+                    color_ = color_ + bm->km() * Li(reflected_ray, scene, bkg_color, depth+1);
+                }
+
+                 if (color_.v1 > 1.0)
+                {
+                    color_.v1 = 1.0;
+                }
+
+                if (color_.v2 > 1.0)
+                {
+                    color_.v2 = 1.0;
+                }
+
+                if (color_.v3 > 1.0)
+                {
+                    color_.v3 = 1.0;
+                }
+
+            }
+        }
+        
+        return color_;
+    }
+    virtual ~BlinnPhongIntegrator() = default;
 };
 
 #endif

@@ -100,7 +100,7 @@ class PerspectiveCamera : public Camera{
             u_ = l + (r - l) * ((x+0.5)/ (float) width);
             v_ = b + (t - b) * ((y+0.5)/ (float) height);
             //std::cout << u_ << " " << v_ << std::endl;
-            Ray r(e, w + u*u_ + v*v_);
+            Ray r(e, normalize(w + u*u_ + v*v_));
             return r;
         }
 
@@ -109,7 +109,7 @@ class PerspectiveCamera : public Camera{
             v_ = b + (t - b) * ((x+0.5)/ (float) height);
 
             //std::cout << u_ << " " << v_ << std::endl;
-            Ray r(e, w + u* (float) u_ + v* (float) v_);
+            Ray r(e, normalize(w + u* (float) u_ + v* (float) v_));
             return r;
         }
 

@@ -5,8 +5,10 @@
 #include "./shape.hpp"
 #include "./material.hpp"
 #include "./vec.hpp"
+#include "./bounds3.hpp"
 #include "primitive.hpp"
-// using Bounds3f = Vec;
+
+using Point = Vec;
 
 class GeometricPrimitive : public Primitive{
     private:
@@ -21,6 +23,8 @@ class GeometricPrimitive : public Primitive{
     Material * get_material() const;
     void set_material(Material * m);
     Shape * get_Shape();
+    
+    // Union(const Bounds3 )
     void set_shape(Shape * s);
     ~GeometricPrimitive(){
         if(shape)
@@ -42,7 +46,7 @@ GeometricPrimitive::GeometricPrimitive(Shape * s, Material * m){
 bool GeometricPrimitive::intersect(Ray& r, Surfel * s){
     float thit;
     if(shape->intersect(r, &thit, s)){
-        if(thit < r.tmax){
+        if(thit < r.tmax and thit > 0.0){
             r.tmax = thit;
             s->primitive = this;
             return true;
@@ -51,7 +55,10 @@ bool GeometricPrimitive::intersect(Ray& r, Surfel * s){
     return false;   
 }
 
-bool GeometricPrimitive::intersect_p(Ray& r){
+bool GeometricPrimitive::intersect_p(Ray& ray){
+    if(shape->intersect_p(ray)){
+            return true;
+    }
     return false;
 }
 

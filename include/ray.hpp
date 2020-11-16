@@ -12,14 +12,17 @@ class Ray{
         Vec d;
 
     public:
-        Point3 operator()(float t){return o + d * t;}
-        Vec point_at_parameter(float t){return o + d * t;}
-        Ray(const Point3& o, const Vec& d) : o{o}, d{d} {/*empty*/}
-        ~Ray();
-        friend std::ostream& operator<<(std::ostream& os, const Ray& r);
 
         float tmin = 0;
         float tmax = MAXFLOAT;
+        Point3 operator()(float t){return o + d * t;}
+        Vec point_at_parameter(float t){return o + d * t;}
+        Ray() {}
+        Ray(const Point3& o, const Vec& d) : o{o}, d{d} {/*empty*/}
+        Ray(const Point3& o, const Vec& d, float tmin, float tmax) : o{o}, d{d}, tmin{tmin}, tmax{tmax} {/*empty*/}
+        ~Ray();
+        friend std::ostream& operator<<(std::ostream& os, const Ray& r);
+
 
         Vec getOrigin();
         Vec getDirection();

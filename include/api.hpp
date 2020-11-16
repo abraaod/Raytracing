@@ -18,6 +18,7 @@
 #include "primitive.hpp"
 #include "material.hpp"
 #include "flatmaterial.hpp"
+#include "blinnmaterial.hpp"
 #include "aggregateprimitive.hpp"
 #include "integrator.hpp"
 #include "light/light.hpp"
@@ -169,7 +170,7 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             for(std::string s; iss >> s; ) 
                 result.push_back(s);
             Vec center_(std::stof(result[0]), std::stof(result[1]), std::stof(result[2]));
-            //center_.print();
+            center_.print();
             center_.v4 = 0;
             Shape * obj_ = new Sphere(false, center_, radius_);
             geo_pri->set_shape(obj_);
@@ -189,6 +190,27 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             geo_pri->set_material(fl_ma);
         }
 
+        if(type_integrator == "blinn"){
+            
+            std::string diffuse = std::get<0>(p).find("diffuse");
+            std::string specular = std::get<0>(p).find("specular");
+            std::string ambient = std::get<0>(p).find("ambient");
+            std::string name = std::get<0>(p).find("name");
+            std::string mirror = std::get<0>(p).find("mirror");
+            std::string glossiness = std::get<0>(p).find("glossiness");
+
+            // Quebrar os espaços do centro e gerar o vetor centro
+            Vec kd(diffuse);
+            Vec ks(specular);
+            Vec ka(ambient);
+            Vec m(mirror);
+
+            //m.print();
+
+            BlinnMaterial * fl_ma = new BlinnMaterial(kd, ks, ka, name, m, std::stof(glossiness)); 
+            geo_pri->set_material(fl_ma);
+        }
+
 
         obj_list_.push_back(geo_pri);
     }
@@ -202,6 +224,9 @@ void Api::INTEGRATOR(Paramset<std::string, std::string> ps){
         integrator = new FlatIntegrator(type);
     } else if (type == "normal_flat") {
         integrator = new NormalIntegrator(type);
+    } else if (type == "blinn_phong") {
+        int depth =  std::stoi(ps.find("depth"));
+        integrator = new BlinnPhongIntegrator(type, depth);
     }
 }
 
@@ -211,8 +236,9 @@ void Api::LIGHTS(std::vector<Paramset<std::string, std::string>> ps){
        if(type == "ambient" || type == "directional"){
            Vec l(lig.find("L"));
            if(type == "ambient"){
-            std::shared_ptr<Light> al = std::make_shared<AmbientLight>(type, l);
-            light_list.push_back(al);
+            //std::shared_ptr<Light> al = std::make_shared<AmbientLight>(type, l);
+            //light_list.push_back(al);
+            scene->ambient = new AmbientLight(type, l);
            }
 
 
@@ -221,8 +247,8 @@ void Api::LIGHTS(std::vector<Paramset<std::string, std::string>> ps){
                Vec from(lig.find("from"));
                Vec to(lig.find("to"));
                // CREATE DIRECTIONAL LIGHT
-            //    std::shared_ptr<Light> dl = std::make_shared<DirectionalLight>(type, l, scale, from, to);
-            //    light_list.push_back(dl);
+               std::shared_ptr<Light> dl = std::make_shared<DirectionalLight>(type, l, scale, from, to);
+               light_list.push_back(dl);
            }
        }
 
@@ -238,13 +264,15 @@ void Api::LIGHTS(std::vector<Paramset<std::string, std::string>> ps){
 
            if(type == "spot"){
                Vec to(lig.find("to"));
-               Vec cutoff(lig.find("cutoff"));
-               Vec falloff(lig.find("falloff"));
+               float cutoff = std::stof(lig.find("cutoff"));
+               float falloff = std::stof(lig.find("falloff"));
                std::shared_ptr<Light> sl = std::make_shared<SpotLight>(type, i, scale, from , to, cutoff, falloff);
                light_list.push_back(sl);
            }
        }
     }
+
+    scene->setLight(light_list);
     
 }
 
@@ -281,7 +309,7 @@ void Api::render(){
                 color_ = background->sample(float(i)/float(w), float(j)/float(h));
             }
             
-            Color24 c = integrator->Li(ray, scene, color_);
+            Color24 c = integrator->Li(ray, scene, color_, 0);
             film->add(i, j, c);
         }
     }
