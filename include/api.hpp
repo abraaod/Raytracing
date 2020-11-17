@@ -26,6 +26,7 @@
 #include "light/directional.hpp"
 #include "light/point.hpp"
 #include "light/spot.hpp"
+#include "triangle.hpp"
 
 class Api
 {
@@ -174,6 +175,21 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             center_.v4 = 0;
             Shape * obj_ = new Sphere(false, center_, radius_);
             geo_pri->set_shape(obj_);
+        }
+
+        if(type_object == "trianglemesh"){
+            bool flip_normals{false};
+            //std::string filename = std::get<1>(p).find("filename");
+            Paramset<std::string, std::string> p_ = std::get<1>(p);
+            auto mesh = create_triangle_mesh_shape(flip_normals, p_);
+            size_t tri_count{0};
+            for ( const auto & tri : mesh ){
+                std::cout << "Triangle #" << ++tri_count << '\n';
+                // Cast shape back to a triangle.
+                Shape * obj_ = dynamic_cast< Triangle* >( tri.get() );
+                geo_pri->set_shape(obj_);
+            }
+
         }
 
         if(type_integrator == "flat"){
