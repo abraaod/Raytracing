@@ -6,6 +6,7 @@
 #include "./material.hpp"
 #include "./vec.hpp"
 #include "./bounds3.hpp"
+#include "./triangle.hpp"
 #include "primitive.hpp"
 
 using Point = Vec;
@@ -45,6 +46,11 @@ GeometricPrimitive::GeometricPrimitive(Shape * s, Material * m){
 
 bool GeometricPrimitive::intersect(Ray& r, Surfel * s){
     float thit;
+
+    // shape->printCenter();
+    // Triangle *t = dynamic_cast<Triangle*>(shape);
+    // std::cout << *t << std::endl;
+    
     if(shape->intersect(r, &thit, s)){
         if(thit < r.tmax and thit > 0.0){
             r.tmax = thit;
@@ -52,6 +58,7 @@ bool GeometricPrimitive::intersect(Ray& r, Surfel * s){
             return true;
         }
     }
+    
     return false;   
 }
 

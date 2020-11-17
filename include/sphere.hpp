@@ -32,6 +32,7 @@ Sphere::Sphere(bool flip_n, Vec center, float radius){
 }
 
 bool Sphere::intersect( Ray& r,float * t_hit, Surfel *sf ){
+
     Ray ray = r;
     Vec oc = ray.getOrigin() - (center);
     float a = (dot(ray.getDirection(), ray.getDirection()));

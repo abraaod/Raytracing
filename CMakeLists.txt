@@ -32,7 +32,8 @@ add_executable(
     ./include/light/point.hpp
     ./include/light/spot.hpp
     ./include/bounds3.hpp
-
+    ./include/triangle.hpp
+    
     ./lib/pugixml.cpp
     ./lib/lodepng.cpp
 )

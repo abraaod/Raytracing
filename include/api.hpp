@@ -27,6 +27,7 @@
 #include "light/directional.hpp"
 #include "light/point.hpp"
 #include "light/spot.hpp"
+#include "triangle.hpp"
 
 class Api
 {
@@ -177,6 +178,21 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             geo_pri->set_shape(obj_);
         }
 
+        if(type_object == "trianglemesh"){
+            bool flip_normals{false};
+            //std::string filename = std::get<1>(p).find("filename");
+            Paramset<std::string, std::string> p_ = std::get<1>(p);
+            auto mesh = create_triangle_mesh_shape(flip_normals, p_);
+            size_t tri_count{0};
+            for ( const auto & tri : mesh ){
+                std::cout << "Triangle #" << ++tri_count << '\n';
+                // Cast shape back to a triangle.
+                Triangle * obj_ = dynamic_cast< Triangle* >( tri.get() );
+                geo_pri->set_shape(obj_);
+            }
+
+        }
+
         if(type_integrator == "flat"){
             std::string color = std::get<0>(p).find("color");
             // Quebrar os espaços do centro e gerar o vetor centro
@@ -294,14 +310,19 @@ void Api::render(){
     
     auto w = film->width();
     auto h = film->height();
+
     
     camera->setHeightWidth(h, w);
 
+    std::cout << "Qnt: " << obj_list_.size() << std::endl;
+    
     for(int j = h-1; j >= 0 ; j--){
         for(int i = 0; i < w; i++){
             
             Ray ray = camera->generate_ray( i, j );
             Vec color_(0,0,0);
+
+
 
             // std::cout << i << " " << j << std::endl;
             // std::cout << ray << std::endl;
