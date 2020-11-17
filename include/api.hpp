@@ -15,6 +15,7 @@
 #include "geometricprimitive.hpp"
 
 #include "sphere.hpp"
+#include "triangle.hpp"
 #include "primitive.hpp"
 #include "material.hpp"
 #include "flatmaterial.hpp"
