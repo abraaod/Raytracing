@@ -60,10 +60,20 @@ class Triangle : public Shape {
 		bool intersect( Ray &ray, float *thit, Surfel *isect ){
 
 			const float EPSILON = 0.0000001;
-			Vec vertex0 = mesh->vertices[v[0]];
-			// std::cout << v[0] << "-" << v[1] << "-" << v[2] << std::endl;
-			Vec vertex1 = mesh->vertices[v[1]];
-			Vec vertex2 = mesh->vertices[v[2]];
+			int v0 = v[0];
+			int v1 = v[1];
+			int v2 = v[2];
+
+		
+			//std::cout << v0 << " " << v1 << " " << v2 << std::endl;
+
+			Vec vertex0 = mesh->vertices[v0];
+			Vec vertex1 = mesh->vertices[v1];
+			Vec vertex2 = mesh->vertices[v2];
+
+			// Vec vertex0 = mesh->vertices[v0];
+			// Vec vertex1 = mesh->vertices[v1];
+			// Vec vertex2 = mesh->vertices[v2];
 			Vec edge1, edge2, h, s, q;
 			float a, f, u, v_;
 			edge1 = vertex1 - vertex0;
@@ -96,113 +106,58 @@ class Triangle : public Shape {
 			{
 				return false;
 			}
-
-			// float beta;
-			// float gamma;
-			// float t;
-
-			// // compute t_hit
-			// Point &p0 = mesh->vertices[v[0]];
-			// Point &p1 = mesh->vertices[v[1]];
-			// Point &p2 = mesh->vertices[v[2]];
-
-			
-			// float a = p0.v1 - p1.v1;
-			// float b = p0.v2 - p1.v2;
-			// float c = p0.v3 - p1.v3;
-			// float d = p0.v1 - p2.v1;
-			// float e = p0.v2 - p2.v2;
-			// float f = p0.v3 - p2.v3;
-			// Vec dir = ray.getDirection();
-			// float g = dir.v1;
-			// float h = dir.v2;
-			// float i = dir.v3;
-			// Vec origem = ray.getOrigin();
-			// float j = p0.v1 - origem.v1;
-			// float k = p0.v2 - origem.v2;
-			// float l = p0.v3 - origem.v3;
-			
-
-			// float m = a * (e*i - h*f) + b * (g*f - d*i) + c * (d*h - e*g);
-			
-			// t = - (f * (a*k - j*b) + e * (j*c - a*l) + d * (b*l- k*c))/m;
-
-			// if(t < ray.tmin or t > ray.tmax)
-			// 	return false;			
-
-			// // compute gamma
-			// gamma = ( i * ((a*k) - (j*b)) + h * ((j*c) - (a*l)) + g * (b*l - k*c))/m;
-
-			// if(gamma < 0 or gamma > 1)
-			// 	return false;
-
-			// // compute betta
-			// beta = (j * (e*i - h*f) + k * (g*f-d*i) + l * (d*h - e*g))/m;
-			
-			// if(beta < 0 or beta > (1-gamma))
-			// 	return false;
-			
-			// *thit = t;
-
-			// isect->p = ray.point_at_parameter(t);
-            
-			// float alpha = 1 - beta - gamma;
-
-			// Vec normal_ = mesh->normals[v[0]] * alpha + mesh->normals[v[1]] * beta + mesh->normals[v[2]];
-			
-			// isect->n = normal_;
-
-			// return true;
 		}
-		bool intersect_p( Ray &ray ) {
-			float beta;
-			float gamma;
-			float t_hit;
+
+		bool intersect_p( Ray &ray ) { return true; }
+		// bool intersect_p( Ray &ray ) {
+		// 	float beta;
+		// 	float gamma;
+		// 	float t_hit;
 
 
-			// compute t_hit
-			Point &p0 = mesh->vertices[v[0]];
-			Point &p1 = mesh->vertices[v[0]];
-			Point &p2 = mesh->vertices[v[0]];
+		// 	// compute t_hit
+		// 	Point &p0 = mesh->vertices[v[0]];
+		// 	Point &p1 = mesh->vertices[v[0]];
+		// 	Point &p2 = mesh->vertices[v[0]];
 
 			
-			float a = p0.v1 - p1.v1;
-			float b = p0.v2 - p1.v2;
-			float c = p0.v3 - p1.v3;
-			float d = p0.v1 - p2.v1;
-			float e = p0.v2 - p2.v2;
-			float f = p0.v3 - p2.v3;
-			Vec dir = ray.getDirection();
-			float g = dir.v1;
-			float h = dir.v2;
-			float i = dir.v3;
-			Vec origem = ray.getOrigin();
-			float j = p0.v1 - origem.v1;
-			float k = p0.v2 - origem.v2;
-			float l = p0.v3 - origem.v3;
+		// 	float a = p0.v1 - p1.v1;
+		// 	float b = p0.v2 - p1.v2;
+		// 	float c = p0.v3 - p1.v3;
+		// 	float d = p0.v1 - p2.v1;
+		// 	float e = p0.v2 - p2.v2;
+		// 	float f = p0.v3 - p2.v3;
+		// 	Vec dir = ray.getDirection();
+		// 	float g = dir.v1;
+		// 	float h = dir.v2;
+		// 	float i = dir.v3;
+		// 	Vec origem = ray.getOrigin();
+		// 	float j = p0.v1 - origem.v1;
+		// 	float k = p0.v2 - origem.v2;
+		// 	float l = p0.v3 - origem.v3;
 			
 
-			float m = a * (e*i - h*f) + b * (g*f - d*i) + c * (d*h - e*g);
+		// 	float m = a * (e*i - h*f) + b * (g*f - d*i) + c * (d*h - e*g);
 			
-			t_hit = - (f * (a*k - j*b) + e * (j*c - a*l) + d * (b*l- k*c))/m;
+		// 	t_hit = - (f * (a*k - j*b) + e * (j*c - a*l) + d * (b*l- k*c))/m;
 
-			if(t_hit < ray.tmin or t_hit > ray.tmax)
-				return false;
+		// 	if(t_hit < ray.tmin or t_hit > ray.tmax)
+		// 		return false;
 
-			// compute gamma
-			gamma = ( i * ((a*k) - (j*b)) + h * ((j*c) - (a*l)) + g * (b*l - k*c))/m;
+		// 	// compute gamma
+		// 	gamma = ( i * ((a*k) - (j*b)) + h * ((j*c) - (a*l)) + g * (b*l - k*c))/m;
 
-			if(gamma < 0 or gamma > 1)
-				return false;
+		// 	if(gamma < 0 or gamma > 1)
+		// 		return false;
 
-			// compute betta
-			beta = (j * (e*i - h*f) + k * (g*f-d*i) + l * (d*h - e*g))/m;
+		// 	// compute betta
+		// 	beta = (j * (e*i - h*f) + k * (g*f-d*i) + l * (d*h - e*g))/m;
 			
-			if(beta < 0 or beta > (1-gamma))
-				return false;
+		// 	if(beta < 0 or beta > (1-gamma))
+		// 		return false;
 
-			return true;
-		}
+		// 	return true;
+		// }
 
 		void printCenter(){ std::cout << "TES\n";}
         /// This friend function helps us debug the triangles, if we want to.

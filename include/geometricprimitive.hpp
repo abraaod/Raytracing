@@ -13,32 +13,32 @@ using Point = Vec;
 
 class GeometricPrimitive : public Primitive{
     private:
-    Shape * shape;
+    
+    std::shared_ptr<Shape> shape;
 
     public:
     GeometricPrimitive() : Primitive() {};
-    GeometricPrimitive(Shape * s, Material * m);
+    //GeometricPrimitive(Shape * s, Material * m);
     // Bounds3f world_bounds();
     bool intersect(Ray& r, Surfel *s);
     bool intersect_p(Ray& r);
     Material * get_material() const;
     void set_material(Material * m);
-    Shape * get_Shape();
+    std::shared_ptr<Shape> get_Shape();
     
     // Union(const Bounds3 )
-    void set_shape(Shape * s);
+    void set_shape(std::shared_ptr<Shape>  s);
+
     ~GeometricPrimitive(){
-        if(shape)
-            delete shape;
         if(material)
             delete material;
     }
 };
 
-GeometricPrimitive::GeometricPrimitive(Shape * s, Material * m){
-    this->shape = s;
-    this->material = m;
-}
+// GeometricPrimitive::GeometricPrimitive(Shape * s, Material * m){
+//     this->shape = s;
+//     this->material = m;
+// }
 
 // Bounds3f GeometricPrimitive::world_bounds(){
     
@@ -77,11 +77,11 @@ void GeometricPrimitive::set_material(Material * m){
     this->material = m;
 }
 
-Shape * GeometricPrimitive::get_Shape(){
+std::shared_ptr<Shape> GeometricPrimitive::get_Shape(){
     return shape;
 }
 
-void GeometricPrimitive::set_shape(Shape * s){
+void GeometricPrimitive::set_shape(std::shared_ptr<Shape> s){
     this->shape = s;
 }
 #endif

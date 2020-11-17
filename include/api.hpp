@@ -153,6 +153,9 @@ void Api::BACKGROUND(Paramset<std::string, std::string> ps){
 // }
 
 void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Paramset<std::string, std::string>>> ps){
+
+    std::vector<std::shared_ptr<Shape>> mesh;
+
     for(std::pair<Paramset<std::string, std::string>, Paramset<std::string, std::string>> p : ps){
         std::string type_object = std::get<1>(p).find("type");
         std::string type_integrator = std::get<0>(p).find("type");
@@ -174,7 +177,7 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             Vec center_(std::stof(result[0]), std::stof(result[1]), std::stof(result[2]));
             center_.print();
             center_.v4 = 0;
-            Shape * obj_ = new Sphere(false, center_, radius_);
+            auto obj_ = std::make_shared<Sphere>(false, center_, radius_);
             geo_pri->set_shape(obj_);
         }
 
@@ -182,14 +185,14 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             bool flip_normals{false};
             //std::string filename = std::get<1>(p).find("filename");
             Paramset<std::string, std::string> p_ = std::get<1>(p);
-            auto mesh = create_triangle_mesh_shape(flip_normals, p_);
-            size_t tri_count{0};
-            for ( const auto & tri : mesh ){
-                std::cout << "Triangle #" << ++tri_count << '\n';
-                // Cast shape back to a triangle.
-                Triangle * obj_ = dynamic_cast< Triangle* >( tri.get() );
-                geo_pri->set_shape(obj_);
-            }
+            mesh = create_triangle_mesh_shape(flip_normals, p_);
+            // size_t tri_count{0};
+            // for ( const auto & tri : mesh ){
+            //     std::cout << "Triangle #" << ++tri_count << '\n';
+            //     // Cast shape back to a triangle.
+            //     Triangle * obj_ = dynamic_cast< Triangle* >( tri.get() );
+            //     geo_pri->set_shape(&obj_);
+            // }
 
         }
 
@@ -228,8 +231,19 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             geo_pri->set_material(fl_ma);
         }
 
-
-        obj_list_.push_back(geo_pri);
+        if(mesh.size() > 0){
+            size_t tri_count{0};
+            for ( const auto & tri : mesh ){
+                std::cout << "Triangle #" << ++tri_count << '\n';
+                // Cast shape back to a triangle.
+                //Shape *obj_ = dynamic_cast< Triangle* >( tri.get() );
+                //std::cout << *obj_ << std::endl;
+                geo_pri->set_shape(tri);
+                obj_list_.push_back(geo_pri);
+            }
+        } else {
+            obj_list_.push_back(geo_pri);
+        }
     }
 
     scene->setObjList(obj_list_);
@@ -314,7 +328,6 @@ void Api::render(){
     
     camera->setHeightWidth(h, w);
 
-    std::cout << "Qnt: " << obj_list_.size() << std::endl;
     
     for(int j = h-1; j >= 0 ; j--){
         for(int i = 0; i < w; i++){
