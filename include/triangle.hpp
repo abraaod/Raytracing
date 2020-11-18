@@ -75,13 +75,15 @@ public:
 
 		if (backface_cull)
 		{
-			if(det < epsilon) return 0;
+			if (det < epsilon)
+				return 0;
 
 			tvec = ray.getDirection() - mesh->vertices[v[0]];
 
 			u = dot(tvec, pvec);
 
-			if(u < 0.0 || u > det){
+			if (u < 0.0 || u > det)
+			{
 				return 0;
 			}
 
@@ -89,7 +91,8 @@ public:
 
 			v_ = dot(ray.getDirection(), qvec);
 
-			if(v_ < 0.0 || u + v_ > det){
+			if (v_ < 0.0 || u + v_ > det)
+			{
 				return 0;
 			}
 
@@ -119,23 +122,30 @@ public:
 			qvec = cross(tvec, edge1);
 
 			v_ = dot(ray.getDirection(), qvec) * inv_det;
-			if (v_ < 0.0 || u + v_ > 1.0)
+			if (v_ <= 0.0 || u + v_ >= 1.0)
 				return false;
 
 			t = dot(edge2, qvec) * inv_det;
-			*thit = t;
-			// std::cout << "Calcula\n";
-
 			
+			// std::cout << "Calcula\n";
 		}
 
-		isect->p = ray.point_at_parameter(t);
-			isect->n = (mesh->normals[v[0]] * (1 - u - v_) + mesh->normals[v[1]] * u + mesh->normals[v[2]] * v_) / (t + u + v_);
+		if(t > ray.tmax) return false;
+
+		*thit = t;
+		
+		isect->p = ray(t);
+		// isect->wo = unique_vector((ray.getDirection() - ray.getOrigin())* -1.0);
+		isect->n = unique_vector(
+			(mesh->normals[v[0]] * (1 - u - v_) +
+			 mesh->normals[v[1]] * u +
+			 mesh->normals[v[2]] * v_));// / (t + u + v_));
 
 		return true;
 	}
 
-	bool intersect_p(Ray &ray) {
+	bool intersect_p(Ray &ray)
+	{
 		Vec edge1, edge2, tvec, pvec, qvec;
 		float det, inv_det, t, u, v_;
 
@@ -150,13 +160,15 @@ public:
 
 		if (backface_cull)
 		{
-			if(det < epsilon) return 0;
+			if (det < epsilon)
+				return 0;
 
 			tvec = ray.getDirection() - mesh->vertices[v[0]];
 
 			u = dot(tvec, pvec);
 
-			if(u < 0.0 || u > det){
+			if (u < 0.0 || u > det)
+			{
 				return 0;
 			}
 
@@ -164,7 +176,8 @@ public:
 
 			v_ = dot(ray.getDirection(), qvec);
 
-			if(v_ < 0.0 || u + v_ > det){
+			if (v_ < 0.0 || u + v_ > det)
+			{
 				return 0;
 			}
 
@@ -178,7 +191,7 @@ public:
 		else
 		{
 			if (det > -epsilon && det < epsilon)
-				return 0;
+				return false;
 
 			inv_det = 1.0 / det;
 
@@ -193,10 +206,14 @@ public:
 
 			qvec = cross(tvec, edge1);
 
-			v_ = dot(ray.getDirection(), qvec) * inv_det;
+			v_ = dot(ray.getDirection(), qvec);
 			if (v_ < 0.0 || u + v_ > 1.0)
 				return false;
-	
+
+			t = dot(edge2, qvec);
+
+			if(t > -epsilon && t <epsilon ) return true;
+
 		}
 
 		return true;
@@ -317,7 +334,8 @@ std::vector<std::shared_ptr<Shape>> create_triangle_mesh_shape(bool flip_normals
 	std::string filename = ps.find("filename");
 	std::string bkf_on_str = ps.find("backface_cull");
 
-	if(bkf_on_str == "false" || bkf_on_str == "off"){
+	if (bkf_on_str == "false" || bkf_on_str == "off")
+	{
 		bkfc_on = false;
 	}
 
