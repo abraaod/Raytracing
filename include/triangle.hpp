@@ -73,7 +73,7 @@ public:
 
 		float epsilon = 0.000001;
 
-		if (false)
+		if (backface_cull)
 		{
 			if(det < epsilon) return 0;
 
@@ -316,6 +316,10 @@ std::vector<std::shared_ptr<Shape>> create_triangle_mesh_shape(bool flip_normals
 	std::shared_ptr<TriangleMesh> mesh = std::make_shared<TriangleMesh>();
 	std::string filename = ps.find("filename");
 	std::string bkf_on_str = ps.find("backface_cull");
+
+	if(bkf_on_str == "false" || bkf_on_str == "off"){
+		bkfc_on = false;
+	}
 
 	std::string rvo_str = ps.find("reverse_vertex_order");
 	if (rvo_str == "on" or rvo_str == "true")

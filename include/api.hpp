@@ -254,7 +254,6 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
                 // Cast shape back to a triangle.
                 //Shape *obj_ = dynamic_cast< Triangle* >( tri.get() );
                 //std::cout << *obj_ << std::endl;
-            
                 geo_pri->set_shape(tri);
                 //geo_pri->get_material()->kd().print();
                 auto t_ = std::make_shared<GeometricPrimitive>(*geo_pri);

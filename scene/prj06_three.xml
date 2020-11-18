@@ -31,7 +31,7 @@
 		uv="0 0   1 0   0 1   1 1"
 		reverse_vertex_order="false"
 		compute_normals="false"
-		backface_cull="true"/>
+		backface_cull="false"/>
 
     <world_end/>
 
