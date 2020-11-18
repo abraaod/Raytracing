@@ -104,13 +104,12 @@ public:
 
             // std::cout << "SAIDA: " << std::endl;
             // obj_list_[k]->printCenter();
-
             if (obj_list_[k]->intersect(ray, &sf))
             {
 
                 Vec c;
                 Vec wi;
-                BlinnMaterial *bm = dynamic_cast<BlinnMaterial *>(sf.primitive->get_material());
+                BlinnMaterial *bm = dynamic_cast<BlinnMaterial *>(sf.primitive->get_material().get());
                 Vec n = normalize(sf.n);
                 for (int i = 0; i < lights.size(); i++)
                 {

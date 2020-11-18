@@ -22,8 +22,8 @@ class GeometricPrimitive : public Primitive{
     // Bounds3f world_bounds();
     bool intersect(Ray& r, Surfel *s);
     bool intersect_p(Ray& r);
-    Material * get_material() const;
-    void set_material(Material * m);
+    std::shared_ptr<Material> get_material() const;
+    void set_material(std::shared_ptr<Material> m);
     void printCenter(){
         std::cout << "_-----------------";
         shape->printCenter();
@@ -33,10 +33,7 @@ class GeometricPrimitive : public Primitive{
     // Union(const Bounds3 )
     void set_shape(std::shared_ptr<Shape>  s);
 
-    ~GeometricPrimitive(){
-        if(material)
-            delete material;
-    }
+    ~GeometricPrimitive() = default;
 };
 
 // GeometricPrimitive::GeometricPrimitive(Shape * s, Material * m){
@@ -73,11 +70,11 @@ bool GeometricPrimitive::intersect_p(Ray& ray){
     return false;
 }
 
-Material * GeometricPrimitive::get_material() const{
+std::shared_ptr<Material> GeometricPrimitive::get_material() const{
     return material;
 }
 
-void GeometricPrimitive::set_material(Material * m){
+void GeometricPrimitive::set_material(std::shared_ptr<Material> m){
     this->material = m;
 }
 

@@ -218,8 +218,9 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             Vec center_(std::stof(result[0]), std::stof(result[1]), std::stof(result[2]));
             //center_.print();
             center_.v4 = 0;
-            Material *fl_ma = new FlatMaterial(center_);
-            geo_pri->set_material(fl_ma);
+            FlatMaterial *fl_ma = new FlatMaterial(center_);
+            std::shared_ptr<Material> material = std::make_shared<FlatMaterial>(*fl_ma);
+            geo_pri->set_material(material);
         }
 
         if (type_integrator == "blinn")
@@ -239,9 +240,9 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             Vec m(mirror);
 
             //m.print();
-
             BlinnMaterial *fl_ma = new BlinnMaterial(kd, ks, ka, name, m, std::stof(glossiness));
-            geo_pri->set_material(fl_ma);
+            std::shared_ptr<Material> material = std::make_shared<BlinnMaterial>(*fl_ma);
+            geo_pri->set_material(material);
         }
 
         if (mesh.size() > 0)
@@ -255,9 +256,10 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
                 //std::cout << *obj_ << std::endl;
 
                 geo_pri->set_shape(tri);
+                //geo_pri->get_material()->kd().print();
                 auto t_ = std::make_shared<GeometricPrimitive>(*geo_pri);
                 obj_list_.push_back(t_);
-                obj_list_[0]->printCenter();
+                //obj_list_[0]->printCenter();
             }
         }
         else
@@ -363,6 +365,12 @@ void Api::render()
     camera->setHeightWidth(h, w);
 
     
+    // for(int k  = 0; k < scene->obj_list.size(); k++){
+    //     auto o = obj_list_[k];
+    //     o->get_material()->kd().print();
+    //     Triangle *t = dynamic_cast<Triangle *>(o->get_Shape().get());
+    //     std::cout << *t << std::endl;
+    // }
 
     for (int j = h - 1; j >= 0; j--)
     {
