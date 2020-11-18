@@ -71,7 +71,7 @@ public:
 
 		det = dot(edge1, pvec);
 
-		float epsilon = 0.000001;
+		float epsilon = 0.0001;
 
 		if (backface_cull)
 		{
@@ -130,7 +130,7 @@ public:
 			// std::cout << "Calcula\n";
 		}
 
-		
+		if(t < epsilon) return false;
 
 		*thit = t;
 		
@@ -140,8 +140,8 @@ public:
 			(mesh->normals[v[0]] * (1 - u - v_) +
 			 mesh->normals[v[1]] * u +
 			 mesh->normals[v[2]] * v_));// / (t + u + v_));
-		if(t > epsilon) return true;
-		return false;
+		// if(t > epsilon) return true;
+		return true;
 	}
 
 	bool intersect_p(Ray &ray)
