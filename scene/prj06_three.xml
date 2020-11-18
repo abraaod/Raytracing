@@ -26,9 +26,9 @@
          <material type="blinn" name="grey" ambient="0.1 0.1 0.1" diffuse="0.7 0.7 0.7" specular="0 0 0" mirror="0.1 0.1 0.1" glossiness="0"/>
         <object type="trianglemesh" material="grey"
                 ntriangles="2" indices="0 1 2   0 2 3"
-		vertices="-3 -0.5 -3   3 -0.5 -3   3 -0.5 3  -3 -0.5 3"
-		normals="0 1 0   0 1 0   0 1 0   0 1 0"
-		uv="0 0   1 0   0 1   1 1"
+		vertices ="-4 0 4  4 0 4  4 0 -4  -4 0 -4"
+                indices ="0 1 2   0 2 3"
+                normals ="0 1 0  0 1 0  0 1 0  0 1 0 "
 		reverse_vertex_order="false"
 		compute_normals="false"
 		backface_cull="false"/>
