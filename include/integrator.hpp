@@ -60,6 +60,7 @@ public:
         auto obj_list_ = scene->obj_list;
 
         Surfel sf;
+        
         for (int k = 0; k < obj_list_.size(); k++)
         {
             if (obj_list_[k]->intersect(ray, &sf))
@@ -100,6 +101,10 @@ public:
         Surfel sf;
         for (int k = 0; k < obj_list_.size(); k++)
         {
+
+            // std::cout << "SAIDA: " << std::endl;
+            // obj_list_[k]->printCenter();
+
             if (obj_list_[k]->intersect(ray, &sf))
             {
 

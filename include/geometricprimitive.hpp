@@ -24,6 +24,10 @@ class GeometricPrimitive : public Primitive{
     bool intersect_p(Ray& r);
     Material * get_material() const;
     void set_material(Material * m);
+    void printCenter(){
+        std::cout << "_-----------------";
+        shape->printCenter();
+    }
     std::shared_ptr<Shape> get_Shape();
     
     // Union(const Bounds3 )
