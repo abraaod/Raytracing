@@ -206,17 +206,16 @@ public:
 
 			qvec = cross(tvec, edge1);
 
-			v_ = dot(ray.getDirection(), qvec);
+			v_ = dot(ray.getDirection(), qvec) * inv_det;
 			if (v_ < 0.0 || u + v_ > 1.0)
 				return false;
 
-			t = dot(edge2, qvec);
+			t = dot(edge2, qvec) * inv_det;
 
-			if(t > -epsilon && t <epsilon ) return true;
-
+			if(t > epsilon) return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	void printCenter()
