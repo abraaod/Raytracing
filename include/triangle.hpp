@@ -130,7 +130,7 @@ public:
 			// std::cout << "Calcula\n";
 		}
 
-		if(t > ray.tmax) return false;
+		
 
 		*thit = t;
 		
@@ -140,8 +140,8 @@ public:
 			(mesh->normals[v[0]] * (1 - u - v_) +
 			 mesh->normals[v[1]] * u +
 			 mesh->normals[v[2]] * v_));// / (t + u + v_));
-
-		return true;
+		if(t > epsilon) return true;
+		return false;
 	}
 
 	bool intersect_p(Ray &ray)
