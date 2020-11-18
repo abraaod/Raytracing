@@ -148,7 +148,7 @@ public:
 
 		float epsilon = 0.000001;
 
-		if (false)
+		if (backface_cull)
 		{
 			if(det < epsilon) return 0;
 
