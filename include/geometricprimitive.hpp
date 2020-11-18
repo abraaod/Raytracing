@@ -51,11 +51,11 @@ bool GeometricPrimitive::intersect(Ray& r, Surfel * s){
     // shape->printCenter();
     // Triangle *t = dynamic_cast<Triangle*>(shape);
     // std::cout << *t << std::endl;
-    
     if(shape->intersect(r, &thit, s)){
         if(thit < r.tmax and thit > 0.0){
             r.tmax = thit;
             s->primitive = this;
+            //std::cout << "Bateu" << std::endl;
             return true;
         }
     }

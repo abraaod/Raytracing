@@ -36,4 +36,5 @@ add_executable(
     
     ./lib/pugixml.cpp
     ./lib/lodepng.cpp
+    ./lib/tiny_obj_loader.cc
 )
