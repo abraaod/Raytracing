@@ -2,15 +2,14 @@
 
 ##### [Abraão Vitor Lopes Dantas and Henrique David de Medeiros](#author)
 
-# Project 5 - Lights
+# Project 6 - Triangles and Triangles Mesh
 
 This is a project to Computer Graphics I class (DIM0451-UFRN).
 
 In this project, it was necessary to:
 
-1. Rearrange the project structure and implement classes and methods suggested by the professor; (Abraão and Henrique)
-2. Implement the the `parsers`, lights and implement shadow; (Henrique)
-3. Implement a `BlinnMaterial` class, lights, integrator, mirror, adapting shadow. (Abraão)
+1. Create the triangle and Triangle Mesh classes; (Abraão)
+2. Implement triangle ray intersection; (Henrique)
 
 ## Compile
 
@@ -22,7 +21,16 @@ Enter the folder of the projec and type:
 
 ## Execute
 
-`./main <input_file_name>.xml`  
+`./main <input_file_name>.xml`
+
+## Results
+
+### Triangle Mesh
+#### Teapot
+  <img src="./teapot_hires_P.png">
+  
+#### Three spheres over a plan
+  <img src="./three_spheres_plane.png">
   
 ## Author
 Abraão Vitor Lopes Dantas  
