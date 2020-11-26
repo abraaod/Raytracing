@@ -2,6 +2,7 @@
 #define _BOUNDS3_
 
 #include "vec.hpp"
+#include <limits>
 using Point = Vec;
 
 class Bounds3 {
@@ -9,18 +10,22 @@ class Bounds3 {
 
         Point pMin;
         Point pMax;
+        
         Bounds3(){
             float minNum = std::numeric_limits<float>::lowest();
             float maxNum = std::numeric_limits<float>::max();
-            pMin = Point(minNum,minNum,minNum);
-            pMax = Point(maxNum,maxNum,maxNum);
+            pMin = Point(maxNum,maxNum,maxNum);
+            pMax = Point(minNum,minNum,minNum);
         }
+
         Bounds3(const Point &p) : pMin(p), pMax(p) {}
+
         Bounds3(const Point &p1, const Point &p2):
                         pMin(std::min(p1.v1, p2.v1), std::min(p1.v2, p2.v2),
                              std::min(p1.v3, p2.v3)),
                         pMax(std::max(p1.v1, p2.v1), std::max(p1.v2, p2.v2),
                              std::max(p1.v3, p2.v3)) {}
+
         const Point &operator[](int i) const;
         Point &operator[](int i);
         
@@ -37,18 +42,24 @@ class Bounds3 {
                          (*this)[(corner & 2) ? 1 : 0].v2,
                          (*this)[(corner & 4) ? 1 : 0].v3);
         }
+
+
+
         Vec diagonal() {
             Vec p = pMax - pMin;
             return p;
         }
+        
         float surfaceArea(){
             Vec d = diagonal();
             return 2 * (d.v1 * d.v2 + d.v1 * d.v3 + d.v2 * d.v3);
         }
+
         float volume(){
             Vec d = diagonal();
             return d.v1 * d.v2 * d.v3;
         }
+        
         int maximumExtent(){
             Vec d = diagonal();
             if(d.v1 > d.v2 && d.v1 > d.v3)
