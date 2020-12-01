@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include "shape.hpp"
+#include "bounds3.hpp"
 
 class Sphere : public Shape {
 
@@ -13,7 +14,7 @@ class Sphere : public Shape {
         Vec center;
         float radius;
         
-
+	Bounds3 world_bounds();
         bool intersect( Ray& r,float * t_hit, Surfel *sf );
         bool intersect_p( Ray & r );
 
@@ -31,8 +32,15 @@ Sphere::Sphere(bool flip_n, Vec center, float radius){
     this->radius = radius;
 }
 
-bool Sphere::intersect( Ray& r,float * t_hit, Surfel *sf ){
+Bounds3 Sphere::world_bounds(){
+    return Bounds3(Point(center.v1-radius, center.v2-radius, center.v3-radius),
+                   Point(center.v1+radius, center.v2+radius, center.v3+radius)); 
+}
 
+bool Sphere::intersect( Ray& r,float * t_hit, Surfel *sf ){
+Bounds3 ob = world_bounds();
+    if (ob.intersect_p(r))
+    {
     Ray ray = r;
     Vec oc = ray.getOrigin() - (center);
     float a = (dot(ray.getDirection(), ray.getDirection()));
@@ -75,6 +83,7 @@ bool Sphere::intersect( Ray& r,float * t_hit, Surfel *sf ){
     }
 
     return false;
+    }
     
 }
 

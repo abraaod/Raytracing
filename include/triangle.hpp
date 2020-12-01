@@ -6,6 +6,7 @@
 #include "paramset.hpp"
 #include "../lib/tiny_obj_loader.h"
 #include <bits/stdc++.h>
+#include "bounds3.hpp"
 
 /// This struct implements an indexd triangle mesh database.
 struct TriangleMesh
@@ -56,11 +57,18 @@ public:
 		uv = &mesh->uvcoord_indices[3 * tri_id];
 	}
 	/// Return the triangle's bounding box.
-	// Bounds3f object_bound() const;
+	Bounds3 world_bounds(){
+		Point p0 = mesh->vertices[v[0]];
+		Point p1 = mesh->vertices[v[1]];
+		Point p2 = mesh->vertices[v[2]];
+		return unionBounds(Bounds3(p0, p1), p2);
+	}
 	/// The regular intersection methods, as defined in the Shape parent class.
 	bool intersect(Ray &ray, float *thit, Surfel *isect)
 	{
-
+		Bounds3 ob = world_bounds();
+    if (ob.intersect_p(ray))
+    {
 		Vec edge1, edge2, tvec, pvec, qvec;
 		float det, inv_det, t, u, v_;
 
@@ -142,6 +150,9 @@ public:
 			 mesh->normals[v[2]] * v_));// / (t + u + v_));
 		// if(t > epsilon) return true;
 		return true;
+		} else {
+		return false;
+		}
 	}
 
 	bool intersect_p(Ray &ray)

@@ -5,6 +5,7 @@
 #include "./vec.hpp"
 #include "./geometricprimitive.hpp"
 #include "./material.hpp"
+#include "./bounds3.hpp"
 
 
 // using Bounds3f = Vec;
@@ -14,7 +15,7 @@ class Shape  {
     // bool flip_normals;
 
     // Shape(bool flip_n);
-    // Bounds3f world_bounds();
+    virtual Bounds3 world_bounds() = 0;
     virtual bool intersect(Ray& r, float * t_hit, Surfel * s) = 0;
     virtual bool intersect_p(Ray & r) = 0;
     virtual void printCenter() = 0;

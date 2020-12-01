@@ -76,7 +76,7 @@ public:
                 p.v3 >= b.pMin.v3 && p.v3 <= b.pMax.v3);
     }
 
-    Bounds3 expandBounds(const Bounds3 &b, float delta)
+    Bounds3 expandBounds( Bounds3 &b, float delta)
     {
         return Bounds3(b.pMin - Point(delta, delta, delta),
                        b.pMax + Point(delta, delta, delta));
