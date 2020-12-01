@@ -11,6 +11,7 @@
 
 using Point = Vec;
 
+
 class GeometricPrimitive : public Primitive
 {
 private:
