@@ -8,7 +8,7 @@
 #include <algorithm>
 
 class Bvh_node {
-
+	public:
     Bvh_node() {}
 	void accel(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list);
     std::shared_ptr<Bounds3> buildTree(std::vector<std::shared_ptr<Bounds3>> bounds, size_t start, size_t end, float tmin, float tmax);
@@ -26,8 +26,13 @@ class Bvh_node {
 
 void Bvh_node::accel(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list){
 	for(int i = 0; i < obj_list.size(); i++){
+		
 		std::shared_ptr<Bounds3> aux = std::make_shared<Bounds3>(obj_list[i]->world_bounds());
+
+        std::cout << "ENTROU - " << i <<"\n";
 		aux->geo = obj_list[i];
+        std::cout << "ENTROU - " << i <<"\n";
+
 		bounds.push_back(aux);
 	}
 }

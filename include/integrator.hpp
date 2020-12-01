@@ -5,6 +5,7 @@
 #include "scene.hpp"
 #include "surfel.hpp"
 #include "light/point.hpp"
+#include "bvh.hpp"
 
 class Integrator
 {
@@ -95,6 +96,11 @@ public:
         //std::cout << depth << std::endl;
 
         Color24 color_ = bkg_color;
+        Bvh_node bvh;
+        bvh.accel(scene->obj_list);
+
+        Bounds3 teste = bvh.buildTree(bvh.bounds, 0, bvh.bounds.size(), ray.tmin, ray.tmax);
+
         auto obj_list_ = scene->obj_list;
         auto lights = scene->lights;
 
@@ -104,7 +110,7 @@ public:
 
             // std::cout << "SAIDA: " << std::endl;
             // obj_list_[k]->printCenter();
-            if (obj_list_[k]->intersect(ray, &sf))
+            if (teste.intersect_p(ray, obj_list_[k]))//obj_list_[k]->intersect(ray, &sf))
             {
 
                 Vec c;

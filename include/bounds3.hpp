@@ -25,6 +25,12 @@ public:
         pMax = Point(minNum, minNum, minNum);
     }
 
+    Bounds3(std::shared_ptr<Bounds3> b){
+        pMin = b.get()->pMin;
+        pMax = b.get()->pMax;
+        geo = b.get()->geo;
+    }
+
     Bounds3(const Point &p) : pMin(p), pMax(p) {}
 
     Bounds3(const Point &p1, const Point &p2) : pMin(std::min(p1.v1, p2.v1), std::min(p1.v2, p2.v2),
