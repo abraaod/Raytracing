@@ -5,12 +5,17 @@
 #include <limits>
 #include <algorithm>
 using Point = Vec;
+#include <memory>
 
+class GeometricPrimitive;
+ 
 class Bounds3
 {
 public:
     Point pMin;
     Point pMax;
+
+    std::shared_ptr<GeometricPrimitive> geo;
 
     Bounds3()
     {
@@ -94,7 +99,7 @@ public:
         *radius = inside(*center, *this) ? distance(*center, pMax) : 0;
     }
 
-    bool intersect_p(Ray &ray, float *hitt0 = nullptr, float *hitt1 = nullptr)
+    bool intersect_p(Ray &ray, std::shared_ptr<GeometricPrimitive> g, float *hitt0 = nullptr, float *hitt1 = nullptr)
     {
         float t0 = ray.tmin;
         float t1 = ray.tmax;
@@ -130,6 +135,7 @@ public:
             *hitt0 = t0;
         if (hitt1)
             *hitt1 = t1;
+        g = geo;
         return true;
     }
     inline bool interset_p(const Ray &ray, const Vec &invDir, const int dirIsneg[3]) const;

@@ -5,6 +5,7 @@
 #include "ray.hpp"
 #include "surfel.hpp"
 #include "material.hpp"
+#include "bounds3.hpp"
 
 class Primitive {
 	public:
@@ -16,6 +17,7 @@ class Primitive {
 		Primitive() {};
 		virtual std::shared_ptr<Material> get_material() const {return material;}
 		virtual ~Primitive() = default;
+		virtual Bounds3 world_bounds() = 0;
 		//virtual const Material * get_material(void) const = { return material; }
 	private:
 		//std::shared_ptr<Material> material;

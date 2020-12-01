@@ -39,8 +39,8 @@ Bounds3 Sphere::world_bounds(){
 
 bool Sphere::intersect( Ray& r,float * t_hit, Surfel *sf ){
 Bounds3 ob = world_bounds();
-    if (ob.intersect_p(r))
-    {
+    // if (ob.intersect_p(r))
+    // {
     Ray ray = r;
     Vec oc = ray.getOrigin() - (center);
     float a = (dot(ray.getDirection(), ray.getDirection()));
@@ -83,7 +83,7 @@ Bounds3 ob = world_bounds();
     }
 
     return false;
-    }
+    //}
     
 }
 

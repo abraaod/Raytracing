@@ -67,8 +67,8 @@ public:
 	bool intersect(Ray &ray, float *thit, Surfel *isect)
 	{
 		Bounds3 ob = world_bounds();
-    if (ob.intersect_p(ray))
-    {
+    /*if (ob.intersect_p(ray))
+    {*/
 		Vec edge1, edge2, tvec, pvec, qvec;
 		float det, inv_det, t, u, v_;
 
@@ -150,9 +150,9 @@ public:
 			 mesh->normals[v[2]] * v_));// / (t + u + v_));
 		// if(t > epsilon) return true;
 		return true;
-		} else {
+		/*} else {
 		return false;
-		}
+		}*/
 	}
 
 	bool intersect_p(Ray &ray)
