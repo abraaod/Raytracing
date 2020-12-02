@@ -26,13 +26,16 @@ class Bvh_node {
 
 void Bvh_node::accel(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list){
 	for(int i = 0; i < obj_list.size(); i++){
-		std::shared_ptr<GeometricPrimitive> ge = obj_list[i];
-		std::shared_ptr<Bounds3> aux = std::make_shared<Bounds3>(obj_list[i]->world_bounds());
+		
+		//
+		auto ge = obj_list[i]->world_bounds();
+		std::shared_ptr<Bounds3> aux = std::make_shared<Bounds3>(ge);
 
-		aux->geo = ge;
-        std::cout << "ENTROU - " << i <<"\n";
+		aux->setGeoPrimitive(obj_list[i]);
+        //std::cout << "ENTROU - " << i <<"\n";
 
 		bounds.push_back(aux);
+		//std::cout << i << std::endl;
 	}
 }
 

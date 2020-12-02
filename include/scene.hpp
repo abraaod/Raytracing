@@ -10,6 +10,7 @@
 #include "light/light.hpp"
 #include "light/ambient.hpp"
 #include "bounds3.hpp"
+#include "bvh.hpp"
 
 class Scene{
     public:
@@ -18,6 +19,7 @@ class Scene{
         Film * film;
         std::vector<std::shared_ptr<GeometricPrimitive>> obj_list;
         std::vector<std::shared_ptr<Light>> lights;
+        std::shared_ptr<Bvh_node> bvh_node;
         AmbientLight * ambient = nullptr;
         Bounds3 worldBound;
         //std::vector<GeometricPrimitive> * obj_list;

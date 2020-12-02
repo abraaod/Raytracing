@@ -26,7 +26,7 @@ public:
     std::shared_ptr<Material> get_material() const;
     void set_material(std::shared_ptr<Material> m);
     Bounds3 world_bounds(){
-        shape->world_bounds();
+        return shape->world_bounds();
     }
     void printCenter()
     {

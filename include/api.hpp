@@ -371,6 +371,12 @@ void Api::render()
     //     std::cout << *t << std::endl;
     // }
 
+    Bvh_node b;
+    b.accel(obj_list_);
+
+    //b.buildTree(b.bounds, 0, b.bounds.size(), 0.0001, MAXFLOAT);
+    //auto tree = b.buildTree(b.bounds, )
+
     for (int j = h - 1; j >= 0; j--)
     {
         for (int i = 0; i < w; i++)

@@ -23,13 +23,19 @@ public:
         float maxNum = std::numeric_limits<float>::max();
         pMin = Point(maxNum, maxNum, maxNum);
         pMax = Point(minNum, minNum, minNum);
-        geo = std::make_shared<GeometricPrimitive>();
+        //geo = std::make_shared<GeometricPrimitive>();
     }
 
     Bounds3(std::shared_ptr<Bounds3> b){
         pMin = b.get()->pMin;
         pMax = b.get()->pMax;
         geo = b.get()->geo;
+    }
+
+    virtual ~Bounds3() = default;
+
+    void setGeoPrimitive(std::shared_ptr<GeometricPrimitive> geo){
+        this->geo = geo;
     }
 
     Bounds3(const Point &p) : pMin(p), pMax(p) {}
