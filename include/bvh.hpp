@@ -13,7 +13,7 @@ class Bvh_node {
 	void accel(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list);
     std::shared_ptr<Bounds3> buildTree(std::vector<std::shared_ptr<Bounds3>> bounds, size_t start, size_t end, float tmin, float tmax);
 
-    bool intersect_p(Ray &r, float tmin, float tmax, std::vector<std::shared_ptr<GeometricPrimitive>> geo);
+    bool intersect_p(Ray &r, float tmin, float tmax, std::vector<std::shared_ptr<GeometricPrimitive>> * geo);
 
     virtual bool bounding_box(float t0, float t1, Bounds3& box) const;
 
@@ -21,6 +21,8 @@ class Bvh_node {
     std::shared_ptr<Bounds3>  right;
     std::shared_ptr<Bounds3> box;
 
+	std::shared_ptr<GeometricPrimitive> geoleft;
+	std::shared_ptr<GeometricPrimitive> georight;
 	std::vector<std::shared_ptr<Bounds3>> bounds;
 };
 
@@ -30,6 +32,7 @@ void Bvh_node::accel(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list){
 		auto ge = obj_list[i]->world_bounds();
 		std::shared_ptr<Bounds3> aux = std::make_shared<Bounds3>(ge);
 
+		//obj_list[i]->get_Shape()->printCenter();
 		aux->setGeoPrimitive(obj_list[i]);
 		bounds.push_back(aux);
 	}
@@ -69,48 +72,57 @@ std::shared_ptr<Bounds3> Bvh_node::buildTree(std::vector<std::shared_ptr<Bounds3
 	}
 
 	size_t  spanning = end - start;
-	std::cout << spanning << std::endl;
+	//std::cout << spanning << std::endl;
 
 	if(spanning == 1){
 
 		left =  right = bounds[start];
+		geoleft = georight = bounds[start]->geo;
 	} else if (spanning == 2){
 		left = bounds[start];
+		geoleft = bounds[start]->geo;
 		right = bounds[start+1];
+		georight = bounds[start+1]->geo;
 	} else {
 
 		size_t mid =  start + spanning/2;
 		left = buildTree(b, start, mid, tmin, tmax);
+		geoleft  =left->geo;
 		right = buildTree(b, mid, end, tmin, tmax);
+		georight = right->geo;
 	}
 
-	std::cout << "FINALIZOU\n";
+	//std::cout << "FINALIZOU\n";
 
 
 	box = std::make_shared<Bounds3>(unionBounds(*left, *right));
 	return box;
 }
 
-bool Bvh_node::intersect_p(Ray &r, float tmin, float tmax, std::vector<std::shared_ptr<GeometricPrimitive>> geo){
+bool Bvh_node::intersect_p(Ray &r, float tmin, float tmax, std::vector<std::shared_ptr<GeometricPrimitive>> * g){
 	//std::shared_ptr<GeometricPrimitive> start = std::make_shared<GeometricPrimitive>(geo(0));
-	if(!box->intersect_p(r, geo[0], &tmin , &tmax)){
+	if(box->intersect_p(r) == nullptr){
 		return false;
 	}
 
-	std::shared_ptr<GeometricPrimitive> leftgeo;
-	std::shared_ptr<GeometricPrimitive> rightgeo;
+	// std::shared_ptr<GeometricPrimitive> leftgeo;
+	// std::shared_ptr<GeometricPrimitive> rightgeo;
 
-	bool hit_left = left->intersect_p(r, leftgeo, &tmin, &tmax);
-	bool hit_right = right->intersect_p(r, rightgeo, &tmin, &tmax);
-	if (hit_left && hit_right) {
-			geo.push_back(leftgeo);
-			geo.push_back(rightgeo);
-			return true;
-	} else if (hit_left) {
-			geo.push_back(leftgeo);
-			return true;
-	} else if (hit_right) {
-			geo.push_back(rightgeo);
+	auto hit_left = left->intersect_p(r, &tmin, &tmax);
+	auto hit_right = right->intersect_p(r, &tmin, &tmax);
+	if (hit_left != nullptr && hit_right != nullptr) {
+		g->push_back(geoleft);
+		g->push_back(georight);
+		geoleft->printCenter();
+		georight->printCenter();
+		return true;
+	} else if (hit_left != nullptr) {
+		geoleft->printCenter();
+		g->push_back(geoleft);
+		return true;
+	} else if (hit_right != nullptr) {
+		g->push_back(georight);
+		georight->printCenter();
 			return true;
 	} else {
 		return false;

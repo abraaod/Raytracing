@@ -375,6 +375,12 @@ void Api::render()
     b.accel(obj_list_);
     b.buildTree(b.bounds, 0, b.bounds.size(), 0.0001, MAXFLOAT);
     //auto tree = b.buildTree(b.bounds, )
+    scene->bvh_node = std::make_shared<Bvh_node>(b);
+
+    // auto bvh = scene->bvh_node;
+    // for(int i =0; i < bvh->bounds.size(); i++){
+    //     bvh->bounds[i]->geo->printCenter();
+    // }
 
     for (int j = h - 1; j >= 0; j--)
     {

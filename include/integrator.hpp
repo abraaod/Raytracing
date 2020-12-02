@@ -104,13 +104,27 @@ public:
         auto obj_list_ = scene->obj_list;
         auto lights = scene->lights;
 
+        auto bvh = scene->bvh_node;
+        std::vector<std::shared_ptr<GeometricPrimitive>> obj_list;
+        // if(bvh->intersect_p(ray, ray.tmin, ray.tmax, &obj_list)){
+        //     std::cout << objs.size() << std::endl;
+        // }
+        
+        //bvh->box->pMin.print();
+        // for(int i =0; i < bvh->bounds.size(); i++){
+        //     bvh->bounds[i]->geo->printCenter();
+        // }
         Surfel sf;
+        if(bvh->intersect_p(ray, ray.tmin, ray.tmax, &obj_list)){
+            obj_list[0]->printCenter();
+        }
+
         for (int k = 0; k < obj_list_.size(); k++)
         {
 
             // std::cout << "SAIDA: " << std::endl;
-            // obj_list_[k]->printCenter();
-            if (obj_list_[k]->intersect(ray, &sf))//obj_list_[k]->intersect(ray, &sf))
+            // obj_list__[k]->printCenter();
+            if (obj_list_[k]->intersect(ray, &sf))//obj_list__[k]->intersect(ray, &sf))
             {
 
                 Vec c;
