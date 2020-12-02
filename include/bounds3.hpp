@@ -181,12 +181,14 @@ public:
 //Realiza a união de 2 bounds
 Bounds3 unionBounds(const Bounds3 &b1, const Bounds3 &b2)
 {
+
     return Bounds3(Point(std::min(b1.pMin.v1, b2.pMin.v1),
                          std::min(b1.pMin.v2, b2.pMin.v2),
                          std::min(b1.pMin.v3, b2.pMin.v3)),
                    Point(std::max(b1.pMax.v1, b2.pMax.v1),
                          std::max(b1.pMax.v2, b2.pMax.v2),
                          std::max(b1.pMax.v3, b2.pMax.v3)));
+                         
 }
 
 Bounds3 unionBounds(const Bounds3 &b, const Point &p)

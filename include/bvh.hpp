@@ -27,15 +27,11 @@ class Bvh_node {
 void Bvh_node::accel(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list){
 	for(int i = 0; i < obj_list.size(); i++){
 		
-		//
 		auto ge = obj_list[i]->world_bounds();
 		std::shared_ptr<Bounds3> aux = std::make_shared<Bounds3>(ge);
 
 		aux->setGeoPrimitive(obj_list[i]);
-        //std::cout << "ENTROU - " << i <<"\n";
-
 		bounds.push_back(aux);
-		//std::cout << i << std::endl;
 	}
 }
 
@@ -64,7 +60,6 @@ bool box_z_compare(const std::shared_ptr<Bounds3> a, const std::shared_ptr<Bound
 
 std::shared_ptr<Bounds3> Bvh_node::buildTree(std::vector<std::shared_ptr<Bounds3>> b, size_t start, size_t end, float tmin, float tmax){
     int axis = int(3 * (rand() % 100 / float(100)));
-
 	if(axis == 0){
 		std::sort(bounds.begin() + start, bounds.begin() + end, box_x_compare);
 	} else if (axis == 1){
@@ -74,7 +69,10 @@ std::shared_ptr<Bounds3> Bvh_node::buildTree(std::vector<std::shared_ptr<Bounds3
 	}
 
 	size_t  spanning = end - start;
+		// std::cout << spanning << std::endl;
+
 	if(spanning == 1){
+
 		left =  right = bounds[start];
 	} else if (spanning == 2){
 		left = bounds[start];
@@ -82,9 +80,12 @@ std::shared_ptr<Bounds3> Bvh_node::buildTree(std::vector<std::shared_ptr<Bounds3
 	} else {
 
 		size_t mid =  start + spanning/2;
-		left = std::make_shared<Bounds3>(buildTree(b, start, mid, tmin, tmax));
-		right = std::make_shared<Bounds3>(buildTree(b, mid, end, tmin, tmax));
+		left = buildTree(b, start, mid, tmin, tmax);
+		right = buildTree(b, mid, end, tmin, tmax);
 	}
+
+		std::cout << "FINALIZOU\n";
+
 
 	box = unionBounds(*left, *right);
 }
