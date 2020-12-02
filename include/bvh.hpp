@@ -19,7 +19,7 @@ class Bvh_node {
 
     std::shared_ptr<Bounds3>  left;
     std::shared_ptr<Bounds3>  right;
-    Bounds3 box;
+    std::shared_ptr<Bounds3> box;
 
 	std::vector<std::shared_ptr<Bounds3>> bounds;
 };
@@ -69,7 +69,7 @@ std::shared_ptr<Bounds3> Bvh_node::buildTree(std::vector<std::shared_ptr<Bounds3
 	}
 
 	size_t  spanning = end - start;
-		// std::cout << spanning << std::endl;
+	std::cout << spanning << std::endl;
 
 	if(spanning == 1){
 
@@ -84,15 +84,16 @@ std::shared_ptr<Bounds3> Bvh_node::buildTree(std::vector<std::shared_ptr<Bounds3
 		right = buildTree(b, mid, end, tmin, tmax);
 	}
 
-		std::cout << "FINALIZOU\n";
+	std::cout << "FINALIZOU\n";
 
 
-	box = unionBounds(*left, *right);
+	box = std::make_shared<Bounds3>(unionBounds(*left, *right));
+	return box;
 }
 
 bool Bvh_node::intersect_p(Ray &r, float tmin, float tmax, std::vector<std::shared_ptr<GeometricPrimitive>> geo){
 	//std::shared_ptr<GeometricPrimitive> start = std::make_shared<GeometricPrimitive>(geo(0));
-	if(!box.intersect_p(r, geo[0], &tmin , &tmax)){
+	if(!box->intersect_p(r, geo[0], &tmin , &tmax)){
 		return false;
 	}
 
