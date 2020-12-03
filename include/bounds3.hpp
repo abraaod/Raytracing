@@ -16,6 +16,8 @@ public:
     Point pMax;
 
     std::shared_ptr<GeometricPrimitive> geo;
+    // std::shared_ptr<GeometricPrimitive> left;
+    // std::shared_ptr<GeometricPrimitive> right;
 
     Bounds3()
     {
@@ -30,9 +32,19 @@ public:
         pMin = b.get()->pMin;
         pMax = b.get()->pMax;
         geo = b.get()->geo;
+        // left = b.get()->left;
+        // right = b.get()->right;
     }
 
     virtual ~Bounds3() = default;
+
+    // void setLeftGeoPrimitive(std::shared_ptr<GeometricPrimitive> geo){
+    //     this->left = geo;
+    // }
+
+    // void setRightGeoPrimitive(std::shared_ptr<GeometricPrimitive> geo){
+    //     this->right = geo;
+    // }
 
     void setGeoPrimitive(std::shared_ptr<GeometricPrimitive> geo){
         this->geo = geo;
@@ -112,7 +124,7 @@ public:
         *radius = inside(*center, *this) ? distance(*center, pMax) : 0;
     }
 
-    bool intersect_p(Ray &ray, std::shared_ptr<GeometricPrimitive> g, float *hitt0 = nullptr, float *hitt1 = nullptr)
+    std::shared_ptr<Bounds3> intersect_p(Ray &ray, float *hitt0 = nullptr, float *hitt1 = nullptr)
     {
         float t0 = ray.tmin;
         float t1 = ray.tmax;
@@ -124,7 +136,7 @@ public:
         if(tNear_v1 > tFar_v1) std::swap(tNear_v1, tFar_v1);
         t0 = tNear_v1 > t0 ? tNear_v1 : t0;
         t1 = tFar_v1 < t1 ? tFar_v1 : t1;
-        if(t0 > t1) return false;
+        if(t0 > t1) return nullptr;
 
         float invRayDir_v2 = 1.f / ray.getDirection().v2;
         float tNear_v2 = invRayDir_v2 * (pMin.v2 - ray.getOrigin().v2);
@@ -133,7 +145,7 @@ public:
         if(tNear_v2 > tFar_v2) std::swap(tNear_v2, tFar_v2);
         t0 = tNear_v2 > t0 ? tNear_v2 : t0;
         t1 = tFar_v2 < t1 ? tFar_v2 : t1;
-        if(t0 > t1) return false;
+        if(t0 > t1) return nullptr;
 
         float invRayDir_v3 = 1.f / ray.getDirection().v3;
         float tNear_v3 = invRayDir_v3 * (pMin.v3 - ray.getOrigin().v3);
@@ -142,14 +154,14 @@ public:
         if(tNear_v3 > tFar_v3) std::swap(tNear_v3, tFar_v3);
         t0 = tNear_v3 > t0 ? tNear_v3 : t0;
         t1 = tFar_v3 < t1 ? tFar_v3 : t1;
-        if(t0 > t1) return false;
+        if(t0 > t1) return nullptr;
 
         if (hitt0)
             *hitt0 = t0;
         if (hitt1)
             *hitt1 = t1;
-        g = geo;
-        return true;
+        //g = geo;
+        return std::make_shared<Bounds3>(*this);
     }
     inline bool interset_p(const Ray &ray, const Vec &invDir, const int dirIsneg[3]) const;
 
@@ -179,15 +191,17 @@ public:
 };
 
 //Realiza a união de 2 bounds
-Bounds3 unionBounds(const Bounds3 &b1, const Bounds3 &b2)
+std::shared_ptr<Bounds3> unionBounds(const Bounds3 &b1, const Bounds3 &b2)
 {
-
-    return Bounds3(Point(std::min(b1.pMin.v1, b2.pMin.v1),
+    std::shared_ptr<Bounds3> b = std::make_shared<Bounds3>(Point(std::min(b1.pMin.v1, b2.pMin.v1),
                          std::min(b1.pMin.v2, b2.pMin.v2),
                          std::min(b1.pMin.v3, b2.pMin.v3)),
                    Point(std::max(b1.pMax.v1, b2.pMax.v1),
                          std::max(b1.pMax.v2, b2.pMax.v2),
                          std::max(b1.pMax.v3, b2.pMax.v3)));
+    // b->left = b1.left;
+    // b->right = b2.right;
+    return b;
                          
 }
 

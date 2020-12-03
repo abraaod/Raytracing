@@ -27,6 +27,7 @@
 #include "light/point.hpp"
 #include "light/spot.hpp"
 #include "triangle.hpp"
+#include "bvhaccel.hpp"
 
 class Api
 {
@@ -372,9 +373,18 @@ void Api::render()
     // }
 
     Bvh_node b;
-    b.accel(obj_list_);
-    b.buildTree(b.bounds, 0, b.bounds.size(), 0.0001, MAXFLOAT);
-    //auto tree = b.buildTree(b.bounds, )
+    auto bounds = b.accel(obj_list_);
+    for(int i = 0; i < bounds.size(); i++){
+        bounds[i]->geo->printCenter();
+    }
+
+    BvhAccel ba;
+    auto a = ba.buildTree(bounds, 0, bounds.size());
+    a->printBVH();
+    //b.buildTree(bounds, 0, bounds.size(), 0.0001, MAXFLOAT);
+
+    // scene->bvh_node = std::make_shared<Bvh_node>(b);
+    // scene->bvh_node->printBVH(scene->bvh_node);
 
     for (int j = h - 1; j >= 0; j--)
     {
