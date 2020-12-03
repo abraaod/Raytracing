@@ -15,6 +15,7 @@ class BvhAccel {
         std::shared_ptr<BvhAccel> left = nullptr;
         std::shared_ptr<BvhAccel> right = nullptr;
         std::shared_ptr<Bounds3> box = nullptr;
+        std::vector<std::shared_ptr<GeometricPrimitive>> g;
 
         void printBVH(){
             if(left != nullptr){
@@ -22,8 +23,9 @@ class BvhAccel {
             } else if(right != nullptr){
                 right->printBVH();
             } else if(left == nullptr and right == nullptr){
-                box->geo->printCenter();
-                std::cout << "chegou na folha" << std::endl;
+                for(int i = 0; i< g.size(); i++){
+                    g[i]->printCenter();
+                }
             }
             
         }
@@ -46,12 +48,16 @@ std::shared_ptr<BvhAccel> BvhAccel::buildTree(const std::vector<std::shared_ptr<
     if (object_span == 1) {
         left = std::make_shared<BvhAccel>();
         left->box = objects[start];
+        left->g.push_back(objects[start]->geo);
+        //right = nullptr;
         //left = right = objects[start];
     } else if (object_span == 2) {
         left = std::make_shared<BvhAccel>();
         right = std::make_shared<BvhAccel>();
         left->box = objects[start];
+        left->g.push_back(objects[start]->geo);
         right->box = objects[start+1];
+        right->g.push_back(objects[start]->geo);
         // if (comparator(objects[start], objects[start+1])) {
         //     left->box = objects[start];
         //     right->box = objects[start+1];
@@ -66,13 +72,23 @@ std::shared_ptr<BvhAccel> BvhAccel::buildTree(const std::vector<std::shared_ptr<
     }
 
     std::cout << "FINALIZOU" << std::endl;
-    // if(right ==  nullptr){
-    //     box = left->box;
-    // } else {
-    //     box = unionBounds(left->box, right->box);
-    // }
+    for(int i = 0; i< g.size(); i++){
+                    g[i]->printCenter();
+                }
+    if(right ==  nullptr){
+        box = left->box;
+        g.push_back(box->geo);
+    } else {
+        box = unionBounds(left->box, right->box);
+        for(int i = 0; i< left->g.size(); i++){
+            this->g.push_back(left->g[i]);
+        }
+        for(int i = 0; i< right->g.size(); i++){
+            this->g.push_back(right->g[i]);
+        }
+    }
 
-    box = unionBounds(left->box, right->box);
+   //box = unionBounds(left->box, right->box);
     return std::make_shared<BvhAccel>(*this);
 }
 #endif
