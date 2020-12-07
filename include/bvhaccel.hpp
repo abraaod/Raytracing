@@ -15,18 +15,32 @@ class BvhAccel {
         std::shared_ptr<BvhAccel> left = nullptr;
         std::shared_ptr<BvhAccel> right = nullptr;
         std::shared_ptr<Bounds3> box = nullptr;
-        std::vector<std::shared_ptr<GeometricPrimitive>> g;
+        //std::vector<std::shared_ptr<GeometricPrimitive>> g;
 
         void printBVH(){
+            if(left == nullptr and right == nullptr){
+                if(box->geo != nullptr){
+                    box->geo->printCenter();
+                }
+                //
+            }
+
             if(left != nullptr){
                 left->printBVH();
-            } else if(right != nullptr){
+                // std::cout << "Imprimindo box" << std::endl;
+                // left->box->pMin.print();
+                // left->box->pMax.print();
+                // std::cout << "finalizando box" << std::endl;
+            } 
+            
+            if(right != nullptr){
                 right->printBVH();
-            } else if(left == nullptr and right == nullptr){
-                for(int i = 0; i< g.size(); i++){
-                    g[i]->printCenter();
-                }
-            }
+                // std::cout << "Imprimindo box" << std::endl;
+                // right->box->pMin.print();
+                // right->box->pMax.print();
+                // std::cout << "finalizando box" << std::endl;
+            } 
+            
             
         }
 };
@@ -46,49 +60,35 @@ std::shared_ptr<BvhAccel> BvhAccel::buildTree(const std::vector<std::shared_ptr<
     size_t object_span = end - start;
     std::cout << object_span << std::endl;
     if (object_span == 1) {
+       
         left = std::make_shared<BvhAccel>();
         left->box = objects[start];
-        left->g.push_back(objects[start]->geo);
-        //right = nullptr;
-        //left = right = objects[start];
+        objects[start]->geo->printCenter();
+        
+        return left;
+    
     } else if (object_span == 2) {
-        left = std::make_shared<BvhAccel>();
-        right = std::make_shared<BvhAccel>();
-        left->box = objects[start];
-        left->g.push_back(objects[start]->geo);
-        right->box = objects[start+1];
-        right->g.push_back(objects[start]->geo);
-        // if (comparator(objects[start], objects[start+1])) {
-        //     left->box = objects[start];
-        //     right->box = objects[start+1];
-        // } else {
-        //     left->box = objects[start+1];
-        //     right->box = objects[start];
-        // }
+        auto root = std::make_shared<BvhAccel>();
+        root->left = std::make_shared<BvhAccel>();
+        root->right = std::make_shared<BvhAccel>();
+        
+        root->left->box = objects[start];
+        objects[start]->geo->printCenter();
+        
+        root->right->box = objects[start+1];
+        objects[start+1]->geo->printCenter();
+        
+        root->box = unionBounds(root->right->box, root->left->box);
+        return root;
     } else {
         auto mid = start + object_span/2;
-        left = buildTree(objects, start, mid);
-        right = buildTree(objects, mid, end);
-    }
+        auto root = std::make_shared<BvhAccel>();
 
-    std::cout << "FINALIZOU" << std::endl;
-    for(int i = 0; i< g.size(); i++){
-                    g[i]->printCenter();
-                }
-    if(right ==  nullptr){
-        box = left->box;
-        g.push_back(box->geo);
-    } else {
-        box = unionBounds(left->box, right->box);
-        for(int i = 0; i< left->g.size(); i++){
-            this->g.push_back(left->g[i]);
-        }
-        for(int i = 0; i< right->g.size(); i++){
-            this->g.push_back(right->g[i]);
-        }
+        root->left = buildTree(objects, start, mid);
+        root->right = buildTree(objects, mid, end);
+        
+        root->box = unionBounds(root->right->box, root->left->box);
+        return root;
     }
-
-   //box = unionBounds(left->box, right->box);
-    return std::make_shared<BvhAccel>(*this);
 }
 #endif

@@ -380,7 +380,8 @@ void Api::render()
 
     BvhAccel ba;
     auto a = ba.buildTree(bounds, 0, bounds.size());
-    ba.printBVH();
+    std::cout << "Printando árvore" << std::endl;
+    a->printBVH();
     //b.buildTree(bounds, 0, bounds.size(), 0.0001, MAXFLOAT);
 
     // scene->bvh_node = std::make_shared<Bvh_node>(b);
