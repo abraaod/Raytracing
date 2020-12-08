@@ -11,6 +11,7 @@
 #include "light/ambient.hpp"
 #include "bounds3.hpp"
 #include "bvh.hpp"
+#include "bvhaccel.hpp"
 
 class Scene{
     public:
@@ -20,6 +21,7 @@ class Scene{
         std::vector<std::shared_ptr<GeometricPrimitive>> obj_list;
         std::vector<std::shared_ptr<Light>> lights;
         std::shared_ptr<Bvh_node> bvh_node;
+        std::shared_ptr<BvhAccel> bvh_;
         AmbientLight * ambient = nullptr;
         Bounds3 worldBound;
         //std::vector<GeometricPrimitive> * obj_list;

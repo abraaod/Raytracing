@@ -10,6 +10,35 @@ public:
     BvhAccel() {}
 
     std::shared_ptr<BvhAccel> buildTree(const std::vector<std::shared_ptr<Bounds3>> &b, size_t start, size_t end);
+    bool hit(Ray &r, float t_min, float t_max)
+    {
+        if (!box->intersect_p(r, &t_min, &t_max))
+        {
+            return false;
+        }
+
+        bool hit_left = false, hit_right = false;
+
+        if (left->left == nullptr and left->right == nullptr and left->box != nullptr)
+        {
+            hit_left = left->box->intersect_p(r, &t_min, &t_max);
+        }
+
+        if (right->left == nullptr and right->right == nullptr and right->box != nullptr)
+        {
+            // std::cout << "AQ\n";
+
+            hit_right = right->box->intersect_p(r, &t_min, &t_max);
+        }
+
+        if (left->left != nullptr || left->right != nullptr)
+            hit_left = left->hit(r, t_min, t_max);
+
+        if (right->left != nullptr || right->right != nullptr)
+            hit_right = right->hit(r, t_min, t_max);
+
+        return hit_left || hit_right;
+    }
 
     ~BvhAccel() = default;
 
@@ -58,22 +87,19 @@ std::shared_ptr<BvhAccel> BvhAccel::buildTree(const std::vector<std::shared_ptr<
     auto objects = src_objects; // Create a modifiable array of the source scene objects
     std::cout << "PASS\n"
               << std::endl;
-    // if (objects.size() > 2)
-    // {
-        int axis = int(3 * (rand() % 100 / float(100)));
-        if (axis == 0)
-        {
-            std::sort(objects.begin(), objects.end(), box_x_compare);
-        }
-        else if (axis == 1)
-        {
-            std::sort(objects.begin(), objects.end(), box_y_compare);
-        }
-        else
-        {
-            std::sort(objects.begin(), objects.end(), box_z_compare);
-        }
-    // }
+    int axis = int(3 * (rand() % 100 / float(100)));
+    if (axis == 0)
+    {
+        std::sort(objects.begin(), objects.end(), box_x_compare);
+    }
+    else if (axis == 1)
+    {
+        std::sort(objects.begin(), objects.end(), box_y_compare);
+    }
+    else
+    {
+        std::sort(objects.begin(), objects.end(), box_z_compare);
+    }
 
     size_t object_span = end - start;
     std::cout << object_span << std::endl;
@@ -111,19 +137,15 @@ std::shared_ptr<BvhAccel> BvhAccel::buildTree(const std::vector<std::shared_ptr<
         {
             v1.push_back(objects[i]);
         }
-        
 
         std::vector<std::shared_ptr<Bounds3>> v2;
         for (int i = mid; i < end; i++)
         {
-        std::cout << "ENTROU " << mid << "-" << end << std::endl;
-
             v2.push_back(objects[i]);
         }
 
-
         root->left = buildTree(v1, 0, mid);
-        root->right = buildTree(v2, 0, end-mid);
+        root->right = buildTree(v2, 0, end - mid);
 
         root->box = unionBounds(root->right->box, root->left->box);
         return root;

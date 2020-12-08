@@ -364,7 +364,6 @@ void Api::render()
 
     camera->setHeightWidth(h, w);
 
-    
     // for(int k  = 0; k < scene->obj_list.size(); k++){
     //     auto o = obj_list_[k];
     //     o->get_material()->kd().print();
@@ -374,7 +373,8 @@ void Api::render()
 
     Bvh_node b;
     auto bounds = b.accel(obj_list_);
-    for(int i = 0; i < bounds.size(); i++){
+    for (int i = 0; i < bounds.size(); i++)
+    {
         bounds[i]->geo->printCenter();
     }
 
@@ -382,9 +382,10 @@ void Api::render()
     auto a = ba.buildTree(bounds, 0, bounds.size());
     std::cout << "Printando árvore" << std::endl;
     a->printBVH();
+
     //b.buildTree(bounds, 0, bounds.size(), 0.0001, MAXFLOAT);
 
-    // scene->bvh_node = std::make_shared<Bvh_node>(b);
+    scene->bvh_ = a;
     // scene->bvh_node->printBVH(scene->bvh_node);
 
     for (int j = h - 1; j >= 0; j--)
@@ -398,12 +399,12 @@ void Api::render()
             // std::cout << i << " " << j << std::endl;
             // std::cout << ray << std::endl;
 
+
             if (background->getMapping() == "screen")
             {
                 color_ = background->sample(float(i) / float(w), float(j) / float(h));
             }
 
-            
             Color24 c = integrator->Li(ray, scene, color_, 0);
             film->add(i, j, c);
         }
