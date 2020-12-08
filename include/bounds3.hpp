@@ -124,19 +124,23 @@ public:
         *radius = inside(*center, *this) ? distance(*center, pMax) : 0;
     }
 
-    std::shared_ptr<Bounds3> intersect_p(Ray &ray, float *hitt0 = nullptr, float *hitt1 = nullptr)
+    bool intersect_p(Ray &ray, float *hitt0 = nullptr, float *hitt1 = nullptr)
     {
         float t0 = ray.tmin;
         float t1 = ray.tmax;
+
+
 
         float invRayDir_v1 = 1.f / ray.getDirection().v1;
         float tNear_v1 = invRayDir_v1 * (pMin.v1 - ray.getOrigin().v1);
         float tFar_v1 = (pMax.v1 - ray.getOrigin().v1) * invRayDir_v1;
 
+
+
         if(tNear_v1 > tFar_v1) std::swap(tNear_v1, tFar_v1);
         t0 = tNear_v1 > t0 ? tNear_v1 : t0;
         t1 = tFar_v1 < t1 ? tFar_v1 : t1;
-        if(t0 > t1) return nullptr;
+        if(t0 > t1 and t0 > 0 and t1 > 0) return false;
 
         float invRayDir_v2 = 1.f / ray.getDirection().v2;
         float tNear_v2 = invRayDir_v2 * (pMin.v2 - ray.getOrigin().v2);
@@ -145,7 +149,7 @@ public:
         if(tNear_v2 > tFar_v2) std::swap(tNear_v2, tFar_v2);
         t0 = tNear_v2 > t0 ? tNear_v2 : t0;
         t1 = tFar_v2 < t1 ? tFar_v2 : t1;
-        if(t0 > t1) return nullptr;
+        if(t0 > t1 and t0 > 0 and t1 > 0) return false;
 
         float invRayDir_v3 = 1.f / ray.getDirection().v3;
         float tNear_v3 = invRayDir_v3 * (pMin.v3 - ray.getOrigin().v3);
@@ -154,14 +158,16 @@ public:
         if(tNear_v3 > tFar_v3) std::swap(tNear_v3, tFar_v3);
         t0 = tNear_v3 > t0 ? tNear_v3 : t0;
         t1 = tFar_v3 < t1 ? tFar_v3 : t1;
-        if(t0 > t1) return nullptr;
+        if(t0 > t1 and t0 > 0 and t1 > 0) return false;
 
         if (hitt0)
             *hitt0 = t0;
         if (hitt1)
             *hitt1 = t1;
-        //g = geo;
-        return std::make_shared<Bounds3>(*this);
+
+
+
+        return true;
     }
     inline bool interset_p(const Ray &ray, const Vec &invDir, const int dirIsneg[3]) const;
 
