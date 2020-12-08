@@ -129,13 +129,9 @@ public:
         float t0 = ray.tmin;
         float t1 = ray.tmax;
 
-
-
         float invRayDir_v1 = 1.f / ray.getDirection().v1;
         float tNear_v1 = invRayDir_v1 * (pMin.v1 - ray.getOrigin().v1);
         float tFar_v1 = (pMax.v1 - ray.getOrigin().v1) * invRayDir_v1;
-
-
 
         if(tNear_v1 > tFar_v1) std::swap(tNear_v1, tFar_v1);
         t0 = tNear_v1 > t0 ? tNear_v1 : t0;

@@ -101,7 +101,7 @@ public:
 
         // Bounds3 teste = bvh.buildTree(bvh.bounds, 0, bvh.bounds.size(), ray.tmin, ray.tmax);
 
-        auto obj_list_ = scene->obj_list;
+        // auto obj_list_ = scene->obj_list;
         auto lights = scene->lights;
 
         auto bvh = scene->bvh_;
@@ -120,9 +120,19 @@ public:
         Surfel sf;
         //obj_list
 
-        if (bvh->hit(ray, ray.tmin, ray.tmax))
+        std::shared_ptr<GeometricPrimitive> g = nullptr;
+        // std::cout << "----------\n";
+        if (bvh->hit(ray, 0, MAXFLOAT, g))
+        //if (g != nullptr)//bvh->hit(ray, ray.tmin, ray.tmax, g != nullptr))
         {
+            
+        //     g->printCenter();
+        // }
+        // std::cout << "----------\n";
             // std::cout << "Hitou!\n";
+
+            std::vector<std::shared_ptr<GeometricPrimitive>> obj_list_;
+            obj_list_.push_back(g);
 
             for (int k = 0; k < obj_list_.size(); k++)
             {
