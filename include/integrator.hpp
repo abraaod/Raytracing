@@ -101,118 +101,197 @@ public:
         Surfel sf;
 
         auto obj_list_ = scene->obj_list;
-        // std::cout << "----------\n";
-//        if (bvh->hit(ray, 0, MAXFLOAT, obj_list_))
+        std::shared_ptr<Surfel> surfel = std::make_shared<Surfel>();
+
+        if (!bvh->hit(ray, 0, MAXFLOAT, surfel))
         {
-        
-            for (int k = 0; k < obj_list_.size(); k++)
-            {
-
-                // std::cout << "SAIDA: " << std::endl;
-                // obj_list__[k]->printCenter();
-                if (obj_list_[k]->intersect(ray, &sf)) //obj_list__[k]->intersect(ray, &sf))
-                {
-
-                    Vec c;
-                    Vec wi;
-                    BlinnMaterial *bm = dynamic_cast<BlinnMaterial *>(sf.primitive->get_material().get());
-                    Vec n = normalize(sf.n);
-                    for (int i = 0; i < lights.size(); i++)
-                    {
-
-                        Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
-
-                        Ray shadow_ray;
-                        if (lights[i]->type == "directional")
-                        {
-                            shadow_ray = Ray(sf.p, l);
-                        }
-                        else
-                        {
-                            float dis = distance(sf.p, lights[i]->from);
-                            shadow_ray = Ray(sf.p, l, 0.0, dis);
-
-                            Vec d_ = sf.p - lights[i]->from;
-                        }
-
-                        bool hittou = false;
-
-                        for (int z = 0; z < obj_list_.size(); z++)
-                        {
-                            if (z != k)
-                            {
-                                hittou = obj_list_[z]->intersect_p(shadow_ray);
-                            }
-                            if (hittou)
-                            {
-                                break;
-                            }
-                        }
-
-                        if (!hittou)
-                        {
-                            float cosTheta = cosAnguloVetores(sf.n, l);
-                            // if (cosTheta < 0)
-                            // {
-                            // std::cout << cosTheta << std::endl;
-                            // return Vec(0,0,0);
-                            // }
-                            Vec v = ray.getOrigin() - sf.p;
-                            v = normalize(v);
-
-                            Vec h = (v + l) / (magnitude(v + l)); // * magnitude(dir_)));
-
-                            c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) + (bm->ks() * wi * std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
-                        }
-
-                        // if(cosTheta < 0){
-                        //     std::cout << cosTheta << std::endl;
-                        //     break;
-                        //     // return Vec(0.0, 0.0, 0.0);
-                        // }
-                        // float grau = cosTheta * (180 / M_PI);
-                        // std::cout << grau << std::endl;
-                        // if (grau >= 90.0 || grau <= -90.0)
-                        //     return Vec(0.0, 0.0, 0.0);
-                    }
-
-                    if (scene->ambient != nullptr)
-                    {
-                        Vec la = scene->ambient->l;
-                        color_ = c + (bm->ka() * la);
-                    }
-                    else
-                    {
-                        color_ = c;
-                    }
-
-                    if (depth < max_depth)
-                    {
-                        Ray reflected_ray = Ray(sf.p, ray.getDirection() - n * (2 * (dot(ray.getDirection(), n))));
-                        color_ = color_ + bm->km() * Li(reflected_ray, scene, bkg_color, depth + 1);
-                    }
-
-                    if (color_.v1 > 1.0)
-                    {
-                        color_.v1 = 1.0;
-                    }
-
-                    if (color_.v2 > 1.0)
-                    {
-                        color_.v2 = 1.0;
-                    }
-
-                    if (color_.v3 > 1.0)
-                    {
-                        color_.v3 = 1.0;
-                    }
-                }
-            }
-
             return color_;
         }
+        else
+        {
+            Vec c;
+            Vec wi;
+            BlinnMaterial *bm = dynamic_cast<BlinnMaterial *>(surfel->primitive->get_material().get());
+            Vec n = normalize(surfel->n);
+            for (int i = 0; i < lights.size(); i++)
+            {
+                Vec l = lights[i]->sample_Li(*surfel.get(), ray.getOrigin(), &wi);
+                Ray shadow_ray;
+                if (lights[i]->type == "directional")
+                {
+                    shadow_ray = Ray(surfel->p + Vec(0.0001, 0.0001, 0.0001, 0), l);
+                }
+                else
+                {
+                    float dis = distance(surfel->p, lights[i]->from);
+                    shadow_ray = Ray(surfel->p + Vec(0.0001, 0.0001, 0.0001, 0), l, 0.0, dis);
+                    Vec d_ = surfel->p - lights[i]->from;
+                }
+
+                bool hittou = false;
+
+                std::shared_ptr<Surfel> aux = std::make_shared<Surfel>();
+                hittou = bvh->hit(shadow_ray, 0.0, MAXFLOAT, aux);
+
+                if (!hittou)
+                {
+                    float cosTheta = cosAnguloVetores(surfel->n, l);
+
+                    Vec v = ray.getOrigin() - surfel->p;
+                    v = normalize(v);
+
+                    Vec h = (v + l) / (magnitude(v + l)); // * magnitude(dir_)));
+
+                    c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) + (bm->ks() * wi * std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
+                }
+
+                if (scene->ambient != nullptr){
+                    Vec la = scene->ambient->l;
+                    color_ = c + (bm->ka() * la);
+                } else {
+                    color_ = c;
+                }
+
+                if (depth < max_depth) {
+                    Ray reflected_ray = Ray(sf.p, ray.getDirection() - n * (2 * (dot(ray.getDirection(), n))));
+                    color_ = color_ + bm->km() * Li(reflected_ray, scene, bkg_color, depth + 1);
+                }
+
+                if (color_.v1 > 1.0)
+                {
+                    color_.v1 = 1.0;
+                }
+
+                if (color_.v2 > 1.0)
+                {
+                    color_.v2 = 1.0;
+                }
+
+                if (color_.v3 > 1.0)
+                {
+                    color_.v3 = 1.0;
+                }
+            }
+        }
+
+        return color_;
     }
+
     virtual ~BlinnPhongIntegrator() = default;
-};
+}
+
+// std::cout << "----------\n";
+//        if (bvh->hit(ray, 0, MAXFLOAT, obj_list_))
+
+//     for (int k = 0; k < obj_list_.size(); k++)
+//     {
+
+//         // std::cout << "SAIDA: " << std::endl;
+//         // obj_list__[k]->printCenter();
+//         if (obj_list_[k]->intersect(ray, &sf)) //obj_list__[k]->intersect(ray, &sf))
+//         {
+
+//             Vec c;
+//             Vec wi;
+//             BlinnMaterial *bm = dynamic_cast<BlinnMaterial *>(sf.primitive->get_material().get());
+//             Vec n = normalize(sf.n);
+//             for (int i = 0; i < lights.size(); i++)
+//             {
+
+//                 Vec l = lights[i]->sample_Li(sf, ray.getOrigin(), &wi);
+
+//                 Ray shadow_ray;
+//                 if (lights[i]->type == "directional")
+//                 {
+//                     shadow_ray = Ray(sf.p, l);
+//                 }
+//                 else
+//                 {
+//                     float dis = distance(sf.p, lights[i]->from);
+//                     shadow_ray = Ray(sf.p, l, 0.0, dis);
+
+//                     Vec d_ = sf.p - lights[i]->from;
+//                 }
+
+//                 bool hittou = false;
+
+//                 for (int z = 0; z < obj_list_.size(); z++)
+//                 {
+//                     if (z != k)
+//                     {
+//                         hittou = obj_list_[z]->intersect_p(shadow_ray);
+//                     }
+//                     if (hittou)
+//                     {
+//                         break;
+//                     }
+//                 }
+
+//                 if (!hittou)
+//                 {
+//                     float cosTheta = cosAnguloVetores(sf.n, l);
+//                     // if (cosTheta < 0)
+//                     // {
+//                     // std::cout << cosTheta << std::endl;
+//                     // return Vec(0,0,0);
+//                     // }
+//                     Vec v = ray.getOrigin() - sf.p;
+//                     v = normalize(v);
+
+//                     Vec h = (v + l) / (magnitude(v + l)); // * magnitude(dir_)));
+
+//                     c = c + (bm->kd() * wi * std::max(0.f, dot(n, l))) + (bm->ks() * wi * std::pow(std::max(0.f, dot(n, h)), bm->glossiness));
+//                 }
+
+//                 // if(cosTheta < 0){
+//                 //     std::cout << cosTheta << std::endl;
+//                 //     break;
+//                 //     // return Vec(0.0, 0.0, 0.0);
+//                 // }
+//                 // float grau = cosTheta * (180 / M_PI);
+//                 // std::cout << grau << std::endl;
+//                 // if (grau >= 90.0 || grau <= -90.0)
+//                 //     return Vec(0.0, 0.0, 0.0);
+//             }
+
+//             if (scene->ambient != nullptr)
+//             {
+//                 Vec la = scene->ambient->l;
+//                 color_ = c + (bm->ka() * la);
+//             }
+//             else
+//             {
+//                 color_ = c;
+//             }
+
+//             if (depth < max_depth)
+//             {
+//                 Ray reflected_ray = Ray(sf.p, ray.getDirection() - n * (2 * (dot(ray.getDirection(), n))));
+//                 color_ = color_ + bm->km() * Li(reflected_ray, scene, bkg_color, depth + 1);
+//             }
+
+//             if (color_.v1 > 1.0)
+//             {
+//                 color_.v1 = 1.0;
+//             }
+
+//             if (color_.v2 > 1.0)
+//             {
+//                 color_.v2 = 1.0;
+//             }
+
+//             if (color_.v3 > 1.0)
+//             {
+//                 color_.v3 = 1.0;
+//             }
+//         }
+//     }
+
+//     return color_;
+// }
+
+// virtual ~BlinnPhongIntegrator() = default;
+// }
+;
 
 #endif

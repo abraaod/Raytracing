@@ -385,7 +385,7 @@ void Api::render()
 
     //b.buildTree(bounds, 0, bounds.size(), 0.0001, MAXFLOAT);
 
-    //scene->bvh_ = a;
+    scene->bvh_ = a;
     // scene->bvh_node->printBVH(scene->bvh_node);
 
     for (int j = h - 1; j >= 0; j--)
