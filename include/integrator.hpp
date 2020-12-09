@@ -130,8 +130,8 @@ public:
 
                 bool hittou = false;
 
-                std::shared_ptr<Surfel> aux = std::make_shared<Surfel>();
-                hittou = bvh->hit(shadow_ray, 0.0, MAXFLOAT, aux);
+                // std::shared_ptr<Surfel> aux = std::make_shared<Surfel>();
+                // hittou = bvh->hit(shadow_ray, 0.0, MAXFLOAT, aux);
 
                 if (!hittou)
                 {
@@ -152,10 +152,10 @@ public:
                     color_ = c;
                 }
 
-                if (depth < max_depth) {
-                    Ray reflected_ray = Ray(sf.p, ray.getDirection() - n * (2 * (dot(ray.getDirection(), n))));
-                    color_ = color_ + bm->km() * Li(reflected_ray, scene, bkg_color, depth + 1);
-                }
+                // if (depth < max_depth) {
+                //     Ray reflected_ray = Ray(sf.p, ray.getDirection() - n * (2 * (dot(ray.getDirection(), n))));
+                //     color_ = color_ + bm->km() * Li(reflected_ray, scene, bkg_color, depth + 1);
+                // }
 
                 if (color_.v1 > 1.0)
                 {
