@@ -66,9 +66,8 @@ public:
 	/// The regular intersection methods, as defined in the Shape parent class.
 	bool intersect(Ray &ray, float *thit, Surfel *isect)
 	{
-		Bounds3 ob = world_bounds();
-    /*if (ob.intersect_p(ray))
-    {*/
+    // if (ob.intersect_p(ray))
+    // {
 		Vec edge1, edge2, tvec, pvec, qvec;
 		float det, inv_det, t, u, v_;
 

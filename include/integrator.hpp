@@ -93,47 +93,18 @@ public:
 
     Color24 Li(Ray &ray, const Scene *scene, Color24 bkg_color, int depth) const
     {
-        //std::cout << depth << std::endl;
 
         Color24 color_ = bkg_color;
-        // Bvh_node bvh;
-        // bvh.accel(scene->obj_list);
-
-        // Bounds3 teste = bvh.buildTree(bvh.bounds, 0, bvh.bounds.size(), ray.tmin, ray.tmax);
-
-        // auto obj_list_ = scene->obj_list;
         auto lights = scene->lights;
 
         auto bvh = scene->bvh_;
-        // std::vector<std::shared_ptr<GeometricPrimitive>> obj_list;
-        // if(bvh->intersect_p(bvh->box,ray, ray.tmin, ray.tmax, &obj_list)){
-        //     // for(int i = 0; i < obj_list.size(); i++){
-        //     //     obj_list[i]->printCenter();
-        //     // }
-        //     std::cout << "acabou" << std::endl;
-        // }
-
-        // //bvh->box->pMin.print();
-        // for(int i =0; i < bvh->bounds.size(); i++){
-        //     bvh->bounds[i]->geo->printCenter();
-        // }
         Surfel sf;
-        //obj_list
 
-        std::shared_ptr<GeometricPrimitive> g = nullptr;
+        std::vector<std::shared_ptr<GeometricPrimitive>> obj_list_ = scene->obj_list;
         // std::cout << "----------\n";
-        if (bvh->hit(ray, 0, MAXFLOAT, g))
-        //if (g != nullptr)//bvh->hit(ray, ray.tmin, ray.tmax, g != nullptr))
+//        if (bvh->hit(ray, 0, MAXFLOAT, obj_list_))
         {
-            
-        //     g->printCenter();
-        // }
-        // std::cout << "----------\n";
-            // std::cout << "Hitou!\n";
-
-            std::vector<std::shared_ptr<GeometricPrimitive>> obj_list_;
-            obj_list_.push_back(g);
-
+        
             for (int k = 0; k < obj_list_.size(); k++)
             {
 

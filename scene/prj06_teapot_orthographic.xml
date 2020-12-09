@@ -18,7 +18,7 @@
         <!-- Objects -->
         <!-- <named_material name="gold"/> -->
         <material type="blinn" name="jade" ambient="0.6 0.6 0.6" diffuse ="0 0.65 0.29"  specular ="0.8 0.8 0.8" mirror ="0.4 0.4 0.4" glossiness ="128"/>
-        <object type="trianglemesh" filename="/home/confuzo/Área de Trabalho/2020.6/CG/Raytracing/objs/teapot.obj"/>
+        <object type="/home/confuzo/Área de Trabalho/Raytracing/objs/teapot-low.obj"/>
 
         <material type="blinn" name="indigo" ambient="0.2 0.2 0.2" diffuse ="0.2 0.0 0.4"  specular ="0.9 0.9 0.9" mirror ="0.1 0.1 0.1" glossiness ="128"/>
         <object type="trianglemesh"

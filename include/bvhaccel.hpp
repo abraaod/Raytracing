@@ -10,7 +10,7 @@ public:
     BvhAccel() {}
 
     std::shared_ptr<BvhAccel> buildTree(const std::vector<std::shared_ptr<Bounds3>> &b, size_t start, size_t end);
-    bool hit(Ray &r, float t_min, float t_max, std::shared_ptr<GeometricPrimitive> &b)
+    bool hit(Ray &r, float t_min, float t_max, std::vector<std::shared_ptr<GeometricPrimitive>> &b)
     {
         if (!box->intersect_p(r, &t_min, &t_max))
         {
@@ -18,8 +18,14 @@ public:
         }
 
         if(left == nullptr and right == nullptr){
-            b = box->geo;
-            return true;
+            if(box->geo->intersect_p(r)){
+                b.push_back(box->geo);
+                return true;
+            } else {
+                return false;
+            }
+            // b.push_back(box->geo);
+            // return true;
         }
         
         bool hit_left, hit_right;

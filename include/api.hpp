@@ -204,7 +204,7 @@ void Api::OBJECTS(std::vector<std::pair<Paramset<std::string, std::string>, Para
             //     std::cout << "Triangle #" << ++tri_count << '\n';
             //     // Cast shape back to a triangle.
             //     Triangle * obj_ = dynamic_cast< Triangle* >( tri.get() );
-            //     geo_pri->set_shape(&obj_);
+            //     geo_pri->set_shape(obj_);
             // }
         }
 
@@ -371,21 +371,21 @@ void Api::render()
     //     std::cout << *t << std::endl;
     // }
 
-    Bvh_node b;
-    auto bounds = b.accel(obj_list_);
-    for (int i = 0; i < bounds.size(); i++)
-    {
-        bounds[i]->geo->printCenter();
-    }
+    // Bvh_node b;
+    // auto bounds = b.accel(obj_list_);
+    // for (int i = 0; i < bounds.size(); i++)
+    // {
+    //     bounds[i]->geo->printCenter();
+    // }
 
-    BvhAccel ba;
-    auto a = ba.buildTree(bounds, 0, bounds.size());
-    std::cout << "Printando árvore" << std::endl;
-    a->printBVH();
+    // BvhAccel ba;
+    // auto a = ba.buildTree(bounds, 0, bounds.size());
+    // std::cout << "Printando árvore" << std::endl;
+    // a->printBVH();
 
     //b.buildTree(bounds, 0, bounds.size(), 0.0001, MAXFLOAT);
 
-    scene->bvh_ = a;
+    //scene->bvh_ = a;
     // scene->bvh_node->printBVH(scene->bvh_node);
 
     for (int j = h - 1; j >= 0; j--)
