@@ -100,7 +100,7 @@ public:
         auto bvh = scene->bvh_;
         Surfel sf;
 
-        std::vector<std::shared_ptr<GeometricPrimitive>> obj_list_ = scene->obj_list;
+        auto obj_list_ = scene->obj_list;
         // std::cout << "----------\n";
 //        if (bvh->hit(ray, 0, MAXFLOAT, obj_list_))
         {

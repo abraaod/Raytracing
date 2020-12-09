@@ -371,17 +371,17 @@ void Api::render()
     //     std::cout << *t << std::endl;
     // }
 
-    // Bvh_node b;
-    // auto bounds = b.accel(obj_list_);
+    Bvh_node b;
+    auto bounds = b.accel(obj_list_);
     // for (int i = 0; i < bounds.size(); i++)
     // {
     //     bounds[i]->geo->printCenter();
     // }
 
-    // BvhAccel ba;
-    // auto a = ba.buildTree(bounds, 0, bounds.size());
-    // std::cout << "Printando árvore" << std::endl;
-    // a->printBVH();
+    BvhAccel ba;
+    auto a = ba.buildTree(bounds, 0, bounds.size());
+    std::cout << "Printando árvore" << std::endl;
+    a->printBVH();
 
     //b.buildTree(bounds, 0, bounds.size(), 0.0001, MAXFLOAT);
 
