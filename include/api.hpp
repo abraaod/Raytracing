@@ -29,6 +29,8 @@
 #include "triangle.hpp"
 #include "bvhaccel.hpp"
 
+#include <time.h>
+
 class Api
 {
 private:
@@ -118,8 +120,8 @@ void Api::FILM(Paramset<std::string, std::string> ps)
     std::string filename = ps.find("filename");
     std::string img_type = ps.find("img_type");
     std::string type = ps.find("type");
-    int x_res = std::stoi(ps.find("x_res"));
-    int y_res = std::stoi(ps.find("y_res"));
+    int x_res = std::stoi(ps.find("x_res")) / 2;
+    int y_res = std::stoi(ps.find("y_res")) / 2;
     film = new Film(filename, img_type, type, x_res, y_res);
 
     scene->setFilm(film);
@@ -386,8 +388,8 @@ void Api::render()
     //b.buildTree(bounds, 0, bounds.size(), 0.0001, MAXFLOAT);
 
     scene->bvh_ = a;
+    auto t = clock();
     // scene->bvh_node->printBVH(scene->bvh_node);
-
     for (int j = h - 1; j >= 0; j--)
     {
         for (int i = 0; i < w; i++)
@@ -399,7 +401,6 @@ void Api::render()
             // std::cout << i << " " << j << std::endl;
             // std::cout << ray << std::endl;
 
-
             if (background->getMapping() == "screen")
             {
                 color_ = background->sample(float(i) / float(w), float(j) / float(h));
@@ -409,7 +410,8 @@ void Api::render()
             film->add(i, j, c);
         }
     }
-
+    t = clock() - t;
+    printf ("It took %f seconds.\n",((float)t)/CLOCKS_PER_SEC);
     film->write_image();
 }
 

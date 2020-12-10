@@ -39,6 +39,45 @@ public:
         
     }
 
+    bool hit_p(Ray &r, float t_min, float t_max, std::shared_ptr<Surfel> s)
+    {
+        if (!box->intersect_p(r, &t_min, &t_max))
+        {
+            return false;
+        }
+        
+        bool hit_left, hit_right;
+        if(left != nullptr)
+            hit_left = left->hit_p(r, t_min, t_max, s);
+
+        if(right != nullptr)
+            hit_right = right->hit_p(r, t_min, t_max, s);
+
+        if(left == nullptr and right == nullptr){
+            //auto bb = s->primitive;
+            // s->primitive->world_bounds().pMin.print();
+            // s->primitive->world_bounds().pMax.print();
+            // box->pMin.print();
+            // box->pMax.print();
+            // std::cout << "fim" << std::endl;
+            if(*box.get() == s->primitive->world_bounds()){
+                return false;
+            } else {
+                return box->geo->intersect_p(r);
+            }
+            // if(box->geo->intersect_p(r)){
+            //     return true;
+            // } else {
+            //     return false;
+            // }
+            // b.push_back(box->geo);
+            // return true;
+        }
+
+        return hit_left || hit_right;
+        
+    }
+
     ~BvhAccel() = default;
 
     std::shared_ptr<BvhAccel> left = nullptr;

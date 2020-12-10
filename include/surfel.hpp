@@ -15,11 +15,11 @@ class Surfel{
 		Vec wo;      //!< Outgoing direction of light, which is -ray.
 		float time;     //!< Time of contact.
 		Point2 uv;     //!< Parametric coordinate (u,v) of the hit surface.
-		const Primitive *primitive=nullptr; //!< Pointer to the primitive.
+		Primitive *primitive=nullptr; //!< Pointer to the primitive.
 
 		Surfel() {}
 		Surfel( const Vec&p,const Vec&n, const Vec&wo, float time, 
-			const Point2& uv, const Primitive *pri )
+			const Point2& uv, Primitive *pri )
 			: p{p}, n{n}, wo{wo}, time{time}, uv{uv}, primitive{pri}
             {/* empty */};
 };

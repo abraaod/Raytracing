@@ -100,7 +100,7 @@ public:
         auto bvh = scene->bvh_;
         Surfel sf;
 
-        auto obj_list_ = scene->obj_list;
+        //auto obj_list_ = scene->obj_list;
         std::shared_ptr<Surfel> surfel = std::make_shared<Surfel>();
 
         if (!bvh->hit(ray, 0, MAXFLOAT, surfel))
@@ -119,19 +119,19 @@ public:
                 Ray shadow_ray;
                 if (lights[i]->type == "directional")
                 {
-                    shadow_ray = Ray(surfel->p + Vec(0.0001, 0.0001, 0.0001, 0), l);
+                    shadow_ray = Ray(surfel->p, l);
                 }
                 else
                 {
                     float dis = distance(surfel->p, lights[i]->from);
-                    shadow_ray = Ray(surfel->p + Vec(0.0001, 0.0001, 0.0001, 0), l, 0.0, dis);
+                    shadow_ray = Ray(surfel->p, l, 0.0, dis);
                     Vec d_ = surfel->p - lights[i]->from;
                 }
 
                 bool hittou = false;
 
                 // std::shared_ptr<Surfel> aux = std::make_shared<Surfel>();
-                // hittou = bvh->hit(shadow_ray, 0.0, MAXFLOAT, aux);
+                hittou = bvh->hit_p(shadow_ray, 0.0, MAXFLOAT, surfel);
 
                 if (!hittou)
                 {
