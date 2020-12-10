@@ -120,8 +120,8 @@ void Api::FILM(Paramset<std::string, std::string> ps)
     std::string filename = ps.find("filename");
     std::string img_type = ps.find("img_type");
     std::string type = ps.find("type");
-    int x_res = std::stoi(ps.find("x_res")) / 2;
-    int y_res = std::stoi(ps.find("y_res")) / 2;
+    int x_res = std::stoi(ps.find("x_res"));
+    int y_res = std::stoi(ps.find("y_res"));
     film = new Film(filename, img_type, type, x_res, y_res);
 
     scene->setFilm(film);

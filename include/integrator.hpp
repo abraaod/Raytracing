@@ -119,19 +119,19 @@ public:
                 Ray shadow_ray;
                 if (lights[i]->type == "directional")
                 {
-                    shadow_ray = Ray(surfel->p + Vec(1, 1, 1, 0.0), l);
+                    shadow_ray = Ray(surfel->p, l);
                 }
                 else
                 {
                     float dis = distance(surfel->p, lights[i]->from);
-                    shadow_ray = Ray(surfel->p + Vec(0.01, 0.01, 0.01, 0.0), l, 0.0, dis);
+                    shadow_ray = Ray(surfel->p, l, 0.0, dis);
                     Vec d_ = surfel->p - lights[i]->from;
                 }
 
                 bool hittou = false;
 
                 // std::shared_ptr<Surfel> aux = std::make_shared<Surfel>();
-                hittou = bvh->hit_p(shadow_ray, 0.0, MAXFLOAT, surfel);
+                //hittou = bvh->hit_p(shadow_ray, 0.0, MAXFLOAT, surfel);
                 // for (int z = 0; z < obj_list_.size(); z++)
                 // {
                 //     hittou = obj_list_[z]->intersect_p(shadow_ray);
