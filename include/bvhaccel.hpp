@@ -27,6 +27,7 @@ public:
         if(left == nullptr and right == nullptr){
             
             if(box->geo->intersect(r, surfels.get())){
+                surfels->bound = box;
                 return true;
             } else {
                 return false;
@@ -50,7 +51,7 @@ public:
         if(left != nullptr)
             hit_left = left->hit_p(r, t_min, t_max, s);
 
-        if(right != nullptr)
+        if(right != nullptr and !hit_left)
             hit_right = right->hit_p(r, t_min, t_max, s);
 
         if(left == nullptr and right == nullptr){
@@ -60,7 +61,7 @@ public:
             // box->pMin.print();
             // box->pMax.print();
             // std::cout << "fim" << std::endl;
-            if(*box.get() == s->primitive->world_bounds()){
+            if(*box.get() == s->bound){
                 return false;
             } else {
                 return box->geo->intersect_p(r);
