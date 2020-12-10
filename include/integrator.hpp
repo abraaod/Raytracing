@@ -100,7 +100,7 @@ public:
         auto bvh = scene->bvh_;
         Surfel sf;
 
-        //auto obj_list_ = scene->obj_list;
+        auto bounds = scene->bounds;
         std::shared_ptr<Surfel> surfel = std::make_shared<Surfel>();
 
         if (!bvh->hit(ray, 0, MAXFLOAT, surfel))
@@ -132,14 +132,16 @@ public:
 
                 // std::shared_ptr<Surfel> aux = std::make_shared<Surfel>();
                 //hittou = bvh->hit_p(shadow_ray, 0.0, MAXFLOAT, surfel);
-                // for (int z = 0; z < obj_list_.size(); z++)
-                // {
-                //     hittou = obj_list_[z]->intersect_p(shadow_ray);
-                //     if (hittou)
-                //     {
-                //         break;
-                //     }
-                // }
+                for (int z = 0; z < bounds.size(); z++)
+                {   
+                    if(bounds[z] != surfel->bound){
+                        hittou = bounds[z]->geo->intersect_p(shadow_ray);
+                    }
+                    if (hittou)
+                    {
+                        break;
+                    }
+                }
               
                 if (!hittou)
                 {

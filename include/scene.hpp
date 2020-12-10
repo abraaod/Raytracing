@@ -19,6 +19,7 @@ class Scene{
         Background * background;
         Film * film;
         std::vector<std::shared_ptr<GeometricPrimitive>> obj_list;
+        std::vector<std::shared_ptr<Bounds3>> bounds;
         std::vector<std::shared_ptr<Light>> lights;
         std::shared_ptr<Bvh_node> bvh_node;
         std::shared_ptr<BvhAccel> bvh_;
@@ -32,6 +33,7 @@ class Scene{
         void setBackground(Background * bg);
         void setFilm(Film * film);
         void setObjList(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list);
+        void setBounds(std::vector<std::shared_ptr<Bounds3>> bounds);
         void setLight(std::vector<std::shared_ptr<Light>> lights);
         Bounds3 & getWorldBound() { return worldBound;}
     private:
@@ -60,6 +62,10 @@ void Scene::setFilm(Film * film){
 
 void Scene::setObjList(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list){
     this->obj_list = obj_list;
+}
+
+void Scene::setBounds(std::vector<std::shared_ptr<Bounds3>> bounds){
+    this->bounds = bounds;
 }
 
 void Scene::setLight(std::vector<std::shared_ptr<Light>> lights){

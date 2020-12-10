@@ -4,6 +4,16 @@
 #include "bounds3.hpp"
 #include <memory>
 #include <vector>
+
+class LinearBVH{
+    public:
+        LinearBVH() {}
+
+        std::shared_ptr<Bounds3> box;
+        std::shared_ptr<Bounds3> next;
+
+};
+
 class BvhAccel
 {
 public:
@@ -46,35 +56,22 @@ public:
         {
             return false;
         }
-        
-        bool hit_left, hit_right;
-        if(left != nullptr)
-            hit_left = left->hit_p(r, t_min, t_max, s);
 
-        if(right != nullptr and !hit_left)
-            hit_right = right->hit_p(r, t_min, t_max, s);
+        bool hit_left = true;
+        bool hit_right =  false;
 
         if(left == nullptr and right == nullptr){
-            //auto bb = s->primitive;
-            // s->primitive->world_bounds().pMin.print();
-            // s->primitive->world_bounds().pMax.print();
-            // box->pMin.print();
-            // box->pMax.print();
-            // std::cout << "fim" << std::endl;
             if(*box.get() == s->bound){
                 return false;
             } else {
                 return box->geo->intersect_p(r);
             }
-            // if(box->geo->intersect_p(r)){
-            //     return true;
-            // } else {
-            //     return false;
-            // }
-            // b.push_back(box->geo);
-            // return true;
         }
 
+        hit_left = left->hit_p(r, t_min, t_max, s);
+        if(!hit_left){
+            hit_right = right->hit_p(r, t_min, t_max, s);
+        }
         return hit_left || hit_right;
         
     }
@@ -114,6 +111,36 @@ public:
             // right->box->pMax.print();
             // std::cout << "finalizando box" << std::endl;
         }
+    }
+
+    void LinearizeBVH(std::vector<std::shared_ptr<LinearBVH>> linear)
+    {
+        std::shared_ptr<LinearBVH> l = std::make_shared<LinearBVH>();
+        l->box = box;
+
+        if (left != nullptr)
+        {
+            std::cout << "ADICIONOU LEFT" << std::endl;
+            left->LinearizeBVH(linear);
+            // std::cout << "Imprimindo box" << std::endl;
+            // left->box->pMin.print();
+            // left->box->pMax.print();
+            // std::cout << "finalizando box" << std::endl;
+        }
+
+        if (right != nullptr)
+        {
+            l->next = right->box;
+            std::cout << "ADICIONOU RIGHT" << std::endl;
+            right->LinearizeBVH(linear);
+            // std::cout << "Imprimindo box" << std::endl;
+            // right->box->pMin.print();
+            // right->box->pMax.print();
+            // std::cout << "finalizando box" << std::endl;
+        }
+
+        //std::cout << "ADICIONOU" << std::endl;
+        linear.push_back(l);
     }
 };
 inline bool comparator(const std::shared_ptr<Bounds3> a, const std::shared_ptr<Bounds3> b)
