@@ -2,8 +2,8 @@ Loading...
 vup: 0 1 0
 
 Loading /home/confuzo/Área de Trabalho/Raytracing/objs/teapot.obj
-		>>> 14.0122 ms
-		>>> 1.40122e+07 ns
+		>>> 13.4593 ms
+		>>> 1.34593e+07 ns
 		>>> 0 s
 -- SUMMARY of the OBJ file --
 # of vertices  : 3241

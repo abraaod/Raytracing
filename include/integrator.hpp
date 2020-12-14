@@ -132,16 +132,16 @@ public:
 
                 // std::shared_ptr<Surfel> aux = std::make_shared<Surfel>();
                 //hittou = bvh->hit_p(shadow_ray, 0.0, MAXFLOAT, surfel);
-                for (int z = 0; z < bounds.size(); z++)
-                {   
-                    if(bounds[z] != surfel->bound){
-                        hittou = bounds[z]->geo->intersect_p(shadow_ray);
-                    }
-                    if (hittou)
-                    {
-                        break;
-                    }
-                }
+                // for (int z = 0; z < bounds.size(); z++)
+                // {   
+                //     if(bounds[z] != surfel->bound){
+                //         hittou = bounds[z]->geo->intersect_p(shadow_ray);
+                //     }
+                //     if (hittou)
+                //     {
+                //         break;
+                //     }
+                // }
               
                 if (!hittou)
                 {

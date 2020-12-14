@@ -11,6 +11,9 @@ class LinearBVH{
 
         std::shared_ptr<Bounds3> box;
         std::shared_ptr<Bounds3> next;
+        bool leaf = false;
+
+        ~LinearBVH() = default;
 
 };
 
@@ -57,22 +60,46 @@ public:
             return false;
         }
 
-        bool hit_left = true;
-        bool hit_right =  false;
+        std::shared_ptr<BvhAccel> aux = std::make_shared<BvhAccel>();
+        aux->box = box;
+        aux->left = left;
+        aux->right = right;
 
-        if(left == nullptr and right == nullptr){
-            if(*box.get() == s->bound){
-                return false;
+        BvhAccel * father;
+        
+        while(aux->left != nullptr and aux->right != nullptr){
+            if(aux->left != nullptr and aux->left->box->intersect_p(r, &t_min, &t_max)){
+                father = aux.get();
+                aux = aux->left;
+            } else if (aux->right != nullptr and aux->right->box->intersect_p(r, &t_min, &t_max)) {
+                father = aux.get();
+                aux = aux->right;
             } else {
-                return box->geo->intersect_p(r);
+                return false;
             }
         }
 
-        hit_left = left->hit_p(r, t_min, t_max, s);
-        if(!hit_left){
-            hit_right = right->hit_p(r, t_min, t_max, s);
-        }
-        return hit_left || hit_right;
+
+        //std::cout << "Chegou aq" << std::endl;
+        return aux->box->geo->intersect_p(r);
+
+
+        // bool hit_left = true;
+        // bool hit_right =  false;
+
+        // if(left == nullptr and right == nullptr){
+        //     if(*box.get() == s->bound){
+        //         return false;
+        //     } else {
+        //         return box->geo->intersect_p(r);
+        //     }
+        // }
+
+        // hit_left = left->hit_p(r, t_min, t_max, s);
+        // if(!hit_left){
+        //     hit_right = right->hit_p(r, t_min, t_max, s);
+        // }
+        // return hit_left || hit_right;
         
     }
 
@@ -83,7 +110,7 @@ public:
     std::shared_ptr<Bounds3> box = nullptr;
     //std::vector<std::shared_ptr<GeometricPrimitive>> g;
 
-    void printBVH()
+    void printBVH(int &i)
     {
         if (left == nullptr and right == nullptr)
         {
@@ -95,8 +122,9 @@ public:
         }
 
         if (left != nullptr)
-        {
-            left->printBVH();
+        {   
+            int c = 0;
+            left->printBVH(c);
             // std::cout << "Imprimindo box" << std::endl;
             // left->box->pMin.print();
             // left->box->pMax.print();
@@ -104,8 +132,9 @@ public:
         }
 
         if (right != nullptr)
-        {
-            right->printBVH();
+        {   
+            i+=1;
+            right->printBVH(i);
             // std::cout << "Imprimindo box" << std::endl;
             // right->box->pMin.print();
             // right->box->pMax.print();
@@ -113,34 +142,25 @@ public:
         }
     }
 
-    void LinearizeBVH(std::vector<std::shared_ptr<LinearBVH>> linear)
+    void LinearizeBVH(BvhAccel node, std::vector<LinearBVH> linear)
     {
-        std::shared_ptr<LinearBVH> l = std::make_shared<LinearBVH>();
-        l->box = box;
-
-        if (left != nullptr)
-        {
-            std::cout << "ADICIONOU LEFT" << std::endl;
-            left->LinearizeBVH(linear);
-            // std::cout << "Imprimindo box" << std::endl;
-            // left->box->pMin.print();
-            // left->box->pMax.print();
-            // std::cout << "finalizando box" << std::endl;
+        
+        if(node.box == nullptr){
+            return;
         }
 
-        if (right != nullptr)
-        {
-            l->next = right->box;
-            std::cout << "ADICIONOU RIGHT" << std::endl;
-            right->LinearizeBVH(linear);
-            // std::cout << "Imprimindo box" << std::endl;
-            // right->box->pMin.print();
-            // right->box->pMax.print();
-            // std::cout << "finalizando box" << std::endl;
+        LinearizeBVH(*node.left.get(), linear);
+        LinearBVH * l = new LinearBVH();
+        l->box = node.box;
+        if(node.right!= nullptr){
+            l->next = node.right->box;
+        } else if( node.right == nullptr and node.left == nullptr){
+            l->leaf = true;
         }
+        //std::cout << "adicionou" << std::endl;
+        linear.push_back(*l);
+        right->LinearizeBVH(*node.right.get(), linear);
 
-        //std::cout << "ADICIONOU" << std::endl;
-        linear.push_back(l);
     }
 };
 inline bool comparator(const std::shared_ptr<Bounds3> a, const std::shared_ptr<Bounds3> b)

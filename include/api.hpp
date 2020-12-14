@@ -382,10 +382,13 @@ void Api::render()
 
     BvhAccel ba;
     auto a = ba.buildTree(bounds, 0, bounds.size());
-    // std::vector<std::shared_ptr<LinearBVH>> lista;
-    // ba.LinearizeBVH(lista);
+    int i = 0;
+    a->printBVH(i);
+    std::cout << "Tamanho: " << i << std::endl;
+    // std::vector<LinearBVH> lista;
+    // ba.LinearizeBVH(*a.get(), lista);
 
-    //std::cout << "Tamanho " << lista.size() << std::endl;
+    // std::cout << "Tamanho " << lista.size() << std::endl;
     // std::cout << "Printando árvore" << std::endl;
     // a->printBVH();
 
