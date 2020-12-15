@@ -2,14 +2,14 @@
 
 ##### [Abraão Vitor Lopes Dantas and Henrique David de Medeiros](#author)
 
-# Project 6 - Triangles and Triangles Mesh
+# Project 7 - BVH
 
 This is a project to Computer Graphics I class (DIM0451-UFRN).
 
 In this project, it was necessary to:
 
-1. Create the triangle and Triangle Mesh classes; (Abraão)
-2. Implement triangle ray intersection; (Henrique)
+1. Create bound box class e box's intersect method; (Abraão)
+2. Implemented tree and tree's intersect; (Henrique)
 
 ## Compile
 
@@ -25,12 +25,10 @@ Enter the folder of the projec and type:
 
 ## Results
 
-### Triangle Mesh
+### Triangle Mesh using BVH
 #### Teapot
   <img src="./teapot_hires_P.png">
   
-#### Three spheres over a plan
-  <img src="./three_spheres_plane.png">
   
 ## Author
 Abraão Vitor Lopes Dantas  
