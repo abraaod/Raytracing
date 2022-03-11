@@ -6,34 +6,46 @@
 #include "camera.hpp"
 #include "film.hpp"
 #include "background.hpp"
+#include "geometricprimitive.hpp"
+#include "light/light.hpp"
+#include "light/ambient.hpp"
+#include "bounds3.hpp"
+#include "bvh.hpp"
+#include "bvhaccel.hpp"
 
 class Scene{
     public:
         Camera * camera;
         Background * background;
-        std::vector<Primitive> * obj_list;
-
-    private:
-        Scene(){}
-        Scene(Camera * cam, Background * bg, std::vector<Primitive> * obj_list);
-        ~Scene();
+        Film * film;
+        std::vector<std::shared_ptr<GeometricPrimitive>> obj_list;
+        std::vector<std::shared_ptr<Bounds3>> bounds;
+        std::vector<std::shared_ptr<Light>> lights;
+        std::shared_ptr<Bvh_node> bvh_node;
+        std::shared_ptr<BvhAccel> bvh_;
+        AmbientLight * ambient = nullptr;
+        Bounds3 worldBound;
+        //std::vector<GeometricPrimitive> * obj_list;
+        Scene() {}
+        Scene(Camera * cam, Background * bg, Film * film, std::vector<std::shared_ptr<GeometricPrimitive>> obj_list);
+        ~Scene() = default; 
         void setCamera(Camera * camera);
         void setBackground(Background * bg);
-        void setObjList(std::vector<Primitive> * obj_list);
+        void setFilm(Film * film);
+        void setObjList(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list);
+        void setBounds(std::vector<std::shared_ptr<Bounds3>> bounds);
+        void setLight(std::vector<std::shared_ptr<Light>> lights);
+        Bounds3 & getWorldBound() { return worldBound;}
+    private:
+        
 
 };
 
-Scene::Scene(Camera * cam, Background * bg, std::vector<Primitive> * obj_list){
+Scene::Scene(Camera * cam, Background * bg, Film * film, std::vector<std::shared_ptr<GeometricPrimitive>> obj_list){
     this->camera = cam;
     this->background = bg;
+    this->film = film;
     this->obj_list = obj_list;
-}
-
-Scene::~Scene(){
-    if(camera)
-        delete camera;
-    if(background)
-        delete background;
 }
 
 void Scene::setCamera(Camera * camera){
@@ -44,8 +56,26 @@ void Scene::setBackground(Background * bg){
     this->background = bg;
 }
 
-void Scene::setObjList(std::vector<Primitive> * obj_list){
+void Scene::setFilm(Film * film){
+    this->film = film;
+}
+
+void Scene::setObjList(std::vector<std::shared_ptr<GeometricPrimitive>> obj_list){
     this->obj_list = obj_list;
+}
+
+void Scene::setBounds(std::vector<std::shared_ptr<Bounds3>> bounds){
+    this->bounds = bounds;
+}
+
+void Scene::setLight(std::vector<std::shared_ptr<Light>> lights){
+    this->lights = lights;
+
+    Scene s = *this;
+
+    for(auto light : lights){
+        light->preprocessLight(s);
+    }
 }
 
 #endif

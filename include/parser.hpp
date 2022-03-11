@@ -8,6 +8,7 @@
 #include <vector>
 #include "paramset.hpp"
 #include "api.hpp"
+#include <utility>
 
 class Parser
 {
@@ -17,7 +18,11 @@ private:
     Paramset<std::string, std::string> filmParams;
     Paramset<std::string, std::string> backgroundParams;
     Paramset<std::string, std::string> materialParams;
-    std::vector<Paramset<std::string, std::string>> objectParams;
+    Paramset<std::string, std::string> objectParams;
+    Paramset<std::string, std::string> integratorParams;
+    Paramset<std::string, std::string> lightsourceParams;
+    std::vector<Paramset<std::string, std::string>> lightsourcesParams;
+    std::vector<std::pair<Paramset<std::string, std::string>, Paramset<std::string, std::string>>> materialObject;
 
     void addItemToParamSet(pugi::xml_node *node, Paramset<std::string, std::string> *ps)
     {
@@ -71,21 +76,33 @@ public:
             {
                 this->addItemToParamSet(&n, &backgroundParams);
             }
+            else if(!aux.compare("integrator")){
+                this->addItemToParamSet(&n, &integratorParams);
+            }
             else if(!aux.compare("material")){
+                materialParams.clear();
                 this->addItemToParamSet(&n, &materialParams);
             }
             else if(!aux.compare("object")){
-                Paramset<std::string, std::string> object_;
-                this->addItemToParamSet(&n, &object_);
-                objectParams.push_back(object_);
+                this->addItemToParamSet(&n, &objectParams);
+                std::pair<Paramset<std::string, std::string>, Paramset<std::string, std::string>> materialObject_ = std::make_pair(materialParams, objectParams);
+                materialObject.push_back(materialObject_);
+                objectParams.clear();
+            }
+            else if(!aux.compare("light_source")){
+                this->addItemToParamSet(&n, &lightsourceParams);
+                lightsourcesParams.push_back(lightsourceParams);
+                lightsourceParams.clear();
             }
         }
 
         api->CAMERA(cameraParams);
         api->FILM(filmParams);
         api->BACKGROUND(backgroundParams);
-        api->MATERIAL(materialParams);
-        api->OBJECTS(objectParams);
+        // api->MATERIAL(materialParams);
+        api->OBJECTS(materialObject);
+        api->INTEGRATOR(integratorParams);
+        api->LIGHTS(lightsourcesParams);
 
         return 0;
     }
@@ -96,6 +113,9 @@ public:
         std::cout << std::endl;
         std::cout << "Film params\n" << std::endl;
         filmParams.print();
+        std::cout << std::endl;
+        std::cout << "Integrator params\n" << std::endl;
+        integratorParams.print();
         std::cout << std::endl;
         std::cout << "Background params\n" << std::endl;
         backgroundParams.print();

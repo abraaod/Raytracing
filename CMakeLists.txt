@@ -22,9 +22,19 @@ add_executable(
     ./include/primitive.hpp
     ./include/scene.hpp
     ./include/sphere.hpp
+    ./include/shape.hpp
     ./include/surfel.hpp
+    ./include/geometricprimitive.hpp
     ./include/vec.hpp
-
+    ./include/light/light.hpp
+    ./include/light/ambient.hpp
+    ./include/light/directional.hpp
+    ./include/light/point.hpp
+    ./include/light/spot.hpp
+    ./include/bounds3.hpp
+    ./include/triangle.hpp
+    
     ./lib/pugixml.cpp
     ./lib/lodepng.cpp
+    ./lib/tiny_obj_loader.cc
 )

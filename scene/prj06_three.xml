@@ -1,0 +1,38 @@
+<RT3>
+    <lookat look_from="0 7 -10" look_at="0 1 1" up="0 1 0" />
+    <camera type="perspective" fovy="45" />
+    <integrator type="blinn_phong" depth="2" />
+
+    <film type="image" x_res="800" y_res="600" filename="three_spheres_plane.png" img_type="png" gamma_corrected="no" />
+
+    <world_begin/>
+
+        <!-- The Background -->
+        <background type="colors" mapping="screen" bl="153 204 255" tl="18 10 143" tr="18 10 143" br="153 204 255" />
+
+        <!-- Lights -->
+        <light_source type="directional" L="0.9 0.9 0.9" scale="1 1 1" from="3 0.8 -2" to="0 0 1" />
+        <light_source type="directional" L="0.6 0.6 0.4" scale="1 1 1" from="1 0.2 -4" to="-1 0 3" />
+         
+        <material type="blinn" name="redish" ambient="0.6 0.6 0.6" diffuse="0.9 0.2 0.1" specular="0.8 0.8 0.8" mirror="0.0 0.0 0.0" glossiness="64"/> Red
+        <object type="sphere" radius="1" center="0 1.0 1" />
+
+        <material type="blinn" name="greenish" ambient="0.6 0.6 0.6" diffuse="0.2 0.9 0.2" specular="0.8 0.8 0.8" mirror="0.0 0.0 0.0" glossiness="256"/> Green
+        <object type="sphere" radius="1" center="-2 1.0 -2" />
+
+        <material type="blinn" name="gold" ambient="0.4 0.4 0.4" diffuse="1 0.65 0.0" specular="0.8 0.6 0.2" mirror="0.0 0.0 0.0" glossiness="256"/> Gold
+        <object type="sphere" radius="1" center="2 1.0 -2"/>
+
+         <material type="blinn" name="grey" ambient="0.1 0.1 0.1" diffuse="0.7 0.7 0.7" specular="0 0 0" mirror="0.1 0.1 0.1" glossiness="0"/>
+        <object type="trianglemesh" material="grey"
+                ntriangles="2" indices="0 1 2   0 2 3"
+		vertices ="-4 0 4  4 0 4  4 0 -4  -4 0 -4"
+                indices ="0 1 2   0 2 3"
+                normals ="0 1 0  0 1 0  0 1 0  0 1 0 "
+		reverse_vertex_order="false"
+		compute_normals="false"
+		backface_cull="false"/>
+
+    <world_end/>
+
+</RT3>

@@ -1,0 +1,33 @@
+<RT3>
+    <lookat look_from="0 -90 30" look_at="0 0 0" up="0 1 0" />
+    <camera type="perspective" fovy="25" />
+    <integrator type="blinn_phong" depth="2" />
+
+    <film type="image" x_res="900" y_res="450" filename="teapot_hires_P.png" img_type="png" gamma_corrected="no" />
+
+    <world_begin/>
+        <!-- The Background -->
+        <background type="colors" mapping="screen" bl="153 204 255" tl="18 10 143" tr="18 10 143" br="153 204 255" />
+        <!-- <background type="colors" bl="0.6 0.8 1" tl="0.04 0.04 0.04" tr="0.04 0.04 0.04" br="0.6 0.8 1" /> -->
+
+        <!-- Lights -->
+        <light_source type="directional" L="0.9 0.6 0.5" scale="1 1 1" from="-5 -5 10" to="0 0 0" />
+        <light_source type="directional" L="0.9 0.9 0.9" scale="1 1 1" from=" 5 -5 10" to="0 0 0" />
+
+        <!-- Objects -->
+        <!-- <named_material name="gold"/> -->
+        <material type="blinn" name="jade" ambient="0.6 0.6 0.6" diffuse ="0 0.65 0.29"  specular ="0.8 0.8 0.8" mirror ="0.4 0.4 0.4" glossiness ="128"/>
+        <object type="trianglemesh" filename="/home/confuzo/Área de Trabalho/Raytracing/objs/teapot.obj"/>
+
+        <material type="blinn" name="indigo" ambient="0.2 0.2 0.2" diffuse ="0.2 0.0 0.4"  specular ="0.9 0.9 0.9" mirror ="0.1 0.1 0.1" glossiness ="128"/>
+        <object type="trianglemesh"
+                ntriangles ="2"
+                vertices="-30 30.5 -1  30 30.5 -1  30 -30.5 -1  -30 -30.5 -1"
+                indices ="0 1 2   0 2 3"
+                normals ="0 0 1  0 0 1  0 0 1  0 0 1 "
+                reverse_vertex_order="false"
+                backface_cull ="off"/>
+
+    <world_end/>
+
+</RT3>

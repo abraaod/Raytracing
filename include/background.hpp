@@ -67,7 +67,7 @@ Vec Background::interpolate(float x, float y){
     float v2_ = bl.v2*(1-x)*(1-y) + br.v2*x*(1-y) + tl.v2*(1-x)*y + tr.v2*x*y;
     float v3_ = bl.v3*(1-x)*(1-y) + br.v3*x*(1-y) + tl.v3*(1-x)*y + tr.v3*x*y;
 
-    return Vec(v1_/255, v2_/255, v3_/255);
+    return Vec(v1_, v2_, v3_);
 }
 
 
