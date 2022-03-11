@@ -25,7 +25,7 @@ Enter the folder of the projec and type:
 ### Three spheres over a plane
   <img src="./three_spheres_plane.png">
 
-### Spot ilumination
+### Spot illumination
   <img src="./spot.png">
 
 ## Author
