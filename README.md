@@ -2,8 +2,6 @@
 
 ##### [Abraão Vitor Lopes Dantas and Henrique David de Medeiros](#author)
 
-# Project 1 - Basic Infrastructure
-
 This is a project to Computer Graphics I class (DIM0451-UFRN).
 
 ## Compile
